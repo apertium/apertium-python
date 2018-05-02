@@ -14,12 +14,12 @@ before_script:
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
     - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en
 script:
-    - flake8 *.py apertium_apy/ language_names/ tests/
+    - flake8 *.py **/*.py
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
         mypy --config-file mypy.ini **/*.py;
       fi
     - python -m unittest tests
-    - coverage report --fail-under 40
+    - coverage report --fail-under 90
 after_success:
     - coveralls
 notifications:
