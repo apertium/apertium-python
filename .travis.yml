@@ -1,0 +1,27 @@
+language: python
+dist: trusty
+cache:
+    pip: true
+python:
+    - '3.4'
+    - '3.5'
+    - '3.6'
+    - 'nightly'
+install:
+    - travis_retry pip install -r requirements-dev.txt
+before_script:
+    - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
+    - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
+    - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en
+script:
+    - flake8 *.py apertium_apy/ language_names/ tests/
+    - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
+        mypy --config-file mypy.ini **/*.py;
+      fi
+    - python -m unittest tests
+    - coverage report --fail-under 40
+after_success:
+    - coveralls
+notifications:
+    on_failure: change
+    on_success: change
