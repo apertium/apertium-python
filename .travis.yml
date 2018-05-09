@@ -18,8 +18,8 @@ script:
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
         mypy **/*.py --strict --any-exprs-report .mypy_coverage;
         cat .mypy_coverage/any-exprs.txt;
-        coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$$//');
-        exit $(echo "${coverage} < 95" | bc -l);
+        coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//');
+        exit $(echo "$coverage < 95" | bc -l);
       fi
     - python -m unittest tests
     - coverage report --fail-under 90
