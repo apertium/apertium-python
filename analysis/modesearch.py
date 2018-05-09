@@ -4,9 +4,6 @@ import logging
 
 from utils import to_alpha3_code
 
-# if False:
-#     from typing import Dict, List, Tuple  # noqa: F401
-
 def is_loop(dirpath, rootpath, real_root=None):
     if os.path.islink(dirpath):
         # We just descended into a directory via a symbolic link

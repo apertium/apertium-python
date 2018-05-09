@@ -18,7 +18,6 @@ def remove_dot_from_deformat(query, analyses):
     When using the txt format, a dot is added at EOF (also, double line
     breaks) if the last part of the query isn't itself a dot
     '''
-    
     if not query[-1] == '.':
         return analyses[:-1]
     else:

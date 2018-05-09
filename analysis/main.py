@@ -1,5 +1,7 @@
 import re
 
+from streamparser import parse
+
 import utils
 from modesearch import search_path
 from translation import execute
@@ -27,11 +29,9 @@ class Analyzer:
         '''
         postprocesses the input
         '''
+        lexical_units = parse(result)
+        print(list(lexical_units)[0])
 
-        lexical_units = utils.remove_dot_from_deformat(in_text, re.findall(r'\^([^\$]*)\$([^\^]*)', result))
-        return [(lu[0], lu[0].split('/')[0] + lu[1])
-                for lu
-                in lexical_units]
 
 
     def analyze(self, text, lang):
@@ -47,6 +47,7 @@ class Analyzer:
             formatting = 'txt'
             commands = [['apertium', '-d', path, '-f', formatting, mode]]
             result = execute(in_text, commands)
+            print(result)
             return self.postproc_text(in_text, result)
         
         else:
