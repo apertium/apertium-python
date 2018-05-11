@@ -31,7 +31,6 @@ init:
         } # credits: JuliaLang developers
 install:
   - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
-  - "ECHO %PATH%"
   - python --version
   - python -c "import sys,platform,struct; print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
 build: false
