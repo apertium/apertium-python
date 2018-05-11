@@ -24,7 +24,7 @@ script:
         fi;
       fi
     - python -m unittest tests
-    - coverage report --fail-under 90
+    - coverage report --fail-under 90 tests/*.py
 after_success:
     - coveralls
 notifications:
