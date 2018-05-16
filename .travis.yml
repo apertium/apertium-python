@@ -23,8 +23,8 @@ script:
             exit 1;
         fi;
       fi
-    - python -m unittest tests
-    - coverage report --fail-under 90 tests/*.py
+    - coverage run tests/*.py
+    - coverage report -m --fail-under 80 tests/*.py
 after_success:
     - coveralls
 notifications:
