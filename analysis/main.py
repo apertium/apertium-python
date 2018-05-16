@@ -1,9 +1,9 @@
 
 from streamparser import parse
 
-import utils
-from modesearch import search_path
-from translation import execute
+import analysis.utils as utils
+from analysis.modesearch import search_path
+from analysis.translation import execute
 
 
 class Analyzer:
@@ -29,7 +29,7 @@ class Analyzer:
         postprocesses the input
         """
         lexical_units = parse(result)
-        print(list(lexical_units)[0])
+        return list(lexical_units)[0]
 
     def analyze(self, text, lang):
         """
@@ -44,7 +44,6 @@ class Analyzer:
             formatting = 'txt'
             commands = [['apertium', '-d', path, '-f', formatting, mode]]
             result = execute(in_text, commands)
-            print(result)
             return self.postproc_text(in_text, result)
 
         else:

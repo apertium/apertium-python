@@ -1,7 +1,7 @@
 import os
 import re
 
-from utils import to_alpha3_code
+from analysis.utils import to_alpha3_code
 
 
 def is_loop(dirpath, rootpath, real_root=None):
