@@ -14,7 +14,7 @@ before_script:
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
     - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en
 script:
-    - flake8 *.py **/*.py
+    - flake8 **/*.py
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
         mypy **/*.py --strict --any-exprs-report .mypy_coverage;
         cat .mypy_coverage/any-exprs.txt;
