@@ -38,7 +38,7 @@ test_script:
   - python -m unittest tests
 artifacts:
   - path: dist\*
- notifications:
+notifications:
     - provider: Email
       on_build_success: false
       on_build_failure: true
