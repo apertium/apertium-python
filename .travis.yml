@@ -14,7 +14,7 @@ before_script:
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
     - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en apertium-eng
 script:
-    - flake8 **/*.py
+    - flake8 --verbose **/*.py
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
         mypy **/*.py --strict --any-exprs-report .mypy_coverage;
         cat .mypy_coverage/any-exprs.txt;
@@ -23,8 +23,8 @@ script:
             exit 1;
         fi;
       fi
-    - python3 -m unittest tests/test.py
-    - coverage report -m --fail-under 80 tests/*.py
+    - python3 -m unittest --verbose tests/test.py
+    - coverage report --show-missing --fail-under 80 tests/*.py
 after_success:
     - coveralls
 notifications:
