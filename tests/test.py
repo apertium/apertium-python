@@ -8,7 +8,7 @@ sys.path.append(base_path)
 from analysis.main import Analyzer  # noqa: E402
 
 
-a = Analyzer('../langdata/apertium-eng/')
+a = Analyzer('/usr/local/share/apertium/')
 
 
 class TestUM(unittest.TestCase):

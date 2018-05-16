@@ -12,7 +12,7 @@ install:
 before_script:
     - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
-    - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en
+    - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en apertium-eng
 script:
     - flake8 **/*.py
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
