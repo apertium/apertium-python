@@ -5,11 +5,8 @@ import unittest
 base_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 sys.path.append(base_path)
 
-try:
-    from analysis.main import Analyzer
-except Exception:
-    print('Error in import')
-    raise
+from analysis.main import Analyzer  # noqa: E402
+
 
 a = Analyzer('../langdata/apertium-eng/')
 
