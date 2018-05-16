@@ -23,7 +23,7 @@ script:
             exit 1;
         fi;
       fi
-    - coverage run tests/*.py
+    - python tests/*.py
     - coverage report -m --fail-under 80 tests/*.py
 after_success:
     - coveralls
