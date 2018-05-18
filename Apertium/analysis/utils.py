@@ -1,4 +1,4 @@
-from analysis.iso639 import iso639Codes
+from iso639 import iso639Codes
 
 
 def to_alpha3_code(code):

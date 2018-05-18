@@ -1,28 +1,33 @@
-
 from streamparser import parse
 
-import analysis.utils as utils
-from analysis.modesearch import search_path
-from analysis.translation import execute
+import utils as utils
+from modesearch import search_path
+from translation import execute
 
 
 class Analyzer:
     """
     Abstraction of morphological analyzer
     """
-    def __init__(self, pair_path):
+    def __init__(self):
         """
         initialization tasks like setting the pair path,
         searching for the analyzers and installs modes
         """
-
-        self.pair_path = pair_path
+        self.pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
         self.analyzers = {}
+        for pair_path in self.pair_paths:
+            self.update_modes(pair_path)
 
-        modes = search_path(self.pair_path)
+    def update_modes(self, pair_path):
+        modes = search_path(pair_path)
+        if len(modes['analyzer']) is not 0:
+                for dirpath, modename, lang_pair in modes['analyzer']:
+                    self.analyzers[lang_pair] = (dirpath, modename)
 
-        for dirpath, modename, lang_pair in modes['analyzer']:
-            self.analyzers[lang_pair] = (dirpath, modename)
+    def append_pair_path(self, pair_path):
+        self.pair_paths.append(pair_path)
+        self.update_modes(pair_path)
 
     def postproc_text(self, in_text, result):
         """
@@ -35,7 +40,6 @@ class Analyzer:
         """
         runs apertium to analyze the input
         """
-
         in_text = text
         in_mode = utils.to_alpha3_code(lang)
 
@@ -47,4 +51,4 @@ class Analyzer:
             return self.postproc_text(in_text, result)
 
         else:
-            print("explanation='That mode is not installed")
+            return None
