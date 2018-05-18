@@ -14,9 +14,9 @@ before_script:
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
     - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en apertium-eng
 script:
-    - flake8 --verbose **/*.py
+    - flake8 --verbose apertium
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
-        mypy **/*.py --strict --any-exprs-report .mypy_coverage;
+        mypy apertium --strict --any-exprs-report .mypy_coverage;
         cat .mypy_coverage/any-exprs.txt;
         coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//');
         if (( $(echo "$coverage < 95" | bc -l) )); then
