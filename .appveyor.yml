@@ -35,7 +35,7 @@ install:
   - python -c "import sys,platform,struct; print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
 build: false
 test_script:
-  - python3 -m unittest tests/test.py
+  - python3 -m unittest --verbose tests/test.py
 artifacts:
   - path: dist\*
 notifications:

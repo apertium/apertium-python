@@ -24,7 +24,7 @@ script:
         fi;
       fi
     - python3 -m unittest --verbose tests/test.py
-    - coverage report --show-missing --fail-under 80 tests/*.py
+    - coverage report --show-missing --fail-under 80 Apertium/analysis/*.py
 after_success:
     - coveralls
 notifications:
