@@ -33,9 +33,11 @@ install:
   - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
   - python --version
   - python -c "import sys,platform,struct; print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
+  - pip install -r requirements-dev.txt
 build: false
 test_script:
-  - python3 -m unittest --verbose tests/test.py
+  - coverage run -m unittest --verbose --buffer
+  - coverage report --show-missing --fail-under 80 --include 'apertium/**'
 artifacts:
   - path: dist\*
 notifications:
