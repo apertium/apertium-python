@@ -1,7 +1,7 @@
 import os
 import re
 
-from utils import to_alpha3_code
+from apertium.utils import to_alpha3_code
 
 
 def is_loop(dirpath, rootpath, real_root=None):
@@ -31,10 +31,14 @@ def search_path(rootpath, include_pairs=True, verbosity=1):
     lang_code = r'[a-z]{2,3}(?:_[A-Za-z]+)?'
     type_re = {
         'analyzer': re.compile(
-            r'(({0}(-{0})?)-(an)?mor(ph)?)\.mode'.format(lang_code))}
+            r'(({0}(-{0})?)-(an)?mor(ph)?)\.mode'.format(lang_code)),
+        'generator': re.compile(
+            r'(({0}(-{0})?)-gener[A-z]*)\.mode'.format(lang_code)),
+        }
     modes = {
         'analyzer': [],
-    }  # type: Dict[str, List[Tuple[str, str, str]]]
+        'generator': [],
+        }  # type: Dict[str, List[Tuple[str, str, str]]]
 
     real_root = os.path.abspath(os.path.realpath(rootpath))
 

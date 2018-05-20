@@ -1,4 +1,4 @@
-iso639Codes = {
+iso_639_codes = {
     'abk': 'ab',
     'aar': 'aa',
     'afr': 'af',
@@ -186,4 +186,5 @@ iso639Codes = {
     'zul': 'zu',
     'hbs': 'sh',
     'arg': 'an',
-    'pes': 'fa'}
+    'pes': 'fa',
+    }
