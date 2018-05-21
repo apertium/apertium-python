@@ -23,7 +23,7 @@ script:
             exit 1;
         fi;
       fi
-    - coverage run -m unittest --verbose --buffer
+    - coverage run -m unittest --verbose --buffer tests
     - coverage report --show-missing --fail-under 80 --include 'apertium/**'
 after_success:
     - coveralls

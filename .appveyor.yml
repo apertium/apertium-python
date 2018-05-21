@@ -36,7 +36,7 @@ install:
   - pip install -r requirements-dev.txt
 build: false
 test_script:
-  - coverage run -m unittest --verbose --buffer
+  - coverage run -m unittest --verbose --buffer tests
   - coverage report --show-missing --fail-under 80 --include 'apertium/**'
 artifacts:
   - path: dist\*
