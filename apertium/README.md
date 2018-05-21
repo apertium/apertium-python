@@ -29,7 +29,7 @@ Out[2]: 'cats'
  ```
  
 ### Installing more modes from other language data
-One can also install modes by providing the path to the lang-data using this simple funciton
+One can also install modes by providing the path to the lang-data using this simple function
 ```python
 In [1]: import apertium as a
 In [2]: a.append_pair_path('..')
