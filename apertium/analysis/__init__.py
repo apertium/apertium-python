@@ -12,11 +12,10 @@ def postproc_text(result):
     return list(lexical_units)[0]
 
 
-def analyze(text, lang):
+def analyze(in_text, lang):
     """
     runs apertium to analyze the input
     """
-    in_text = text
     in_mode = to_alpha3_code(lang)
 
     if in_mode in apertium.analyzers:
@@ -25,6 +24,5 @@ def analyze(text, lang):
         commands = [['apertium', '-d', path, '-f', formatting, mode]]
         result = execute(in_text, commands)
         return postproc_text(result)
-
     else:
         return None

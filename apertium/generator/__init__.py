@@ -18,8 +18,6 @@ def postproc_text(lexical_units, result):
 
 
 def generate(in_text, lang):
-
-    in_text = in_text
     in_mode = to_alpha3_code(lang)
 
     if in_mode in apertium.generators:
