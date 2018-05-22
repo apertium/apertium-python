@@ -15,8 +15,8 @@ sys.path.append(base_path)
 import apertium # noqa: E402
 
 class TestAnalyze(unittest.TestCase):
-    s = '$^%s$' % (apertium.analyze('cats', 'en'),)
-    
+    s = '$^%s$' % (apertium.analyze('cats', 'en'))
+
     def test_en(self):
         lexical_units = list(parse(self.s))
         self.assertEqual(len(lexical_units), 1)
