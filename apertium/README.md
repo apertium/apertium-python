@@ -7,8 +7,8 @@
 
 ## About the Code Base
 - The development starts initially with a subprocess implementation of all the uses of Apertium, like Analysis, Generation, Translation etc. For which, code has been ported from [apertium-apy](https://github.com/apertium/apertium-apy "apertium-apy codebase")
-- Which will be followed by a pip release.
 - The second part of the project involves using SWIG to expose modules that require lower level functionality access.
+- Which will be followed by a pip release.
 
 ## Usage of library
 

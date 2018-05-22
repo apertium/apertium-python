@@ -1,11 +1,12 @@
-import re
+import streamparser
+
 
 import apertium
 from apertium.utils import to_alpha3_code, execute
 
 
 def preproc_text(in_text):
-        lexical_units = re.findall(r'(\^[^\$]*\$[^\^]*)', in_text)  # TODO: replace with streamparser
+        lexical_units = list(streamparser.parse(in_text))
         if len(lexical_units) == 0:
             lexical_units = ['^%s$' % (in_text,)]
         return lexical_units, '[SEP]'.join(lexical_units)
@@ -28,4 +29,4 @@ def generate(in_text, lang):
         result = execute(to_generate, commands)
         return postproc_text(lexical_units, result)
     else:
-        return None
+        raise Exception('mode not installed')

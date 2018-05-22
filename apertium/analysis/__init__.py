@@ -25,4 +25,4 @@ def analyze(in_text, lang):
         result = execute(in_text, commands)
         return postproc_text(result)
     else:
-        return None
+        raise Exception('mode not installed')
