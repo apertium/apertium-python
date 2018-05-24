@@ -4,19 +4,19 @@ from typing import List, Union, Tuple
 import apertium
 from apertium.utils import to_alpha3_code, execute
 
+CONST_SEP = '[SEP]'
+
 
 def preproc_text(in_text: str) -> Tuple[List[str], str]:
         if len(list(streamparser.parse(in_text))) == 0:
             lexical_units = ['^%s$' % (in_text,)]
-        # print("this is another type check", type(lexical_units[0]), type('[SEP]'.join(lexical_units)))
-        return lexical_units, '[SEP]'.join(lexical_units)
+        return lexical_units, CONST_SEP.join(lexical_units)
 
 
 def postproc_text(lexical_units: List[str], result: str) -> str:
-
     return [(generation, lexical_units[i])
             for (i, generation)
-            in enumerate(result.split('[SEP]'))][0][0]
+            in enumerate(result.split(CONST_SEP))][0][0]
 
 
 def generate(in_text: str, lang: str)-> Union[str, List[str], Exception]:

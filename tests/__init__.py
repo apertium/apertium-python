@@ -18,7 +18,6 @@ class TestAnalyze(unittest.TestCase):
         lexical_units = list(parse(self.s))
         self.assertEqual(len(lexical_units), 1)
         lexical_unit = lexical_units[0]
-        print("this is the type", type(lexical_unit))
         self.assertEqual(str(lexical_unit), 'cats/cat<n><pl>')
         readings = lexical_unit.readings
         self.assertListEqual(readings, [[SReading(baseform='cat', tags=['n', 'pl'])]])
