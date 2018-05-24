@@ -1,18 +1,21 @@
+import streamparser
 from streamparser import parse
+from typing import List, Union
 
 import apertium
 from apertium.utils import to_alpha3_code, execute
 
 
-def postproc_text(result):
+def postproc_text(result: str) -> List[streamparser.LexicalUnit]:
     """
     postprocesses the input
     """
-    lexical_units = parse(result)
-    return list(lexical_units)[0]
+    lexical_units = list(parse(result))
+    lexical_units.pop()
+    return lexical_units
 
 
-def analyze(in_text, lang):
+def analyze(in_text: str, lang: str) -> Union[List[streamparser.LexicalUnit], Exception]:
     """
     runs apertium to analyze the input
     """

@@ -1,0 +1,10 @@
+               Name   Unannotated   Explicit   Unimported   Omitted Generics   Error   Special Form   Implementation Artifact
+-----------------------------------------------------------------------------------------------------------------------------
+    apertium.iso639             0          0            0                  0       0              0                         0
+     apertium.utils             0          8            0                  3       0              3                         0
+apertium.modesearch             0         13            0                  2       0              0                         0
+ apertium.generator             0          2            0                  0       0              0                         0
+  apertium.analysis             0          2            0                  0       0              0                         0
+           apertium             0          0            0                  0       0              0                         0
+-----------------------------------------------------------------------------------------------------------------------------
+              Total             0         25            0                  5       0              3                         0
