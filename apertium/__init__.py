@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import List, Dict, Tuple
 
 from apertium.modesearch import search_path
 from apertium.analysis import analyze  # noqa: F401
@@ -22,7 +22,7 @@ def append_pair_path(pair_path: str) -> None:
 
 
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
-analyzers: Dict[str, Tuple[str, str]] = {}
-generators: Dict[str, Tuple[str, str]] = {}
+analyzers = {}  #  type: Dict[str, Tuple[str, str]] 
+generators = {} #  type: Dict[str, Tuple[str, str]] 
 for pair_path in pair_paths:
     update_modes(pair_path)
