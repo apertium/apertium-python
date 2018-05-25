@@ -34,6 +34,8 @@ install:
   - python --version
   - python -c "import sys,platform,struct; print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
   - pip install -r requirements-dev.txt
+  - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
+  - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en apertium-eng
 build: false
 test_script:
   - coverage run -m unittest --verbose --buffer tests
