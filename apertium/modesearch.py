@@ -1,10 +1,14 @@
 import os
 import re
-from typing import Dict, List, Tuple, Union
+
 from apertium.utils import to_alpha3_code
 
+if False:
+    from typing import Dict, List, Tuple, Union  # noqa: F401
 
-def is_loop(dirpath: str, rootpath: str, real_root: Union[None, str]=None) -> bool:
+
+def is_loop(dirpath, rootpath, real_root=None):
+    # type: (str, str, Union[None, str]) -> bool
     if os.path.islink(dirpath):
         # We just descended into a directory via a symbolic link
         # Check if we're referring to a directory that is
@@ -27,7 +31,8 @@ def is_loop(dirpath: str, rootpath: str, real_root: Union[None, str]=None) -> bo
         return False
 
 
-def search_path(rootpath: str, include_pairs: bool=True) -> Dict[str, List[Tuple[str, str, str]]]:
+def search_path(rootpath, include_pairs=True):
+    # type: (str, bool) -> Dict[str, List[Tuple[str, str, str]]]
     lang_code = r'[a-z]{2,3}(?:_[A-Za-z]+)?'
     type_re = {
         'analyzer': re.compile(r'(({0}(-{0})?)-(an)?mor(ph)?)\.mode'.format(lang_code)),

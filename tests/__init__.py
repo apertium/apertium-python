@@ -24,6 +24,10 @@ class TestAnalyze(unittest.TestCase):
         self.assertEqual(lexical_unit.wordform, 'cats')
         self.assertEqual(lexical_unit.knownness, known)
 
+    def test_error(self):
+        with self.assertRaises(apertium.ModeNotInstalled):
+            apertium.analyze('cats', 'spa')
+
 class TestGenerate(unittest.TestCase):
     s = '$^%s$' % (apertium.generate('cat<n><pl>', 'en'))
 
@@ -33,3 +37,4 @@ class TestGenerate(unittest.TestCase):
         lexical_unit = lexical_units[0]
         self.assertEqual(str(lexical_unit), 'cats')
         self.assertEqual(lexical_unit.knownness, known)
+

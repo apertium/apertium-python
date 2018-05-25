@@ -1,11 +1,17 @@
-from typing import List, Dict, Tuple  # noqa: F401
-
 from apertium.modesearch import search_path
 from apertium.analysis import analyze  # noqa: F401
 from apertium.generator import generate  # noqa: F401
 
+if False:
+    from typing import List, Dict, Tuple  # noqa: F401
 
-def update_modes(pair_path: str) -> None:
+
+class ModeNotInstalled(ValueError):
+    pass
+
+
+def update_modes(pair_path):
+    # type: (str) -> None
     modes = search_path(pair_path)
     if modes['analyzer']:
             for dirpath, modename, lang_pair in modes['analyzer']:
@@ -15,7 +21,8 @@ def update_modes(pair_path: str) -> None:
                 generators[lang_pair] = (dirpath, modename)
 
 
-def append_pair_path(pair_path: str) -> None:
+def append_pair_path(pair_path):
+    # type: (str) -> None
     pair_paths.append(pair_path)
     update_modes(pair_path)
 
