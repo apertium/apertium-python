@@ -1,4 +1,4 @@
-# Implementation of Apertium in Python
+# Apertium + Python
 
 [![Travis Build Status](https://travis-ci.org/apertium/apertium-python.svg)](https://travis-ci.org/apertium/apertium-python)
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/sesdinoy4cw2p1tk/branch/master?svg=true)](https://ci.appveyor.com/project/sushain97/apertium-python/branch/master)
