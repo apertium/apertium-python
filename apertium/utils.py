@@ -9,8 +9,7 @@ if False:
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 
 
-def to_alpha3_code(code):
-    # type: (str) -> str
+def to_alpha3_code(code):  # type: (str) -> str
     if '_' in code:
         code, variant = code.split('_')
         return '%s_%s' % ((iso639_codes_inverse[code], variant) if code in iso639_codes_inverse else (code, variant))
@@ -18,8 +17,7 @@ def to_alpha3_code(code):
         return iso639_codes_inverse[code] if code in iso639_codes_inverse else code
 
 
-def execute(inp, commands):
-    # type: (str, List[List[str]]) -> str
+def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     procs = []
     end = inp.encode()
     for i, command in enumerate(commands):

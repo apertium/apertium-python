@@ -19,16 +19,16 @@
 ### Analysis
 Performing Morphological Analysis
 ```python
-In [1]: import apertium as a
-In [2]: a.analyze('cats', 'en')
+In [1]: import apertium
+In [2]: apertium.analyze('cats', 'en')
 Out[2]: cats/cat<n><pl>
 ```
  
  ### Generation
  Performing Morphological Generation
   ```python 
-In [1]: import apertium as a
-In [2]: a.generate('cat<n><pl>', 'en')
+In [1]: import apertium
+In [2]: apertium.generate('cat<n><pl>', 'en')
 Out[2]: 'cats'
  ```
  
