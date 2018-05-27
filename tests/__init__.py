@@ -23,22 +23,15 @@ class TestAnalyze(unittest.TestCase):
 
 class TestGenerate(unittest.TestCase):
     def test_en(self):
-<<<<<<< HEAD
         wordform = apertium.generate('en', '^cat<n><pl>$')
         self.assertEqual(wordform, 'cats')
-=======
         lexical_units = apertium.generate('en', '^cat<n><pl>$')
         self.assertEqual(lexical_units, 'cats')
         lexical_units = apertium.generate('en', '^cat<n><pl>$ ^cat<n><pl>$')
         self.assertEqual(lexical_units, 'cats cats')
         lexical_units = apertium.generate('en', 'cat<n><pl>')
         self.assertEqual(lexical_units, 'cat<n><pl>')
->>>>>>> 5316eed... issue fix
 
     def test_uninstalled_mode(self):
         with self.assertRaises(apertium.ModeNotInstalled):
             apertium.generate('spa', 'cat<n><pl>')
-<<<<<<< HEAD
-=======
-
->>>>>>> 5316eed... issue fix
