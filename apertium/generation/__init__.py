@@ -6,8 +6,6 @@ from apertium.utils import to_alpha3_code, execute
 if False:
     from typing import List, Union, Tuple  # noqa: F401
 
-SEPARATOR = '[SEP]'
-
 
 def preproc_text(in_text):  # type: (str) -> List[LexicalUnit]
     if len(list(parse(in_text))) == 0:
@@ -18,12 +16,6 @@ def preproc_text(in_text):  # type: (str) -> List[LexicalUnit]
     return lexical_units
 
 
-def postproc_text(lexical_units, result):  # type: (List[LexicalUnit], str) -> str
-    return [(generation, lexical_units[i])
-            for (i, generation)
-            in enumerate(result.split(SEPARATOR))][0][0]
-
-
 def generate(lang, in_text, formatting='none'):  # type: (str, str, str) -> Union[str, List[str]]
     lang = to_alpha3_code(lang)
 
@@ -32,6 +24,6 @@ def generate(lang, in_text, formatting='none'):  # type: (str, str, str) -> Unio
         commands = [['apertium', '-d', path, '-f', formatting, mode]]
         lexical_units = preproc_text(in_text)
         result = execute(in_text, commands)
-        return postproc_text(lexical_units, result)
+        return result
     else:
         raise apertium.ModeNotInstalled(lang)
