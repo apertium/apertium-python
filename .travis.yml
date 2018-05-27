@@ -12,19 +12,19 @@ install:
 before_script:
     - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
-    - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en
+    - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en apertium-eng
 script:
-    - flake8 *.py **/*.py
+    - flake8 --verbose apertium
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
-        mypy **/*.py --strict --any-exprs-report .mypy_coverage;
+        mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports;
         cat .mypy_coverage/any-exprs.txt;
         coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//');
         if (( $(echo "$coverage < 95" | bc -l) )); then
             exit 1;
         fi;
       fi
-    - python -m unittest tests
-    - coverage report --fail-under 90
+    - coverage run -m unittest --verbose --buffer tests
+    - coverage report --show-missing --fail-under 80 --include 'apertium/**'
 after_success:
     - coveralls
 notifications:
