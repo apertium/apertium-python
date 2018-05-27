@@ -6,8 +6,6 @@ from apertium.utils import to_alpha3_code, execute
 if False:
     from typing import List, Union, Tuple  # noqa: F401
 
-SEPARATOR = '[SEP]'
-
 
 def preproc_text(in_text):  # type: (str) -> List[LexicalUnit]
     if len(list(parse(in_text))) == 0:
