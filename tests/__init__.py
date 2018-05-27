@@ -23,9 +23,9 @@ class TestAnalyze(unittest.TestCase):
 
 class TestGenerate(unittest.TestCase):
     def test_en(self):
-        wordform = apertium.generate('cat<n><pl>', 'en')
+        wordform = apertium.generate('en', '^cat<n><pl>$')
         self.assertEqual(wordform, 'cats')
 
     def test_uninstalled_mode(self):
         with self.assertRaises(apertium.ModeNotInstalled):
-            apertium.generate('cat<n><pl>', 'spa')
+            apertium.generate('spa', 'cat<n><pl>')
