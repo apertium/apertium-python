@@ -2,9 +2,7 @@ import os
 import sys
 import unittest
 
-from streamparser import (
-    parse, SReading, known, unknown,
-)
+from streamparser import parse, SReading, known
 
 base_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 sys.path.append(base_path)
