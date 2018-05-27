@@ -22,7 +22,6 @@ def generate(lang, in_text, formatting='none'):  # type: (str, str, str) -> Unio
     if lang in apertium.generators:
         path, mode = apertium.generators[lang]
         commands = [['apertium', '-d', path, '-f', formatting, mode]]
-        lexical_units = preproc_text(in_text)
         result = execute(in_text, commands)
         return result
     else:
