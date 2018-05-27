@@ -15,7 +15,7 @@ def postproc_text(result):  # type: (str) -> List[LexicalUnit]
     return lexical_units
 
 
-def analyze(in_text, lang, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
+def analyze(lang, in_text, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
     """
     runs apertium to analyze the input
     """
