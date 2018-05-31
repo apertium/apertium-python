@@ -52,7 +52,6 @@ def cmd_needs_z(cmd):
     return re.match(exceptions, cmd) is None
 
 
-
 def get_pipe_cmds(l1, l2):
     if (l1, l2) not in apertium.pipeline_cmds:
         mode_path = apertium.pairs['%s-%s' % (l1, l2)]
