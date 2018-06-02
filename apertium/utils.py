@@ -1,4 +1,7 @@
 import subprocess
+import re
+from collections import namedtuple
+
 
 from apertium.iso639 import iso_639_codes
 
@@ -25,6 +28,12 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
         )
         end, _ = procs[i].communicate(end)
     return end.decode()
+
+def cmd_needs_z(cmd):
+    exceptions = r'^\s*(vislcg3|cg-mwesplit|hfst-tokeni[sz]e|divvun-suggest)'
+    return re.match(exceptions, cmd) is None
+
+ParsedModes = namedtuple('ParsedModes', 'do_flush commands')
 
 def parse_mode_file(mode_path):
     mode_str = open(mode_path, 'r').read().strip()

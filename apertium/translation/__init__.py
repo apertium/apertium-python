@@ -37,12 +37,19 @@ def get_format(format, deformat, reformat):
     return deformat, reformat
 
 
-def translate(langpair, text, markUnknown='yes', format=None, deformat='html', reformat='html-noent'):
+def maybe_strip_marks(mark_unknown, pair, translated):
+        if mark_unknown:
+            return translated
+        else:
+            return re.sub(self.unknown_mark_re, r'\1', translated)
+
+def translate(langpair, text, markUnknown='no', format=None, deformat='txt', reformat='txt'):
     pair = get_pair_or_error(langpair, len(text))
     if pair is not None:
         (l1, l2) = pair
         cmds = list(get_pipe_cmds(l1, l2).commands)
         deformat, reformat = get_format(format, deformat, reformat)
-        res = execute(to_translate, cmds)
+        res = execute(text, cmds)
+        val = maybe_strip_marks(markUnknown, pair, res)
         return res
         
