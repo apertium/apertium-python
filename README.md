@@ -20,7 +20,7 @@
 Performing Morphological Analysis
 ```python
 In [1]: import apertium
-In [2]: apertium.analyze('cats', 'en')
+In [2]: apertium.analyze('en', 'cats')
 Out[2]: cats/cat<n><pl>
 ```
  
@@ -28,13 +28,13 @@ Out[2]: cats/cat<n><pl>
  Performing Morphological Generation
   ```python 
 In [1]: import apertium
-In [2]: apertium.generate('cat<n><pl>', 'en')
+In [2]: apertium.generate('en', '^cat<n><pl>$')
 Out[2]: 'cats'
  ```
  
 ### Installing more modes from other language data
 One can also install modes by providing the path to the lang-data using this simple function
 ```python
-In [1]: import apertium as a
-In [2]: a.append_pair_path('..')
+In [1]: import apertium
+In [2]: apertium.append_pair_path('..')
 ```
