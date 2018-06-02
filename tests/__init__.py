@@ -22,15 +22,15 @@ class TestAnalyze(unittest.TestCase):
             apertium.analyze('spa', 'cats')
 
 class TestGenerate(unittest.TestCase):
-    def test_en(self):
+    def test_single(self):
         wordform = apertium.generate('en', '^cat<n><pl>$')
         self.assertEqual(wordform, 'cats')
 
-    def test_wordform_parsing(self):
+    def test_multiple(self):
         lexical_units = apertium.generate('en', '^cat<n><pl>$ ^cat<n><pl>$')
         self.assertEqual(lexical_units, 'cats cats')
 
-    def test_wordform_format(self):
+    def test_bare(self):
         lexical_units = apertium.generate('en', 'cat<n><pl>')
         self.assertEqual(lexical_units, 'cat<n><pl>')
 
