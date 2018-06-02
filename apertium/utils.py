@@ -16,7 +16,6 @@ def to_alpha3_code(code):  # type: (str) -> str
     else:
         return iso639_codes_inverse[code] if code in iso639_codes_inverse else code
 
-
 def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     procs = []
     end = inp.encode()
@@ -26,22 +25,6 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
         )
         end, _ = procs[i].communicate(end)
     return end.decode()
-
-def start_pipeline(commands):
-    procs = []  # type: List[tornado.process.Subprocess]
-    for i, cmd in enumerate(commands):
-        if i == 0:
-            in_from = tornado.process.Subprocess.STREAM
-        else:
-            in_from = procs[-1].stdout
-        if i == len(commands) - 1:
-            out_from = tornado.process.Subprocess.STREAM
-        else:
-            out_from = PIPE
-        procs.append(tornado.process.Subprocess(cmd,
-                                                stdin=in_from,
-                                                stdout=out_from))
-    return procs[0], procs[-1]
 
 def parse_mode_file(mode_path):
     mode_str = open(mode_path, 'r').read().strip()

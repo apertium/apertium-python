@@ -10,12 +10,13 @@ if False:
 class ModeNotInstalled(ValueError):
     pass
 
-class PairNotInstalled()
+class PairNotInstalled(ValueError):
+    pass
 
 
 def update_modes(pair_path):  # type: (str) -> None
     modes = search_path(pair_path)
-    if modes['pair']
+    if modes['pair']:
         for path, lang_src, lang_trg in modes['pair']:
             pairs['%s-%s' % (lang_src, lang_trg)] = path
     if modes['analyzer']:
@@ -24,6 +25,7 @@ def update_modes(pair_path):  # type: (str) -> None
     if modes['generator']:
         for dirpath, modename, lang_pair in modes['generator']:
             generators[lang_pair] = (dirpath, modename)
+    print("These are the mode pairs", modes['pair'])
 
 
 def append_pair_path(pair_path):  # type: (str) -> None

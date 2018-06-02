@@ -35,10 +35,12 @@ def search_path(rootpath, include_pairs=True):  # type: (str, bool) -> Dict[str,
     type_re = {
         'analyzer': re.compile(r'(({0}(-{0})?)-(an)?mor(ph)?)\.mode'.format(lang_code)),
         'generator': re.compile(r'(({0}(-{0})?)-gener[A-z]*)\.mode'.format(lang_code)),
+        'pair': re.compile(r'({0})-({0})\.mode'.format(lang_code)),
     }
     modes = {
         'analyzer': [],
         'generator': [],
+        'pair': [],
     }  # type: Dict[str, List[Tuple[str, str, str]]]
 
     real_root = os.path.abspath(os.path.realpath(rootpath))

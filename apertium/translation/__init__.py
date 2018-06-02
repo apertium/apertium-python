@@ -1,7 +1,14 @@
-import apertium
-from apertium.utils import to_alpha3_code, execute
-from utils import init_paths, init_pairs_graph, get_pipeline
+import sys
 
+import apertium
+from apertium.utils import to_alpha3_code, execute, parse_mode_file
+
+
+def get_pipe_cmds(l1, l2):
+    if (l1, l2) not in apertium.pipeline_cmds:
+        mode_path = apertium.pairs['%s-%s' % (l1, l2)]
+        apertium.pipeline_cmds[(l1, l2)] = parse_mode_file(mode_path)
+    return apertium.pipeline_cmds[(l1, l2)]
 
 
 def get_pair_or_error(langpair, text_length):
@@ -30,23 +37,12 @@ def get_format(format, deformat, reformat):
     return deformat, reformat
 
 
-def translate_and_respond(self, pair, pipeline, to_translate, mark_unknown, nosplit=False, deformat=True, reformat=True):
-        mark_unknown = mark_unknown in ['yes', 'true', '1']
-        translated = translate(to_translate, nosplit, deformat, reformat)
-        val = maybe_strip_marks(mark_unknown, pair, translated)
-        return val
-
-def transalate(langpair, text, markUnknown='yes', format=None, deformat='html', reformat='html-noent'):
-	init_pairs_graph()
-	init_paths()
-    pair = get_pair_or_error(langpair), len(text)
+def translate(langpair, text, markUnknown='yes', format=None, deformat='html', reformat='html-noent'):
+    pair = get_pair_or_error(langpair, len(text))
     if pair is not None:
-        pipeline = get_pipeline(pair)
+        (l1, l2) = pair
+        cmds = list(get_pipe_cmds(l1, l2).commands)
         deformat, reformat = get_format(format, deformat, reformat)
-        return translate_and_respond(pair,
-                                         pipeline,
-                                         text,
-                                         markUnknown,
-                                         nosplit=False,
-                                         deformat=deformat,
-                                         reformat=reformat)
+        res = execute(to_translate, cmds)
+        return res
+        
