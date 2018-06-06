@@ -1,7 +1,9 @@
 from apertium.mode_search import search_path
 from apertium.analysis import analyze  # noqa: F401
 from apertium.generation import generate  # noqa: F401
-from apertium.translation import translate  #noqa: F401
+from apertium.translation import translate  # noqa: F401
+from apertium.utils import ParsedModes  # noqa: F401
+
 
 if False:
     from typing import List, Dict, Tuple  # noqa: F401
@@ -10,7 +12,12 @@ if False:
 class ModeNotInstalled(ValueError):
     pass
 
+
 class PairNotInstalled(ValueError):
+    pass
+
+
+class ProcessFailure(Exception):
     pass
 
 
@@ -25,7 +32,7 @@ def update_modes(pair_path):  # type: (str) -> None
     if modes['generator']:
         for dirpath, modename, lang_pair in modes['generator']:
             generators[lang_pair] = (dirpath, modename)
-    print("These are the mode pairs", modes['pair'])
+    # print("These are the mode pairs", modes['pair'])
 
 
 def append_pair_path(pair_path):  # type: (str) -> None
@@ -36,10 +43,7 @@ def append_pair_path(pair_path):  # type: (str) -> None
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
-pairs = {}
-pairs_graph = {}
-paths = {}
-pipelines = {}
-pipeline_cmds = {}
+pairs = {}  # type: Dict[str, str]
+pipeline_cmds = {}  # type: Dict[Tuple[str, str], ParsedModes]
 for pair_path in pair_paths:
     update_modes(pair_path)

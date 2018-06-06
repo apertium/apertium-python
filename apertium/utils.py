@@ -1,41 +1,56 @@
 import subprocess
 import re
+import os
+
 from collections import namedtuple
 
+if False:
+    from typing import List, Dict, Tuple, Union  # noqa: F401
 
-from apertium.iso639 import iso_639_codes
+from apertium.iso639 import iso_639_codes  # noqa: F401
 
 if False:
-    import typing # noqa:F401
-    from typing import List # noqa:F401
+    import typing  # noqa:F401
+    from typing import List  # noqa:F401
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
+
+
+ParsedModes = namedtuple('ParsedModes', 'do_flush commands')
 
 
 def to_alpha3_code(code):  # type: (str) -> str
     if '_' in code:
         code, variant = code.split('_')
-        return '%s_%s' % ((iso639_codes_inverse[code], variant) if code in iso639_codes_inverse else (code, variant))
+        return '%s_%s' % ((iso639_codes_inverse[code],
+                           variant) if code in iso639_codes_inverse else (
+            code,
+            variant))
     else:
         return iso639_codes_inverse[code] if code in iso639_codes_inverse else code
+
 
 def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     procs = []
     end = inp.encode()
     for i, command in enumerate(commands):
         procs.append(
-            subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),
+            subprocess.Popen(
+                command,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE),
         )
         end, _ = procs[i].communicate(end)
-    return end.decode()
+    return end.decode('utf-8')
 
-def cmd_needs_z(cmd):
+
+def cmd_needs_z(cmd):  # type: (str) -> bool
     exceptions = r'^\s*(vislcg3|cg-mwesplit|hfst-tokeni[sz]e|divvun-suggest)'
     return re.match(exceptions, cmd) is None
 
-ParsedModes = namedtuple('ParsedModes', 'do_flush commands')
 
-def parse_mode_file(mode_path):
+def parse_mode_file(mode_path):  # type: (str) -> Union[ParsedModes, Exception]
+    # print("This is the type of mode path", type(mode_path))
     mode_str = open(mode_path, 'r').read().strip()
     if mode_str:
         if 'ca-oc@aran' in mode_str:
