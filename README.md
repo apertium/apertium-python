@@ -1,6 +1,6 @@
 # Apertium + Python
 
-[![Travis Build Status](https://travis-ci.com/apertium/apertium-python.svg)](https://travis-ci.org/apertium/apertium-python)
+[![Travis Build Status](https://travis-ci.com/apertium/apertium-python.svg?branch=master)](https://travis-ci.com/apertium/apertium-python)
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/sesdinoy4cw2p1tk/branch/master?svg=true)](https://ci.appveyor.com/project/sushain97/apertium-python/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/apertium/apertium-python/badge.svg?branch=master)](https://coveralls.io/github/apertium/apertium-python?branch=master)
 
@@ -20,7 +20,7 @@
 Performing Morphological Analysis
 ```python
 In [1]: import apertium
-In [2]: apertium.analyze('cats', 'en')
+In [2]: apertium.analyze('en', 'cats')
 Out[2]: cats/cat<n><pl>
 ```
  
@@ -28,15 +28,15 @@ Out[2]: cats/cat<n><pl>
 Performing Morphological Generation
   ```python 
 In [1]: import apertium
-In [2]: apertium.generate('cat<n><pl>', 'en')
+In [2]: apertium.generate('en', '^cat<n><pl>$')
 Out[2]: 'cats'
  ```
  
 ### Installing more modes from other language data
 One can also install modes by providing the path to the lang-data using this simple function
 ```python
-In [1]: import apertium as a
-In [2]: a.append_pair_path('..')
+In [1]: import apertium
+In [2]: apertium.append_pair_path('..')
 ```
 
 ### Translation
