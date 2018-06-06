@@ -24,8 +24,8 @@ In [2]: apertium.analyze('cats', 'en')
 Out[2]: cats/cat<n><pl>
 ```
  
- ### Generation
- Performing Morphological Generation
+### Generation
+Performing Morphological Generation
   ```python 
 In [1]: import apertium
 In [2]: apertium.generate('cat<n><pl>', 'en')
@@ -37,4 +37,12 @@ One can also install modes by providing the path to the lang-data using this sim
 ```python
 In [1]: import apertium as a
 In [2]: a.append_pair_path('..')
+```
+
+### Translation
+Performing Translations
+```python
+In [3]: import apertium
+In [4]: apertium.translate('eng', 'spa', 'I love you')
+Out[4]: 'Te quieres'
 ```
