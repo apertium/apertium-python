@@ -1,5 +1,4 @@
 import re
-import subprocess  # noqa: F401
 from subprocess import Popen, PIPE
 
 if False:
@@ -9,21 +8,22 @@ import apertium  # noqa: F401
 from apertium.utils import to_alpha3_code, execute, parse_mode_file, ParsedModes  # noqa: F401
 
 
+pipeline_cmds = {}  # type: Dict[Tuple[str, str], ParsedModes]
+
+
 def get_pipe_cmds(l1, l2):  # type: (str, str) -> ParsedModes
-    if (l1, l2) not in apertium.pipeline_cmds:
+    if (l1, l2) not in pipeline_cmds:
         mode_path = apertium.pairs['%s-%s' % (l1, l2)]
-        apertium.pipeline_cmds[(l1, l2)] = parse_mode_file(mode_path)  # type: ignore
-    return apertium.pipeline_cmds[(l1, l2)]
+        pipeline_cmds[(l1, l2)] = parse_mode_file(mode_path)
+    return pipeline_cmds[(l1, l2)]
 
 
 def get_pair_or_error(l1, l2):  # type: (str, str) -> Union[None, Tuple[str, str]]
     try:
         l1, l2 = map(to_alpha3_code, [l1, l2])
     except ValueError:
-        print('Pair is Invalid')
         return None
     if '%s-%s' % (l1, l2) not in apertium.pairs:
-        print('Pair is not Installed')
         return None
     else:
         return (l1, l2)
@@ -42,7 +42,7 @@ def get_format(format, deformat, reformat):  # type: (Union[str, None], Union[st
     return deformat, reformat
 
 
-def check_ret_code(name, proc):  # type: (str, subprocess.Popen) -> None
+def check_ret_code(name, proc):  # type: (str, Popen) -> None
     if proc.returncode != 0:
         raise apertium.ProcessFailure('%s failed, exit code %s', name, proc.returncode)
 
@@ -58,13 +58,15 @@ def validate_formatters(deformat, reformat):  # type: (Union[str, None], Union[s
         'apertium-deshtml',
         'apertium-destxt',
         'apertium-desrtf',
-        False]
+        False,
+    ]
     reformatters = [
         'apertium-rehtml-noent',
         'apertium-rehtml',
         'apertium-retxt',
         'apertium-rertf',
-        False]
+        False,
+    ]
     return valid1(deformat, deformatters), valid1(reformat, reformatters)
 
 
@@ -92,25 +94,16 @@ def get_reformat(reformat, text):  # type: (str, str) -> str
     return result  # type: ignore
 
 
-def translate(
-        l1,
-        l2,
-        text,
-        markunknown='no',
-        format=None,
-        deformat='txt',
-        reformat='txt'):  # type: (str, str, str, str, Union[str, None], str, str) -> str
+def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):  # type: (str, str, str, bool, Union[str, None], str, str) -> str
     pair = get_pair_or_error(l1, l2)
     if pair is not None:
-        (l1, l2) = pair
+        l1, l2 = pair
         cmds = list(get_pipe_cmds(l1, l2).commands)
-        unsafe_deformat, unsafe_reformat = get_format(
-            format, deformat, reformat)
-        deformat, reformat = validate_formatters(  # type: ignore
-            unsafe_deformat, unsafe_reformat)
+        unsafe_deformat, unsafe_reformat = get_format(format, deformat, reformat)
+        deformat, reformat = validate_formatters(unsafe_deformat, unsafe_reformat)  # type: ignore
         deformatted = get_deformat(deformat, text)
         output = execute(deformatted, cmds)
         result = get_reformat(reformat, output).strip()
         return result.decode()  # type: ignore
     else:
-        raise apertium.PairNotInstalled()
+        raise apertium.ModeNotInstalled()

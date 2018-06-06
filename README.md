@@ -42,7 +42,7 @@ In [2]: apertium.append_pair_path('..')
 ### Translation
 Performing Translations
 ```python
-In [3]: import apertium
-In [4]: apertium.translate('eng', 'spa', 'I love you')
-Out[4]: 'Te quieres'
+In [1]: import apertium
+In [2]: apertium.translate('eng', 'spa', 'I love you')
+Out[1]: 'Te quieres'
 ```

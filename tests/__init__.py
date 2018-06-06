@@ -14,8 +14,7 @@ class TestAnalyze(unittest.TestCase):
     def test_en(self):
         lexical_units = apertium.analyze('en', 'cats')
         lexical_unit = lexical_units[0]
-        self.assertListEqual(lexical_unit.readings, [
-                             [SReading(baseform='cat', tags=['n', 'pl'])]])
+        self.assertListEqual(lexical_unit.readings, [[SReading(baseform='cat', tags=['n', 'pl'])]])
         self.assertEqual(lexical_unit.wordform, 'cats')
         self.assertEqual(lexical_unit.knownness, known)
 
@@ -44,5 +43,5 @@ class TestGenerate(unittest.TestCase):
 
 class TestTranslate(unittest.TestCase):
     def test_en_spa(self):
-        translated = apertium.translate('eng', 'spa', 'I love you')
-        self.assertEqual(translated, 'Te quieres')
+        translated = apertium.translate('eng', 'spa', 'cats')
+        self.assertEqual(translated, 'Gatos')

@@ -13,10 +13,6 @@ class ModeNotInstalled(ValueError):
     pass
 
 
-class PairNotInstalled(ValueError):
-    pass
-
-
 class ProcessFailure(Exception):
     pass
 
@@ -32,7 +28,6 @@ def update_modes(pair_path):  # type: (str) -> None
     if modes['generator']:
         for dirpath, modename, lang_pair in modes['generator']:
             generators[lang_pair] = (dirpath, modename)
-    # print("These are the mode pairs", modes['pair'])
 
 
 def append_pair_path(pair_path):  # type: (str) -> None
@@ -44,6 +39,5 @@ pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
 pairs = {}  # type: Dict[str, str]
-pipeline_cmds = {}  # type: Dict[Tuple[str, str], ParsedModes]
 for pair_path in pair_paths:
     update_modes(pair_path)
