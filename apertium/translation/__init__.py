@@ -79,8 +79,8 @@ def get_deformat(deformat, text):  # type: (str, str) -> str
         check_ret_code('Deformatter', proc_deformat)
     else:
         deformatted = bytes(text, 'utf-8')
-    deformatted = str(deformatted)
-    return deformatted  # type: ignore
+    res = str(deformatted)
+    return res
 
 
 def get_reformat(reformat, text):  # type: (str, str) -> str

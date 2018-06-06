@@ -13,7 +13,7 @@ from apertium.iso639 import iso_639_codes  # noqa: F401
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 
 
-ParsedModes = namedtuple('ParsedModes', 'do_flush commands')
+ParsedModes = namedtuple('ParsedModes', 'commands')
 
 
 def to_alpha3_code(code):  # type: (str) -> str
@@ -39,7 +39,6 @@ def parse_mode_file(mode_path):  # type: (str) -> ParsedModes
     mode_str = open(mode_path, 'r').read().strip()
     if mode_str:
         if 'ca-oc@aran' in mode_str:
-            do_flush = False
             modes_parentdir = os.path.dirname(os.path.dirname(mode_path))
             mode_name = os.path.splitext(os.path.basename(mode_path))[0]
             commands = [[
@@ -50,7 +49,6 @@ def parse_mode_file(mode_path):  # type: (str) -> ParsedModes
                 mode_name,
             ]]
         else:
-            do_flush = True
             commands = []
             for cmd in mode_str.strip().split('|'):
                 # TODO: we should make language pairs install
@@ -59,6 +57,6 @@ def parse_mode_file(mode_path):  # type: (str) -> ParsedModes
                 cmd = cmd.replace('$2', '').replace('$1', '-g')
                 cmd = re.sub(r'^\s*(\S*)', r'\g<1> -z', cmd)
                 commands.append([c.strip("'") for c in cmd.split()])
-        return ParsedModes(do_flush, commands)
+        return ParsedModes(commands)
     else:
         raise Exception('Could not parse mode file %s', mode_path)
