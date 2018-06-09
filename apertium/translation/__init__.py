@@ -1,17 +1,18 @@
 import re
+import subprocess
 from subprocess import Popen, PIPE
 
 if False:
     from typing import List, Dict, Tuple, Union, Optional, NamedTuple  # noqa: F401
 
 import apertium  # noqa: F401
-from apertium.utils import to_alpha3_code, execute, parse_mode_file, ParsedModes  # noqa: F401
+from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F401
 
 
-pipeline_cmds = {}  # type: Dict[Tuple[str, str], ParsedModes]
+pipeline_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
 
 
-def get_pipe_cmds(l1, l2):  # type: (str, str) -> ParsedModes
+def get_pipe_cmds(l1, l2):  # type: (str, str) -> List[List[str]]
     if (l1, l2) not in pipeline_cmds:
         mode_path = apertium.pairs['%s-%s' % (l1, l2)]
         pipeline_cmds[(l1, l2)] = parse_mode_file(mode_path)
@@ -44,7 +45,7 @@ def get_format(format, deformat, reformat):  # type: (Union[str, None], Union[st
 
 def check_ret_code(name, proc):  # type: (str, Popen) -> None
     if proc.returncode != 0:
-        raise apertium.ProcessFailure('%s failed, exit code %s', name, proc.returncode)
+        raise subprocess.CalledProcessError()  # type: ignore
 
 
 def validate_formatters(deformat, reformat):  # type: (Union[str, None], Union[str, None]) -> Tuple[Union[str, object], Union[str, object]]
@@ -98,7 +99,7 @@ def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', ref
     pair = get_pair_or_error(l1, l2)
     if pair is not None:
         l1, l2 = pair
-        cmds = list(get_pipe_cmds(l1, l2).commands)
+        cmds = list(get_pipe_cmds(l1, l2))
         unsafe_deformat, unsafe_reformat = get_format(format, deformat, reformat)
         deformat, reformat = validate_formatters(unsafe_deformat, unsafe_reformat)  # type: ignore
         deformatted = get_deformat(deformat, text)

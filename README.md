@@ -44,5 +44,5 @@ Performing Translations
 ```python
 In [1]: import apertium
 In [2]: apertium.translate('eng', 'spa', 'I love you')
-Out[1]: 'Te quieres'
+Out[2]: 'Te quieres'
 ```

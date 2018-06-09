@@ -2,7 +2,6 @@ import subprocess
 import re
 import os
 
-from collections import namedtuple
 
 if False:
     from typing import List, Dict, Tuple, Union  # noqa: F401
@@ -11,9 +10,6 @@ from apertium.iso639 import iso_639_codes  # noqa: F401
 
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
-
-
-ParsedModes = namedtuple('ParsedModes', 'commands')
 
 
 def to_alpha3_code(code):  # type: (str) -> str
@@ -35,7 +31,7 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     return end.decode()
 
 
-def parse_mode_file(mode_path):  # type: (str) -> ParsedModes
+def parse_mode_file(mode_path):  # type: (str) -> List[List[str]]
     mode_str = open(mode_path, 'r').read().strip()
     if mode_str:
         if 'ca-oc@aran' in mode_str:
@@ -57,6 +53,6 @@ def parse_mode_file(mode_path):  # type: (str) -> ParsedModes
                 cmd = cmd.replace('$2', '').replace('$1', '-g')
                 cmd = re.sub(r'^\s*(\S*)', r'\g<1> -z', cmd)
                 commands.append([c.strip("'") for c in cmd.split()])
-        return ParsedModes(commands)
+        return commands
     else:
         raise Exception('Could not parse mode file %s', mode_path)
