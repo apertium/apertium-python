@@ -1,7 +1,7 @@
 from apertium.mode_search import search_path
-from apertium.analysis import analyze  # noqa: F401
-from apertium.generation import generate  # noqa: F401
-from apertium.translation import translate  # noqa: F401
+from apertium.analysis import Analyzer  # noqa: F401
+from apertium.generation import Generator  # noqa: F401
+from apertium.translation import Translator  # noqa: F401
 
 
 if False:
