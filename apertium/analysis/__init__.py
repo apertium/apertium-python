@@ -9,35 +9,31 @@ if False:
 
 class Analyzer:
 
-    def __init__(self):
+    def __init__(self, lang):  # type: (Analyzer, str) -> None
         self.analyzer_cmds = {}  # type: Dict[str, List[List[str]]]
+        self.lang = to_alpha3_code(lang)  # type: str
+        if self.lang not in apertium.analyzers:
+            raise apertium.ModeNotInstalled(self.lang)
+        else:
+            self.path, self.mode = apertium.analyzers[self.lang]
 
+    def _get_commands(self):  # type: (Analyzer) -> List[List[str]]
+        if self.lang not in self.analyzer_cmds:
+            mode_path, mode = apertium.analyzers[self.lang]
+            self.analyzer_cmds[self.lang] = parse_mode_file(mode_path+'/modes/'+mode+'.mode')
+        return self.analyzer_cmds[self.lang]
 
-    def _get_commands(self, lang):  # type: (str) -> List[List[str]]
-        if lang not in self.analyzer_cmds:
-            mode_path, mode = apertium.analyzers[lang]
-            self.analyzer_cmds[lang] = parse_mode_file(mode_path+'/modes/'+mode+'.mode')
-        return self.analyzer_cmds[lang]
-
-
-    def _postproc_text(self, result):  # type: (str) -> List[LexicalUnit]
+    def _postproc_text(self, result):  # type: (Analyzer, str) -> List[LexicalUnit]
         """
         postprocesses the input
         """
         lexical_units = list(parse(result))
         return lexical_units
 
-
-    def analyze(self, lang, in_text, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
+    def analyze(self, in_text, formatting='txt'):  # type: (Analyzer, str, str) -> List[LexicalUnit]
         """
         runs apertium to analyze the input
         """
-        lang = to_alpha3_code(lang)
-
-        if lang in apertium.analyzers:
-            commands = list(self._get_commands(lang))
-            result = execute(in_text, commands)
-            return self._postproc_text(result)
-        else:
-            raise apertium.ModeNotInstalled(lang)
-
+        commands = [['apertium', '-d', self.path, '-f', formatting, self.mode]]
+        result = execute(in_text, commands)
+        return self._postproc_text(result)

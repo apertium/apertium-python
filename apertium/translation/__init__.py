@@ -8,22 +8,23 @@ if False:
 import apertium  # noqa: F401
 from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F401
 
+
 class Translator:
 
-    def __init__(self):    
+    def __init__(self, l1, l2):  # type: (Translator, str, str) -> None
         self.translation_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
+        self.l1 = l1
+        self.l2 = l2
 
-
-    def _get_commands(l1, l2):  # type: (str, str) -> List[List[str]]
-        if (l1, l2) not in translation_cmds:
+    def _get_commands(self, l1, l2):  # type: (Translator, str, str) -> List[List[str]]
+        if (l1, l2) not in self.translation_cmds:
             mode_path = apertium.pairs['%s-%s' % (l1, l2)]
-            translation_cmds[(l1, l2)] = parse_mode_file(mode_path)
-        return translation_cmds[(l1, l2)]
+            self.translation_cmds[(l1, l2)] = parse_mode_file(mode_path)
+        return self.translation_cmds[(l1, l2)]
 
-
-    def _get_pair_or_error(l1, l2):  # type: (str, str) -> Union[None, Tuple[str, str]]
+    def _get_pair_or_error(self):  # type: (Translator) -> Union[None, Tuple[str, str]]
         try:
-            l1, l2 = map(to_alpha3_code, [l1, l2])
+            l1, l2 = map(to_alpha3_code, [self.l1, self.l2])
         except ValueError:
             return None
         if '%s-%s' % (l1, l2) not in apertium.pairs:
@@ -31,8 +32,8 @@ class Translator:
         else:
             return (l1, l2)
 
-
-    def _get_format(format, deformat, reformat):  # type: (Union[str, None], Union[str, None], Union[str, None]) -> Tuple[Union[str, None], Union[str, None]]
+    def _get_format(self, format, deformat, reformat):
+        # type: (Translator, Union[str, None], Union[str, None], Union[str, None]) -> Tuple[Union[str, None], Union[str, None]]
         if format:
             deformat = 'apertium-des' + format
             reformat = 'apertium-re' + format
@@ -44,13 +45,12 @@ class Translator:
 
         return deformat, reformat
 
-
-    def _check_ret_code(name, proc):  # type: (str, Popen) -> None
+    def _check_ret_code(self, name, proc):  # type: (Translator, str, Popen) -> None
         if proc.returncode != 0:
             raise subprocess.CalledProcessError()  # type: ignore
 
-
-    def _validate_formatters(deformat, reformat):  # type: (Union[str, None], Union[str, None]) -> Tuple[Union[str, object], Union[str, object]]
+    def _validate_formatters(self, deformat, reformat):
+        # type: (Translator, Union[str, None], Union[str, None]) -> Tuple[Union[str, object], Union[str, object]]
         def valid1(elt, lst):  # type: (Union[str, None], List[object]) -> Union[str, object]
             if elt in lst:
                 return elt
@@ -72,8 +72,7 @@ class Translator:
         ]
         return valid1(deformat, deformatters), valid1(reformat, reformatters)
 
-
-    def _get_deformat(deformat, text):  # type: (str, str) -> str
+    def _get_deformat(self, deformat, text):  # type: (Translator, str, str) -> str
         if deformat:
             proc_deformat = Popen(deformat, stdin=PIPE, stdout=PIPE)
             proc_deformat.stdin.write(bytes(text, 'utf-8'))
@@ -85,8 +84,7 @@ class Translator:
         res = str(deformatted)
         return res
 
-
-    def _get_reformat(reformat, text):  # type: (str, str) -> str
+    def _get_reformat(self, reformat, text):  # type: (Translator, str, str) -> str
         if reformat:
             proc_reformat = Popen(reformat, stdin=PIPE, stdout=PIPE)
             proc_reformat.stdin.write(bytes(text, 'utf-8'))
@@ -96,17 +94,17 @@ class Translator:
             result = re.sub(rb'\0$', b'', text)  # type: ignore
         return result  # type: ignore
 
-
-    def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):  # type: (str, str, str, bool, Union[str, None], str, str) -> str
-        pair = self._get_pair_or_error(l1, l2)
+    def translate(self, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
+        # type: (Translator, str, bool, Union[str, None], str, str) -> str
+        pair = self._get_pair_or_error()
         if pair is not None:
             l1, l2 = pair
             cmds = list(self._get_commands(l1, l2))
             unsafe_deformat, unsafe_reformat = self._get_format(format, deformat, reformat)
-            deformat, reformat = self._validate_formatters(unsafe_deformat, unsafe_reformat)  # type: ignore
-            deformatted = self._get_deformat(deformat, text)
+            deformater, reformater = self._validate_formatters(unsafe_deformat, unsafe_reformat)
+            deformatted = self._get_deformat(str(deformater), text)
             output = execute(deformatted, cmds)
-            result = self._get_reformat(reformat, output).strip()
+            result = self._get_reformat(str(reformater), output).strip()
             return result.decode()  # type: ignore
         else:
             raise apertium.ModeNotInstalled()

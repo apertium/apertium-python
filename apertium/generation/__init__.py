@@ -6,25 +6,25 @@ from apertium.utils import to_alpha3_code, execute, parse_mode_file
 if False:
     from typing import List, Union, Tuple, Dict  # noqa: F401
 
+
 class Generator:
 
-    def __init__(self):
+    def __init__(self, lang):  # type: (Generator, str) -> None
         self.generator_cmds = {}  # type: Dict[str, List[List[str]]]
+        self.lang = lang  # type: str
 
+    def _get_commands(self):  # type: (Generator) -> List[List[str]]
+        if self.lang not in self.generator_cmds:
+            mode_path, mode = apertium.generators[self.lang]
+            self.generator_cmds[self.lang] = parse_mode_file(mode_path+'/modes/'+mode+'.mode')
+        return self.generator_cmds[self.lang]
 
-    def _get_commands(self, lang):  # type: (str) -> List[List[str]]
-        if lang not in self.generator_cmds:
-            mode_path, mode = apertium.generators[lang]
-            self.generator_cmds[lang] = parse_mode_file(mode_path+'/modes/'+mode+'.mode')
-        return self.generator_cmds[lang]
+    def generate(self, in_text, formatting='none'):  # type: (Generator, str, str) -> Union[str, List[str]]
+        self.lang = to_alpha3_code(self.lang)
 
-
-    def generate(lang, in_text, formatting='none'):  # type: (str, str, str) -> Union[str, List[str]]
-        lang = to_alpha3_code(lang)
-
-        if lang in apertium.generators:
-            commands = list(self._get_commands(lang))
+        if self.lang in apertium.generators:
+            commands = list(self._get_commands())
             result = execute(in_text, commands)
-            return result
+            return result.rstrip('\x00')
         else:
-            raise apertium.ModeNotInstalled(lang)
+            raise apertium.ModeNotInstalled(self.lang)
