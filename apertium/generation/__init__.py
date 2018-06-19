@@ -8,7 +8,6 @@ if False:
 
 
 class Generator:
-
     def __init__(self, lang):  # type: (Generator, str) -> None
         self.generator_cmds = {}  # type: Dict[str, List[List[str]]]
         self.lang = lang  # type: str

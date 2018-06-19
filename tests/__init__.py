@@ -11,7 +11,6 @@ import apertium  # noqa: E402
 
 
 class TestAnalyze(unittest.TestCase):
-
     def test_analyzer_en(self):
         analyzer = apertium.Analyzer('en')
         lexical_units = analyzer.analyze('cats')
@@ -33,7 +32,6 @@ class TestAnalyze(unittest.TestCase):
 
 
 class TestGenerate(unittest.TestCase):
-
     def test_generator_single(self):
         generator = apertium.Generator('en')
         wordform = generator.generate('^cat<n><pl>$')
@@ -72,7 +70,6 @@ class TestGenerate(unittest.TestCase):
 
 
 class TestTranslate(unittest.TestCase):
-
     def test_en_spa(self):
         translator = apertium.Translator('eng', 'spa')
         translated = translator.translate('cats')

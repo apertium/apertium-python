@@ -10,7 +10,6 @@ from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F40
 
 
 class Translator:
-
     def __init__(self, l1, l2):  # type: (Translator, str, str) -> None
         self.translation_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
         self.l1 = l1
@@ -22,7 +21,7 @@ class Translator:
             self.translation_cmds[(l1, l2)] = parse_mode_file(mode_path)
         return self.translation_cmds[(l1, l2)]
 
-    def _get_pair_or_error(self):  # type: (Translator) -> Union[None, Tuple[str, str]]
+    def _get_pair_or_error(self):  # type: (Translator) -> Optional[Tuple[str, str]]
         try:
             l1, l2 = map(to_alpha3_code, [self.l1, self.l2])
         except ValueError:
@@ -33,7 +32,7 @@ class Translator:
             return (l1, l2)
 
     def _get_format(self, format, deformat, reformat):
-        # type: (Translator, Union[str, None], Union[str, None], Union[str, None]) -> Tuple[Union[str, None], Union[str, None]]
+        # type: (Translator, Optional[str], Optional[str], Optional[str]) -> Tuple[Optional[str], Optional[str]]
         if format:
             deformat = 'apertium-des' + format
             reformat = 'apertium-re' + format
@@ -45,13 +44,13 @@ class Translator:
 
         return deformat, reformat
 
-    def _check_ret_code(self, name, proc):  # type: (Translator, str, Popen) -> None
+    def _check_ret_code(self, proc):  # type: (Translator, Popen) -> None
         if proc.returncode != 0:
             raise subprocess.CalledProcessError()  # type: ignore
 
     def _validate_formatters(self, deformat, reformat):
-        # type: (Translator, Union[str, None], Union[str, None]) -> Tuple[Union[str, object], Union[str, object]]
-        def valid1(elt, lst):  # type: (Union[str, None], List[object]) -> Union[str, object]
+        # type: (Translator, Optional[str], Optional[str]) -> Tuple[Union[str, object], Union[str, object]]
+        def valid1(elt, lst):  # type: (Optional[str], List[object]) -> Union[str, object]
             if elt in lst:
                 return elt
             else:
@@ -78,7 +77,7 @@ class Translator:
             proc_deformat.stdin.write(bytes(text, 'utf-8'))
             deformatted = proc_deformat.communicate()[0]
             deformatted = deformatted.decode()
-            self._check_ret_code('Deformatter', proc_deformat)
+            self._check_ret_code(proc_deformat)
         else:
             deformatted = bytes(text, 'utf-8')
         res = str(deformatted)
@@ -89,13 +88,13 @@ class Translator:
             proc_reformat = Popen(reformat, stdin=PIPE, stdout=PIPE)
             proc_reformat.stdin.write(bytes(text, 'utf-8'))
             result = proc_reformat.communicate()[0]
-            self._check_ret_code('Reformatter', proc_reformat)
+            self._check_ret_code(proc_reformat)
         else:
             result = re.sub(rb'\0$', b'', text)  # type: ignore
         return result  # type: ignore
 
     def translate(self, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
-        # type: (Translator, str, bool, Union[str, None], str, str) -> str
+        # type: (Translator, str, bool, Optional[str], str, str) -> str
         pair = self._get_pair_or_error()
         if pair is not None:
             l1, l2 = pair

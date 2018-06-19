@@ -8,7 +8,6 @@ if False:
 
 
 class Analyzer:
-
     def __init__(self, lang):  # type: (Analyzer, str) -> None
         self.analyzer_cmds = {}  # type: Dict[str, List[List[str]]]
         self.lang = to_alpha3_code(lang)  # type: str
