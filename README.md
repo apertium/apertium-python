@@ -18,6 +18,7 @@
 
 ### Analysis
 Performing Morphological Analysis
+
 Method 1: One can create ```Analyzer``` objects on which ```analyze()``` function can be run.
 ```python
 In [1]: import apertium
@@ -34,6 +35,7 @@ Out[2]: cats/cat<n><pl>
 
 ### Generation
 Performing Morphological Generation
+
 Method 1:  Just like the ```Analyzer```, One can create ```Generator``` objects on which ```generate()``` function can be run.
 ```python 
 In [1]: import apertium
