@@ -39,11 +39,6 @@ class Analyzer:
 
 
 def analyze(lang, in_text, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
-    if lang not in apertium.analyzers:
-        raise apertium.ModeNotInstalled(lang)
-    else:
-        path, mode = apertium.analyzers[lang]
-    commands = [['apertium', '-d', path, '-f', formatting, mode]]
-    result = execute(in_text, commands)
-    lexical_units = list(parse(result))
-    return lexical_units
+    analyzer = Analyzer(lang)
+    analyzed = analyzer.analyze(in_text, formatting)
+    return analyzed

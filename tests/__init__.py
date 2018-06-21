@@ -70,7 +70,11 @@ class TestGenerate(unittest.TestCase):
 
 
 class TestTranslate(unittest.TestCase):
-    def test_en_spa(self):
+    def test_translator_en_spa(self):
         translator = apertium.Translator('eng', 'spa')
         translated = translator.translate('cats')
+        self.assertEqual(translated, 'Gatos')
+
+    def test_en_spa(self):
+        translated = apertium.translate('eng', 'spa', 'cats')
         self.assertEqual(translated, 'Gatos')

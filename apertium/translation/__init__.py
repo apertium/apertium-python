@@ -10,6 +10,8 @@ from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F40
 
 
 class Translator:
+    _get_pair_or_error = lambda self: (map(to_alpha3_code, [self.l1, self.l2])) if '%s-%s' % (map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs else None
+
     def __init__(self, l1, l2):  # type: (Translator, str, str) -> None
         self.translation_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
         self.l1 = l1
@@ -21,15 +23,6 @@ class Translator:
             self.translation_cmds[(l1, l2)] = parse_mode_file(mode_path)
         return self.translation_cmds[(l1, l2)]
 
-    def _get_pair_or_error(self):  # type: (Translator) -> Optional[Tuple[str, str]]
-        try:
-            l1, l2 = map(to_alpha3_code, [self.l1, self.l2])
-        except ValueError:
-            return None
-        if '%s-%s' % (l1, l2) not in apertium.pairs:
-            return None
-        else:
-            return (l1, l2)
 
     def _get_format(self, format, deformat, reformat):
         # type: (Translator, Optional[str], Optional[str], Optional[str]) -> Tuple[Optional[str], Optional[str]]
@@ -107,3 +100,10 @@ class Translator:
             return result.decode()  # type: ignore
         else:
             raise apertium.ModeNotInstalled()
+
+
+def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
+    # type: (str, str, str, bool, Optional[str], str, str) -> str
+    translator = apertium.Translator(l1, l2)
+    translated = translator.translate(text, mark_unknown, format, deformat, reformat)
+    return translated
