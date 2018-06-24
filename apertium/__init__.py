@@ -12,10 +12,6 @@ class ModeNotInstalled(ValueError):
     pass
 
 
-class ProcessFailure(Exception):
-    pass
-
-
 def update_modes(pair_path):  # type: (str) -> None
     modes = search_path(pair_path)
     if modes['pair']:

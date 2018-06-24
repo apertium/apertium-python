@@ -10,9 +10,6 @@ from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F40
 
 
 class Translator:
-
-    get_pair_or_error = lambda self: (map(to_alpha3_code, [self.l1, self.l2])) if '%s-%s' % tuple(map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs else None  # type: ignore  # noqa: E731 E501
-
     def __init__(self, l1, l2):  # type: (Translator, str, str) -> None
         self.translation_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
         self.l1 = l1
@@ -88,7 +85,11 @@ class Translator:
 
     def translate(self, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
         # type: (Translator, str, bool, Optional[str], str, str) -> str
-        pair = self.get_pair_or_error()  # type: ignore
+        if '%s-%s' % tuple(map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs:  # type: ignore
+            pair = map(to_alpha3_code, [self.l1, self.l2])
+        else:
+            pass
+
         if pair is not None:
             l1, l2 = pair
             cmds = list(self._get_commands(l1, l2))
