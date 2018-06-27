@@ -24,7 +24,7 @@ script:
         fi;
       fi
     - coverage run -m unittest --verbose --buffer tests
-    - coverage report --show-missing --fail-under 80 --include 'apertium/**'
+    - coverage report --show-missing --fail-under 85 --include 'apertium/**'
 after_success:
     - coveralls
 notifications:
