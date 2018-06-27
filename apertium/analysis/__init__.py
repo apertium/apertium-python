@@ -40,5 +40,4 @@ class Analyzer:
 
 def analyze(lang, in_text, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
     analyzer = Analyzer(lang)
-    analyzed = analyzer.analyze(in_text, formatting)
-    return analyzed
+    return analyzer.analyze(in_text, formatting)

@@ -1,6 +1,5 @@
 import re
-import subprocess
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, CalledProcessError
 
 if False:
     from typing import List, Dict, Tuple, Union, Optional, NamedTuple  # noqa: F401
@@ -36,7 +35,7 @@ class Translator:
 
     def _check_ret_code(self, proc):  # type: (Translator, Popen) -> None
         if proc.returncode != 0:
-            raise subprocess.CalledProcessError()  # type: ignore
+            raise CalledProcessError()  # type: ignore
 
     def _validate_formatters(self, deformat, reformat):
         # type: (Translator, Optional[str], Optional[str]) -> Tuple[Union[str, object], Union[str, object]]
@@ -88,7 +87,7 @@ class Translator:
         if '%s-%s' % tuple(map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs:  # type: ignore
             pair = map(to_alpha3_code, [self.l1, self.l2])
         else:
-            pass
+            raise apertium.ModeNotInstalled()
 
         if pair is not None:
             l1, l2 = pair
@@ -99,12 +98,9 @@ class Translator:
             output = execute(deformatted, cmds)
             result = self._get_reformat(str(reformater), output).strip()
             return result.decode()  # type: ignore
-        else:
-            raise apertium.ModeNotInstalled()
 
 
 def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
     # type: (str, str, str, bool, Optional[str], str, str) -> str
     translator = apertium.Translator(l1, l2)
-    translated = translator.translate(text, mark_unknown, format, deformat, reformat)
-    return translated
+    return translator.translate(text, mark_unknown, format, deformat, reformat)

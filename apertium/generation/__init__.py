@@ -31,5 +31,4 @@ class Generator:
 
 def generate(lang, in_text, formatting='none'):    # type: (str, str, str) -> Union[str, List[str]]
     generator = Generator(lang)
-    generated = generator.generate(in_text, formatting)
-    return generated
+    return generator.generate(in_text, formatting)
