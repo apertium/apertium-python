@@ -20,7 +20,7 @@ class Analyzer:
         return 'Analyzer(lang=%s)' % self.lang
 
     def __str__(self):  # type: (Analyzer) -> str
-        return '<Analyzer: %s' % self.mode
+        return '<Analyzer: %s>' % self.mode
 
     def _get_commands(self):  # type: (Analyzer) -> List[List[str]]
         if self.lang not in self.analyzer_cmds:
