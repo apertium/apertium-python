@@ -14,7 +14,7 @@ class Translator:
         self.l1 = l1
         self.l2 = l2
 
-    def __repr__(self):
+    def __repr__(self):  # type: (Translator) -> str
         return 'Translator(pair=%s-%s)' % (self.l1, self.l2)
 
     def _get_commands(self, l1, l2):  # type: (Translator, str, str) -> List[List[str]]
@@ -26,13 +26,13 @@ class Translator:
     def _get_format(self, format, deformat, reformat):
         # type: (Translator, Optional[str], Optional[str], Optional[str]) -> Tuple[Optional[str], Optional[str]]
         if format:
-            deformat = 'apertium-des' + format
-            reformat = 'apertium-re' + format
+            deformat = 'apertium-des' + str(format)
+            reformat = 'apertium-re' + str(format)
         else:
-            if 'apertium-des' not in deformat:  # type: ignore
-                deformat = 'apertium-des' + deformat  # type: ignore
-            if 'apertium-re' not in reformat:  # type: ignore
-                reformat = 'apertium-re' + reformat  # type: ignore
+            if 'apertium-des' not in str(deformat):
+                deformat = 'apertium-des' + str(deformat)
+            if 'apertium-re' not in str(reformat):
+                reformat = 'apertium-re' + str(reformat)
 
         return deformat, reformat
 

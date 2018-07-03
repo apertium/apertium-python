@@ -17,10 +17,10 @@ class Generator:
         else:
             raise apertium.ModeNotInstalled(self.lang)
 
-    def __repr__(self):  # type: (Analyzer) -> str
+    def __repr__(self):  # type: (Generator) -> str
         return 'Generator(lang=%s)' % self.lang
 
-    def __str__(self):  # type: (Analyzer) -> str
+    def __str__(self):  # type: (Generator) -> str
 
         return '<Generator: %s>' % self.mode
 
