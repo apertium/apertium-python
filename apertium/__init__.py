@@ -11,9 +11,29 @@ if False:
 class ModeNotInstalled(ValueError):
     pass
 
+class Paths(list):
+    def __init__(self, elements):
+        for element in elements:
+            update_modes(element)
+        super(Paths, self).__init__(elements)
+
+    def extend(self, elements):
+        if isinstance(elements, list):
+            for element in elements:
+                update_modes(element)
+        else:
+            update_modes(elements)
+        super(Paths, self).extend(elements)
+
+    def __add__(self, elements):
+        for element in elements:
+            update_modes(element)
+        super(Paths, self).__add__(elements)
 
 def update_modes(pair_path):  # type: (str) -> None
+    print("running on %s", pair_path)
     modes = search_path(pair_path)
+    print("these are the modes", modes)
     if modes['pair']:
         for path, lang_src, lang_trg in modes['pair']:
             pairs['%s-%s' % (lang_src, lang_trg)] = path
@@ -26,13 +46,13 @@ def update_modes(pair_path):  # type: (str) -> None
 
 
 def append_pair_path(pair_path):  # type: (str) -> None
-    pair_paths.append(pair_path)
+    paths.append(pair_path)
     update_modes(pair_path)
 
 
-pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
 pairs = {}  # type: Dict[str, str]
-for pair_path in pair_paths:
-    update_modes(pair_path)
+paths = Paths(['/usr/share/apertium', '/usr/local/share/apertium'])
+# for path in paths:
+#     update_modes(path)
