@@ -48,9 +48,8 @@ class TestGenerate(unittest.TestCase):
         self.assertEqual(lexical_units, 'cat<n><pl>')
 
     def test_generator_uninstalled_mode(self):
-        generator = apertium.Generator('spa')
         with self.assertRaises(apertium.ModeNotInstalled):
-            generator.generate('cat<n><pl>')
+            generator = apertium.Generator('spa')
 
     def test_single(self):
         wordform = apertium.generate('en', '^cat<n><pl>$')
