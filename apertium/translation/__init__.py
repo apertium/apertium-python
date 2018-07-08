@@ -94,6 +94,7 @@ class Translator:
             pair = map(to_alpha3_code, [self.l1, self.l2])
         else:
             raise apertium.ModeNotInstalled()
+
         if pair is not None:
             l1, l2 = pair
             cmds = list(self._get_commands(l1, l2))
