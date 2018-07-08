@@ -12,7 +12,7 @@ class Generator:
         self.generator_cmds = {}  # type: Dict[str, List[List[str]]]
         self.lang = to_alpha3_code(lang)  # type: str
         if self.lang in apertium.generators:
-            self.path, self.mode = apertium.generators[self.lang] 
+            self.path, self.mode = apertium.generators[self.lang]
             self.commands = list(self._get_commands())
         else:
             raise apertium.ModeNotInstalled(self.lang)
@@ -21,7 +21,6 @@ class Generator:
         return 'Generator(lang=%s)' % self.lang
 
     def __str__(self):  # type: (Generator) -> str
-
         return '<Generator: %s>' % self.mode
 
     def _get_commands(self):  # type: (Generator) -> List[List[str]]
@@ -31,8 +30,14 @@ class Generator:
         return self.generator_cmds[self.lang]
 
     def generate(self, in_text, formatting='none'):  # type: (Generator, str, str) -> Union[str, List[str]]
-        result = execute(in_text, self.commands)
-        return result.rstrip('\x00')
+        self.lang = to_alpha3_code(self.lang)
+
+        if self.lang in apertium.generators:
+            commands = list(self._get_commands())
+            result = execute(in_text, commands)
+            return result.rstrip('\x00')
+        else:
+            raise apertium.ModeNotInstalled(self.lang)
 
 
 def generate(lang, in_text, formatting='none'):    # type: (str, str, str) -> Union[str, List[str]]
