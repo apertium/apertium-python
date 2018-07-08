@@ -13,6 +13,9 @@ class ModeNotInstalled(ValueError):
 
 
 def update_modes(path):  # type: (str) -> None
+    """
+    takes a path as input and returns updates the installed modes
+    """
     modes = search_path(path)
     if modes['pair']:
         for path, lang_src, lang_trg in modes['pair']:

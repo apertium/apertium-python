@@ -59,22 +59,16 @@ In [2]: apertium.append_pair_path('..')
 
 ### Translation
 Performing Translations
-<<<<<<< HEAD
 Method 1:
-=======
->>>>>>> 674c1cfdf645ac6cafe4be3277e20d567a43b23d
 ```python
 In [1]: import apertium
 In [2]: t = apertium.Translator('eng', 'spa')
 In [3]: t.translate('cats')
 Out[3]: 'Gatos'
 ```
-<<<<<<< HEAD
 Method 2:
 ```python
 In [1]: import apertium
 In [2]: apertium.translate('eng', 'spa', 'I love you')
 Out[2]: 'Te quieres'
 ```
-=======
->>>>>>> 674c1cfdf645ac6cafe4be3277e20d567a43b23d
