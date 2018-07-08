@@ -14,8 +14,11 @@ class Translator:
         self.l1 = l1
         self.l2 = l2
 
-    def __repr__(self):
+    def __repr__(self):  # type: (Translator) -> str
         return 'Translator(pair=%s-%s)' % (self.l1, self.l2)
+
+    def __str__(self):  # type: (Translator) -> str
+        return '<Translator: %s>' % apertium.pairs['%s-%s' % (self.l1, self.l2)].split('/')[-1]
 
     def _get_commands(self, l1, l2):  # type: (Translator, str, str) -> List[List[str]]
         if (l1, l2) not in self.translation_cmds:
@@ -91,7 +94,6 @@ class Translator:
             pair = map(to_alpha3_code, [self.l1, self.l2])
         else:
             raise apertium.ModeNotInstalled()
-
         if pair is not None:
             l1, l2 = pair
             cmds = list(self._get_commands(l1, l2))

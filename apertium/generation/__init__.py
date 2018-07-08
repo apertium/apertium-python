@@ -12,15 +12,15 @@ class Generator:
         self.generator_cmds = {}  # type: Dict[str, List[List[str]]]
         self.lang = to_alpha3_code(lang)  # type: str
         if self.lang in apertium.generators:
-            self.path, self.mode = apertium.generators[self.lang] 
+            self.path, self.mode = apertium.generators[self.lang]
             self.commands = list(self._get_commands())
         else:
             raise apertium.ModeNotInstalled(self.lang)
 
-    def __repr__(self):  # type: (Analyzer) -> str
+    def __repr__(self):  # type: (Generator) -> str
         return 'Generator(lang=%s)' % self.lang
 
-    def __str__(self):  # type: (Analyzer) -> str
+    def __str__(self):  # type: (Generator) -> str
 
         return '<Generator: %s>' % self.mode
 
