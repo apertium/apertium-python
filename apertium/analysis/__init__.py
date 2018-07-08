@@ -9,6 +9,9 @@ if False:
 
 class Analyzer:
     def __init__(self, lang):  # type: (Analyzer, str) -> None
+        """
+        initializes the Analyzer object
+        """
         self.analyzer_cmds = {}  # type: Dict[str, List[List[str]]]
         self.lang = to_alpha3_code(lang)  # type: str
         if self.lang not in apertium.analyzers:
@@ -17,6 +20,9 @@ class Analyzer:
             self.path, self.mode = apertium.analyzers[self.lang]
 
     def _get_commands(self):  # type: (Analyzer) -> List[List[str]]
+        """
+        returns the commands to run for the analysis
+        """
         if self.lang not in self.analyzer_cmds:
             mode_path, mode = apertium.analyzers[self.lang]
             self.analyzer_cmds[self.lang] = parse_mode_file(mode_path+'/modes/'+mode+'.mode')
@@ -39,5 +45,8 @@ class Analyzer:
 
 
 def analyze(lang, in_text, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
+    """
+    directly returns the analysis from apertium
+    """
     analyzer = Analyzer(lang)
     return analyzer.analyze(in_text, formatting)

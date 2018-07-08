@@ -12,8 +12,11 @@ class ModeNotInstalled(ValueError):
     pass
 
 
-def update_modes(pair_path):  # type: (str) -> None
-    modes = search_path(pair_path)
+def update_modes(path):  # type: (str) -> None
+    """
+    takes a path as input and returns updates the installed modes
+    """
+    modes = search_path(path)
     if modes['pair']:
         for path, lang_src, lang_trg in modes['pair']:
             pairs['%s-%s' % (lang_src, lang_trg)] = path
