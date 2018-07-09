@@ -30,6 +30,14 @@ class TestAnalyze(unittest.TestCase):
         with self.assertRaises(apertium.ModeNotInstalled):
             analyzer = apertium.Analyzer('spa')
 
+    def test_repr(self):
+        analyzer = apertium.Analyzer('en')
+        self.assertEqual(repr(analyzer), 'Analyzer(lang=eng)')
+
+    def test_str(self):
+        analyzer = apertium.Analyzer('en')
+        self.assertEqual(str(analyzer), '<Analyzer: eng-morph>')
+
 
 class TestGenerate(unittest.TestCase):
     def test_generator_single(self):
@@ -67,6 +75,14 @@ class TestGenerate(unittest.TestCase):
         with self.assertRaises(apertium.ModeNotInstalled):
             apertium.generate('spa', 'cat<n><pl>')
 
+    def test_repr(self):
+        generator = apertium.Generator('eng')
+        self.assertEqual(repr(generator), 'Generator(lang=eng)')
+
+    def test_str(self):
+        generator = apertium.Generator('eng')
+        self.assertEqual(str(generator), '<Generator: eng-gener>')
+
 
 class TestTranslate(unittest.TestCase):
     def test_translator_en_spa(self):
@@ -77,3 +93,11 @@ class TestTranslate(unittest.TestCase):
     def test_en_spa(self):
         translated = apertium.translate('eng', 'spa', 'cats')
         self.assertEqual(translated, 'Gatos')
+
+    def test_repr(self):
+        translator = apertium.Translator('eng', 'spa')
+        self.assertEqual(repr(translator), 'Translator(pair=eng-spa)')
+
+    def test_str(self):
+        translator = apertium.Translator('eng', 'spa')
+        self.assertEqual(str(translator), '<Translator: en-es.mode>')
