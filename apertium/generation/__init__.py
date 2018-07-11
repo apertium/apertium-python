@@ -18,10 +18,16 @@ class Generator:
             raise apertium.ModeNotInstalled(self.lang)
 
     def __repr__(self):  # type: (Generator) -> str
-        return 'Generator(lang=%s)' % self.lang
+        """
+        returns the representation of this Generator class object
+        """
+        return "Generator(lang='%s')" % self.lang
 
     def __str__(self):  # type: (Generator) -> str
-        return '<Generator: %s>' % self.mode
+        """
+        returns the printable str representation of the object
+        """
+        return "<Generator: '%s'>" % self.mode
 
     def _get_commands(self):  # type: (Generator) -> List[List[str]]
         if self.lang not in self.generator_cmds:

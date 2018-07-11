@@ -17,10 +17,16 @@ class Analyzer:
             self.path, self.mode = apertium.analyzers[self.lang]
 
     def __repr__(self):  # type: (Analyzer) -> str
-        return 'Analyzer(lang=%s)' % self.lang
+        """
+        returns the representation of this Analyzer class object
+        """
+        return "Analyzer(lang='%s')" % self.lang
 
     def __str__(self):  # type: (Analyzer) -> str
-        return '<Analyzer: %s>' % self.mode
+        """
+        returns the printable str representation of the object
+        """
+        return "<Analyzer: '%s'>" % self.mode
 
     def _get_commands(self):  # type: (Analyzer) -> List[List[str]]
         if self.lang not in self.analyzer_cmds:
