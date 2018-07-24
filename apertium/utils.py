@@ -20,6 +20,15 @@ def to_alpha3_code(code):  # type: (str) -> str
 
 
 def execute(inp, commands):  # type: (str, List[List[str]]) -> str
+    """exectues the commands in a pipeline fashion and returns the output
+
+    Args:
+        inp (str): The input to the command that is to be executed
+        commands (List[List[str]]): A list of the commands to be executed in pipeline manner
+
+    Yeilds:
+        stringified output when the command is executed
+    """
     procs = []
     end = inp.encode()
     for i, command in enumerate(commands):
@@ -31,6 +40,14 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
 
 
 def parse_mode_file(mode_path):  # type: (str) -> List[List[str]]
+    """parses the modefile and returns the commands to execute for a gives mode.
+
+    Args:
+        mode_path (str): Path to where the modes for the language data are stored
+
+    Yeilds:
+        commands (List[List[str]]): The commands that need to be run for the execution of the mode
+    """
     mode_str = open(mode_path, 'r').read().strip()
     if mode_str:
         commands = []
