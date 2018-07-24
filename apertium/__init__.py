@@ -13,8 +13,13 @@ class ModeNotInstalled(ValueError):
 
 
 def update_modes(path):  # type: (str) -> None
-    """
-    takes a path as input and returns updates the installed modes
+    """Updates the install modes
+
+    Args:
+        path(str): A string that is the absolute location to the modes to be installed
+
+    Yelids:
+        Updates the pairs, analyzers, generator dictionaries with entries
     """
     modes = search_path(path)
     if modes['pair']:
