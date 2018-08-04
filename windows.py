@@ -21,6 +21,7 @@ def change_mode(mode_file):
             if len(t) > 2 and t[0] == "'" and t[1] == "/":
                 t = t.replace('/', '\\')
                 t = t.replace(r'\usr', r'.\apertium-all-dev')
+                t = t.replace('\'', '')
                 arr[index] = t
                 # print("changed t")
                 print(arr[index])
