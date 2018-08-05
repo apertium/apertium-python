@@ -14,6 +14,18 @@ class Translator:
         self.l1 = l1
         self.l2 = l2
 
+    def __repr__(self):  # type: (Translator) -> str
+        """
+        returns the representation of this Translator class object
+        """
+        return "Translator(pair='%s-%s')" % (self.l1, self.l2)
+
+    def __str__(self):  # type: (Translator) -> str
+        """
+        returns the printable str representation of the Translator object
+        """
+        return "<Translator: '%s'>" % apertium.pairs['%s-%s' % (self.l1, self.l2)].split('/')[-1]
+
     def _get_commands(self, l1, l2):  # type: (Translator, str, str) -> List[List[str]]
         if (l1, l2) not in self.translation_cmds:
             mode_path = apertium.pairs['%s-%s' % (l1, l2)]

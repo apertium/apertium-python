@@ -31,7 +31,8 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
 
 
 def parse_mode_file(mode_path):  # type: (str) -> List[List[str]]
-    mode_str = open(mode_path, 'r').read().strip()
+    mode = open(mode_path, 'r')
+    mode_str = mode.read().strip()
     if mode_str:
         commands = []
         for cmd in mode_str.strip().split('|'):
@@ -41,6 +42,8 @@ def parse_mode_file(mode_path):  # type: (str) -> List[List[str]]
             cmd = cmd.replace('$2', '').replace('$1', '-g')
             cmd = re.sub(r'^\s*(\S*)', r'\g<1> -z', cmd)
             commands.append([c.strip("'") for c in cmd.split()])
+        mode.close()
         return commands
     else:
+        mode.close()
         raise apertium.ModeNotInstalled(mode_path)

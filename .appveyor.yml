@@ -3,22 +3,22 @@ cache:
   - '%LOCALAPPDATA%\pip\Cache'
 environment:
   matrix:
-    - PYTHON: C:\\Python34
+    - PYTHON: c:\python34
       PYTHON_VERSION: 3.4
       PYTHON_ARCH: 32
-    - PYTHON: C:\\Python34-x64
+    - PYTHON: c:\python34-x64
       PYTHON_VERSION: 3.4
       PYTHON_ARCH: 64
-    - PYTHON: C:\\Python35
+    - PYTHON: c:\python35
       PYTHON_VERSION: 3.5
       PYTHON_ARCH: 32
-    - PYTHON: C:\\Python35-x64
+    - PYTHON: c:\python35-x64
       PYTHON_VERSION: 3.4
       PYTHON_ARCH: 64
-    - PYTHON: C:\\Python36
+    - PYTHON: c:\python36
       PYTHON_VERSION: 3.6
       PYTHON_ARCH: 32
-    - PYTHON: C:\\Python36-x64
+    - PYTHON: c:\python36-x64
       PYTHON_VERSION: 3.4
       PYTHON_ARCH: 64
 init:
@@ -31,9 +31,13 @@ init:
         } # credits: JuliaLang developers
 install:
   - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
+  - ECHO %PATH%
   - python --version
   - python -c "import sys,platform,struct; print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
   - pip install -r requirements-dev.txt
+  - python windows.py
+  - SET PATH=%PATH%%cd%\apertium-all-dev\bin;
+  - "ECHO %PATH%"
 build: false
 test_script:
   - coverage run -m unittest --verbose --buffer tests
