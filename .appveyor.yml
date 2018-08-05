@@ -36,7 +36,7 @@ install:
   - python -c "import sys,platform,struct; print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
   - pip install -r requirements-dev.txt
   - python windows.py
-  - SET PATH=%PATH%;%cd%\apertium-all-dev\bin;
+  - SET PATH=%PATH%%cd%\apertium-all-dev\bin;
   - "ECHO %PATH%"
 build: false
 test_script:
