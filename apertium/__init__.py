@@ -11,6 +11,7 @@ if False:
 class ModeNotInstalled(ValueError):
     pass
 
+
 def update_modes(path):  # type: (str) -> None
     """Updates the pairs, analyzers, generator dictionaries with entries of the installed modes
 
@@ -29,13 +30,14 @@ def update_modes(path):  # type: (str) -> None
             generators[lang_pair] = (dirpath, modename)
 
 
-def append_pair_path(pair_path):  # type: (str) -> None
-    pair_paths.append(pair_path)
-    update_modes(pair_path)
+def append_pair_path(path):  # type: (str) -> None
+    paths.append(path)
+    update_modes(path)
+
 
 paths = ['/usr/share/apertium', '/usr/local/share/apertium', r'..\apertium-all-dev\share\apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
 pairs = {}  # type: Dict[str, str]
-for pair_path in pair_paths:
-    update_modes(pair_path)
+for path in paths:
+    update_modes(path)
