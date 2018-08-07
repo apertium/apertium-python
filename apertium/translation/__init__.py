@@ -9,12 +9,29 @@ from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F40
 
 
 class Translator:
+    """An Translator object containing it's translation mode and the language pair. The language pair is taken as input
+    and then the translator corresponding to the particular language that are installed are looked up
+    and used.
+
+    Attributes:
+        translation_cmds (Dict[str, List[List[str]]]): stores the commands for various translators to run succesfully.
+        l1 (str): The language in which the input text is provided
+        l2 (str): The language in which the input text is to be translated.
+    """
     def __init__(self, l1, l2):  # type: (Translator, str, str) -> None
         self.translation_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
         self.l1 = l1
         self.l2 = l2
 
     def _get_commands(self, l1, l2):  # type: (Translator, str, str) -> List[List[str]]
+        """returns the commands to run for the translation
+
+        Args:
+        Object of class Translator
+
+        Yeilds:
+        A List[List[str]] having the commands that need to be run for the particular mode execution.
+        """
         if (l1, l2) not in self.translation_cmds:
             mode_path = apertium.pairs['%s-%s' % (l1, l2)]
             self.translation_cmds[(l1, l2)] = parse_mode_file(mode_path)
@@ -22,6 +39,9 @@ class Translator:
 
     def _get_format(self, format, deformat, reformat):
         # type: (Translator, Optional[str], Optional[str], Optional[str]) -> Tuple[Optional[str], Optional[str]]
+        """
+        returns the appropriate deformat and reformat arguments
+        """
         if format:
             deformat = 'apertium-des' + format
             reformat = 'apertium-re' + format
@@ -34,11 +54,17 @@ class Translator:
         return deformat, reformat
 
     def _check_ret_code(self, proc):  # type: (Translator, Popen) -> None
+        """
+        validates if the process was executed succesfully
+        """
         if proc.returncode != 0:
             raise CalledProcessError()  # type: ignore
 
     def _validate_formatters(self, deformat, reformat):
         # type: (Translator, Optional[str], Optional[str]) -> Tuple[Union[str, object], Union[str, object]]
+        """
+        returns validated formatting arguments
+        """
         def valid1(elt, lst):  # type: (Optional[str], List[object]) -> Union[str, object]
             if elt in lst:
                 return elt
@@ -84,6 +110,13 @@ class Translator:
 
     def translate(self, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
         # type: (Translator, str, bool, Optional[str], str, str) -> str
+        """
+        Args:
+        text (str): The text to be translated from l1 to l2
+
+        Yeilds:
+        str for the translated text
+        """
         if '%s-%s' % tuple(map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs:  # type: ignore
             pair = map(to_alpha3_code, [self.l1, self.l2])
         else:
@@ -102,5 +135,8 @@ class Translator:
 
 def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
     # type: (str, str, str, bool, Optional[str], str, str) -> str
+    """
+    directly returns the translation from apertium
+    """
     translator = apertium.Translator(l1, l2)
     return translator.translate(text, mark_unknown, format, deformat, reformat)
