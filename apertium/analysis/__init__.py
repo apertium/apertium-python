@@ -10,7 +10,7 @@ if False:
 class Analyzer:
     """An Analyzer object containing its analysis mode and language
 
-    Attributes:
+    Args:
         analyzer_cmds (Dict[str, List[List[str]]]): stores the commands for various analyzers to run succesfully.
         lang (str): Language of the text which is morphologically analyzed.
         path (str): Location to the analyzer mode for a particular language.
@@ -32,7 +32,9 @@ class Analyzer:
 
     def __str__(self):  # type: (Analyzer) -> str
         """returns the printable str representation of the object
-        Yeilds: The commands to run for the analysis mode
+
+        Yeilds:
+            The commands to run for the analysis mode
         """
         return "<Analyzer: '%s'>" % self.mode
 

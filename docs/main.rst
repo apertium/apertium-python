@@ -7,7 +7,6 @@ Welcome to Apertium-Python's documentation!
 ===========================================
 
 |
-|
 
 Indices and tables
 ------------------
