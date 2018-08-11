@@ -53,7 +53,7 @@ class Analyzer:
         """
         runs apertium to analyze the input
         """
-        commands = [['apertium', '-d', self.path, '-f', formatting, self.mode]]
+        commands = [['apertium-destxt'], ['lt-proc', '-z', '-w', '/usr/share/apertium/apertium-eng/eng.automorf.bin'], ['apertium-retxt']]
         result = execute(in_text, commands)
         return self._postproc_text(result)
 
