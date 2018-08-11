@@ -44,7 +44,7 @@ for i in download_array:
 	print("modes copied")
 	
 	print("copying the other lang files")
-	copy_tree(r'.\usr\share\apertium\{}'.format(i), r'apertium-all-dev\share\apertium')
+	copy_tree(r'.\usr\share\apertium\{}'.format(i), r'apertium-all-dev\share\apertium\{}'.format(i))
 	print("lang files copied")
 	
 	print("Deleting the current ./usr")
