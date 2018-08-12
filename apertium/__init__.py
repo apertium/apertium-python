@@ -35,7 +35,7 @@ def append_pair_path(path):  # type: (str) -> None
     update_modes(path)
 
 
-paths = ['/usr/share/apertium', '/usr/local/share/apertium', r'..\apertium-all-dev\share\apertium']
+paths = ['/usr/share/apertium', '/usr/local/share/apertium', '.\\apertium-all-dev\\apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
 pairs = {}  # type: Dict[str, str]
