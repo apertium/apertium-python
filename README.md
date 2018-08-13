@@ -9,10 +9,13 @@
 - The Apertium core modules are written in C++.
 - This project is an attempt to make the Apertium modules available in python, which because of it's simplicity is more appealing to users.
 
-## About the Code Base
-- The development starts initially with a subprocess implementation of all the uses of Apertium, like Analysis, Generation, Translation etc. For which, code has been ported from [apertium-apy](https://github.com/apertium/apertium-apy "apertium-apy codebase")
-- The second part of the project involves using SWIG to expose modules that require lower level functionality access.
-- Which will be followed by a pip release.
+## About the Exisiting Code Base
+- The exisiting code base has the subprocess implementation of the basic functions of Apertium. 
+- A branch called the ```windows``` has the implementation for the ```windows``` support and will soon be available on master. Detailed instructions can be found [here](https://gist.github.com/arghyatiger/c8aab476022158f4bdb3dbe45308cdb4)
+
+## Major things to do
+- Subprocess implementation of the C++ functions in Apertium. To make the wrapper thinner.
+- Other small issues can be found [here](https://github.com/apertium/apertium-python/issues)
 
 ## Usage of library
 
