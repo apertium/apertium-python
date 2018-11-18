@@ -12,7 +12,8 @@ class ModeNotInstalled(ValueError):
     pass
 
 
-def update_modes(pair_path):  # type: (str) -> None
+def update_modes(pair_path):
+    """type: (str) -> None"""
     modes = search_path(pair_path)
     if modes['pair']:
         for path, lang_src, lang_trg in modes['pair']:
@@ -25,7 +26,8 @@ def update_modes(pair_path):  # type: (str) -> None
             generators[lang_pair] = (dirpath, modename)
 
 
-def append_pair_path(pair_path):  # type: (str) -> None
+def append_pair_path(pair_path):
+    """type: (str) -> None"""
     pair_paths.append(pair_path)
     update_modes(pair_path)
 
