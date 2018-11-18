@@ -11,9 +11,9 @@ class Generator:
     def __init__(self, lang):
         """type: (Generator, str) -> None"""
         self.generator_cmds = {}
-        """type: Dict[str, List[List[str]]]"""
+        """:dict: Dict[str, List[List[str]]]"""
         self.lang = lang
-        """type: str"""
+        """:str: str"""
 
     def _get_commands(self):
         """type: (Generator) -> List[List[str]]"""

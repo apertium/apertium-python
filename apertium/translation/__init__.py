@@ -12,7 +12,7 @@ class Translator:
     def __init__(self, l1, l2):
         """type: (Translator, str, str) -> None"""
         self.translation_cmds = {}
-        """type: Dict[Tuple[str, str], List[List[str]]]"""
+        """:dict: Dict[Tuple[str, str], List[List[str]]]"""
         self.l1 = l1
         self.l2 = l2
 

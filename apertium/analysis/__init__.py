@@ -11,9 +11,9 @@ class Analyzer:
     def __init__(self, lang):
         """type: (Analyzer, str) -> None"""
         self.analyzer_cmds = {}
-        """type: Dict[str, List[List[str]]]"""
+        """:dict:Dict[str, List[List[str]]]"""
         self.lang = to_alpha3_code(lang)
-        """type: str"""
+        """:str:"""
         if self.lang not in apertium.analyzers:
             raise apertium.ModeNotInstalled(self.lang)
         else:
