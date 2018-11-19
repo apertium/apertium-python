@@ -1,12 +1,11 @@
-=================
 Apertium + Python
 =================
 
-.. toctree::
-   :maxdepth: 2
+Contents
+--------
 
-   usage
-   documentation
+* [Usage](usage.md)
+* [Code Documentation](documentation.md)
 
 Introduction
 ------------
@@ -19,17 +18,19 @@ About the Existing Code Base
 -----------------------------
 
 - The existing code base has the subprocess implementation of the basic functions of Apertium.
-- A branch called ``windows`` has the implementation for the ``windows`` support and will soon be available on master. Detailed instructions can be found `here <https://gist.github.com/arghyatiger/c8aab476022158f4bdb3dbe45308cdb4/>`_
+- A branch called `windows` has the implementation for the `windows` support and will soon be available on master. Detailed instructions can be found [here](https://gist.github.com/arghyatiger/c8aab476022158f4bdb3dbe45308cdb4)
 
 Contribute
 ----------
 
-- Issue Tracker: https://www.github.com/apertium/apertium-python/issues
-- Source Code: https://www.github.com/apertium/apertium-python
+- Issue Tracker: [https://www.github.com/apertium/apertium-python/issues]
+- Source Code: [https://www.github.com/apertium/apertium-python]
 
 Indices and tables
 ------------------
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+```eval_rst
+    * :ref:`genindex`
+    * :ref:`modindex`
+    * :ref:`search`
+```

@@ -13,7 +13,7 @@ class Generator:
         self.generator_cmds = {}
         """:dict: Dict[str, List[List[str]]]"""
         self.lang = lang
-        """:str: str"""
+        """:str:"""
 
     def _get_commands(self):
         """type: (Generator) -> List[List[str]]"""
