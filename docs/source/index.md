@@ -23,8 +23,8 @@ About the Existing Code Base
 Contribute
 ----------
 
-- Issue Tracker: https://www.github.com/apertium/apertium-python/issues
-- Source Code: https://www.github.com/apertium/apertium-python
+- Issue Tracker: <https://www.github.com/apertium/apertium-python/issues>
+- Source Code: <https://www.github.com/apertium/apertium-python>
 
 Indices and tables
 ------------------
