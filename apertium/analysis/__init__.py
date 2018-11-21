@@ -1,4 +1,4 @@
-from streamparser import parse, LexicalUnit  # type: ignore
+from streamparser import parse  # type: ignore
 
 import apertium  # type: ignore
 from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore
