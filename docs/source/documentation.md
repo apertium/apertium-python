@@ -30,23 +30,3 @@ Translation
     :undoc-members:
     :private-members:
 ```
-
-Mode Search Script
-------------------
-
-```eval_rst
-.. automodule:: apertium.mode_search
-    :members:
-    :undoc-members:
-    :private-members:
-```
-
-Utils Script
-------------
-
-```eval_rst
-.. automodule:: apertium.utils
-    :members:
-    :undoc-members:
-    :private-members:
-```
