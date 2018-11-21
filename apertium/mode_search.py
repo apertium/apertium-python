@@ -3,9 +3,6 @@ import re
 
 from apertium.utils import to_alpha3_code  # type: ignore
 
-if False:
-    from typing import Dict, List, Tuple, Union  # type: ignore
-
 
 def is_loop(dirpath, rootpath, real_root=None):
     # type: (str, str, Union[None, str]) -> bool

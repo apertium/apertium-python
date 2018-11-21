@@ -1,10 +1,5 @@
-from streamparser import parse, LexicalUnit  # type: ignore
-
 import apertium  # type: ignore
 from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore
-
-if False:
-    from typing import List, Union, Tuple, Dict  # type: ignore
 
 
 class Generator:

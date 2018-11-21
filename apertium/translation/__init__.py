@@ -3,9 +3,6 @@ import apertium  # type: ignore
 import re
 from subprocess import Popen, PIPE, CalledProcessError
 
-if False:
-    from typing import List, Dict, Tuple, Union, Optional, NamedTuple  # type: ignore
-
 
 class Translator:
     """

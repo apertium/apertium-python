@@ -3,9 +3,6 @@ import apertium  # type:ignore
 import subprocess
 import re
 
-if False:
-    from typing import List, Dict, Tuple, Union  # type: ignore
-
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 
