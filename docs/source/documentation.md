@@ -7,8 +7,6 @@ Analysis
 ```eval_rst
 .. automodule:: apertium.analysis
     :members:
-    :undoc-members:
-    :private-members:
 ```
 
 Generation
@@ -17,8 +15,6 @@ Generation
 ```eval_rst
 .. automodule:: apertium.generation
     :members:
-    :undoc-members:
-    :private-members:
 ```
 
 Translation
@@ -27,6 +23,4 @@ Translation
 ```eval_rst
 .. automodule:: apertium.translation
     :members:
-    :undoc-members:
-    :private-members:
 ```
