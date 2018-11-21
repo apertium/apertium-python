@@ -1,10 +1,10 @@
-from streamparser import parse, LexicalUnit  # noqa: F401
+from streamparser import parse, LexicalUnit  # type: ignore
 
-import apertium
-from apertium.utils import to_alpha3_code, execute, parse_mode_file
+import apertium  # type: ignore
+from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore
 
 if False:
-    from typing import List, Union, Dict  # noqa: F401
+    from typing import List, Union, Dict  # type: ignore
 
 
 class Analyzer:

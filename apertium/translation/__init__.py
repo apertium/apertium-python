@@ -1,11 +1,10 @@
+from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore
+import apertium  # type: ignore
 import re
 from subprocess import Popen, PIPE, CalledProcessError
 
 if False:
-    from typing import List, Dict, Tuple, Union, Optional, NamedTuple  # noqa: F401
-
-import apertium  # noqa: F401
-from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F401
+    from typing import List, Dict, Tuple, Union, Optional, NamedTuple  # type: ignore
 
 
 class Translator:
@@ -158,7 +157,7 @@ class Translator:
         """
         Args:
             text (str)
-            mark_unknown (boolean)
+            mark_unknown (bool)
             format (Optional[str])
             deformat (str)
             reformat (str)
@@ -187,7 +186,7 @@ def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', ref
     """
     Args:
         text (str)
-        mark_unknown (boolean)
+        mark_unknown (bool)
         format (Optional[str])
         deformat (str)
         reformat (str)
