@@ -24,7 +24,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
-    'sphinx_autodoc_typehints',
 ]
 napoleon_include_special_with_doc = False
 
