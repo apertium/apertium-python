@@ -1,14 +1,13 @@
 import os
 import re
 
-from apertium.utils import to_alpha3_code  # type: ignore  # noqa: F401
+from apertium.utils import to_alpha3_code
 
 if False:
-    from typing import List, Union, Tuple, Dict  # noqa: F401
+    from typing import Dict, List, Tuple, Union  # noqa: F401
 
 
-def is_loop(dirpath, rootpath, real_root=None):
-    # type: (str, str, Union[None, str]) -> bool
+def is_loop(dirpath, rootpath, real_root=None):  # type: (str, str, Union[None, str]) -> bool
     """
     Args:
         dirpath (str)
@@ -40,8 +39,7 @@ def is_loop(dirpath, rootpath, real_root=None):
         return False
 
 
-def search_path(rootpath, include_pairs=True):
-    # type: (str, bool) -> Dict[str, List[Tuple[str, str, str]]]
+def search_path(rootpath, include_pairs=True):  # type: (str, bool) -> Dict[str, List[Tuple[str, str, str]]]
     """
     Args:
         rootpath (str)

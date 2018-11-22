@@ -1,10 +1,10 @@
-from streamparser import parse, LexicalUnit  # type: ignore  # noqa: F401
+from streamparser import parse, LexicalUnit  # noqa: F401
 
-import apertium  # type: ignore
-from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore
+import apertium
+from apertium.utils import to_alpha3_code, execute, parse_mode_file
 
 if False:
-    from typing import List, Union, Tuple, Dict  # noqa: F401
+    from typing import List, Union, Dict  # noqa: F401
 
 
 class Analyzer:
@@ -14,8 +14,7 @@ class Analyzer:
         lang (str)
     """
 
-    def __init__(self, lang):
-        # type: (Analyzer, str) -> None
+    def __init__(self, lang):  # type: (Analyzer, str) -> None
         """
         Args:
             lang (str)
@@ -27,8 +26,7 @@ class Analyzer:
         else:
             self.path, self.mode = apertium.analyzers[self.lang]
 
-    def _get_commands(self):
-        # type: (Analyzer) -> List[List[str]]
+    def _get_commands(self):  # type: (Analyzer) -> List[List[str]]
         """
         Returns:
             List[List[str]]
@@ -38,8 +36,7 @@ class Analyzer:
             self.analyzer_cmds[self.lang] = parse_mode_file(mode_path+'/modes/'+mode+'.mode')
         return self.analyzer_cmds[self.lang]
 
-    def _postproc_text(self, result):
-        # type: (Analyzer, str) -> List[LexicalUnit]
+    def _postproc_text(self, result):  # type: (Analyzer, str) -> List[LexicalUnit]
         """
         Postprocesses the input
 
@@ -52,8 +49,7 @@ class Analyzer:
         lexical_units = list(parse(result))
         return lexical_units
 
-    def analyze(self, in_text, formatting='txt'):
-        # type: (Analyzer, str, str) -> List[LexicalUnit]
+    def analyze(self, in_text, formatting='txt'):  # type: (Analyzer, str, str) -> List[LexicalUnit]
         """
         Runs apertium to analyze the input
 
@@ -69,8 +65,7 @@ class Analyzer:
         return self._postproc_text(result)
 
 
-def analyze(lang, in_text, formatting='txt'):
-    # type: (str, str, str) -> List[LexicalUnit]
+def analyze(lang, in_text, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
     """
     Args:
         lang (str)

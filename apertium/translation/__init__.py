@@ -1,10 +1,11 @@
-from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore  # noqa: F401
-import apertium  # type: ignore  # noqa: F401
 import re
 from subprocess import Popen, PIPE, CalledProcessError
 
 if False:
     from typing import List, Dict, Tuple, Union, Optional, NamedTuple  # noqa: F401
+
+import apertium  # noqa: F401
+from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F401
 
 
 class Translator:
@@ -15,8 +16,7 @@ class Translator:
         l2 (str)
     """
 
-    def __init__(self, l1, l2):
-        # type: (Translator, str, str) -> None
+    def __init__(self, l1, l2):  # type: (Translator, str, str) -> None
         """
         Args:
             l1 (str)
@@ -26,8 +26,7 @@ class Translator:
         self.l1 = l1
         self.l2 = l2
 
-    def _get_commands(self, l1, l2):
-        # type: (Translator, str, str) -> List[List[str]]
+    def _get_commands(self, l1, l2):  # type: (Translator, str, str) -> List[List[str]]
         """
         Args:
             l1 (str)
@@ -41,8 +40,7 @@ class Translator:
             self.translation_cmds[(l1, l2)] = parse_mode_file(mode_path)
         return self.translation_cmds[(l1, l2)]
 
-    def _get_format(self, format, deformat, reformat):
-        # type: (Translator, Optional[str], Optional[str], Optional[str]) -> Tuple[Optional[str], Optional[str]]
+    def _get_format(self, format, deformat, reformat):  # type: (Translator, Optional[str], Optional[str], Optional[str]) -> Tuple[Optional[str], Optional[str]]
         """
         Args:
             format (Optional[str])
@@ -63,8 +61,7 @@ class Translator:
 
         return deformat, reformat
 
-    def _check_ret_code(self, proc):
-        # type: (Translator, Popen) -> None
+    def _check_ret_code(self, proc):  # type: (Translator, Popen) -> None
         """
         Args:
             proc (Popen)
@@ -72,8 +69,7 @@ class Translator:
         if proc.returncode != 0:
             raise CalledProcessError()  # type: ignore
 
-    def _validate_formatters(self, deformat, reformat):
-        # type: (Translator, Optional[str], Optional[str]) -> Tuple[Union[str, object], Union[str, object]]
+    def _validate_formatters(self, deformat, reformat):  # type: (Translator, Optional[str], Optional[str]) -> Tuple[Union[str, object], Union[str, object]]
         """
         Args:
             deformat (Optional[str])
@@ -82,8 +78,7 @@ class Translator:
         Returns:
             Tuple[Union[str, object], Union[str, object]]
         """
-        def valid1(elt, lst):
-            # type: (Optional[str], List[object]) -> Union[str, object]
+        def valid1(elt, lst):  # type: (Optional[str], List[object]) -> Union[str, object]
             """
             Args:
                 elt (Optional[str])
@@ -112,8 +107,7 @@ class Translator:
         ]
         return valid1(deformat, deformatters), valid1(reformat, reformatters)
 
-    def _get_deformat(self, deformat, text):
-        # type: (Translator, str, str) -> str
+    def _get_deformat(self, deformat, text):  # type: (Translator, str, str) -> str
         """
         Args:
             deformat (str)
@@ -133,8 +127,7 @@ class Translator:
         res = str(deformatted)
         return res
 
-    def _get_reformat(self, reformat, text):
-        # type: (Translator, str, str) -> str
+    def _get_reformat(self, reformat, text):  # type: (Translator, str, str) -> str
         """
         Args:
             reformat (str)
@@ -152,8 +145,7 @@ class Translator:
             result = re.sub(rb'\0$', b'', text)  # type: ignore
         return result  # type: ignore
 
-    def translate(self, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
-        # type: (Translator, str, bool, Optional[str], str, str) -> str
+    def translate(self, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):  # type: (Translator, str, bool, Optional[str], str, str) -> str
         """
         Args:
             text (str)
@@ -181,8 +173,7 @@ class Translator:
             return result.decode()  # type: ignore
 
 
-def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):
-    # type: (str, str, str, bool, Optional[str], str, str) -> str
+def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):  # type: (str, str, str, bool, Optional[str], str, str) -> str
     """
     Args:
         text (str)

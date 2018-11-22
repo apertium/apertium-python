@@ -12,8 +12,7 @@ class ModeNotInstalled(ValueError):
     pass
 
 
-def update_modes(pair_path):
-    # type: (str) -> None
+def update_modes(pair_path):  # type: (str) -> None
     """
     Args:
         pair_path (str)
@@ -30,12 +29,7 @@ def update_modes(pair_path):
             generators[lang_pair] = (dirpath, modename)
 
 
-def append_pair_path(pair_path):
-    # type: (str) -> None
-    """
-    Args:
-        pair_path (str)
-    """
+def _append_pair_path(pair_path):  # type: (str) -> None
     pair_paths.append(pair_path)
     update_modes(pair_path)
 
