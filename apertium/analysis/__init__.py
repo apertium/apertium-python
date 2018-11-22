@@ -1,7 +1,10 @@
-from streamparser import parse  # type: ignore
+from streamparser import parse, LexicalUnit  # type: ignore
 
 import apertium  # type: ignore
 from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore
+
+if False:
+    from typing import List, Union, Tuple, Dict  # noqa: F401
 
 
 class Analyzer:
@@ -49,7 +52,8 @@ class Analyzer:
         lexical_units = list(parse(result))
         return lexical_units
 
-    def analyze(self, in_text, formatting='txt'):  # type: (Analyzer, str, str) -> List[LexicalUnit]
+    def analyze(self, in_text, formatting='txt'):
+        # type: (Analyzer, str, str) -> List[LexicalUnit]
         """
         Runs apertium to analyze the input
 

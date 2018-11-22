@@ -1,6 +1,9 @@
 import apertium  # type: ignore
 from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore
 
+if False:
+    from typing import List, Union, Tuple, Dict  # noqa: F401
+
 
 class Generator:
     """

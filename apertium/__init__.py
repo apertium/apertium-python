@@ -13,7 +13,11 @@ class ModeNotInstalled(ValueError):
 
 
 def update_modes(pair_path):
-    """type: (str) -> None"""
+    # type: (str) -> None
+    """
+    Args:
+        pair_path (str)
+    """
     modes = search_path(pair_path)
     if modes['pair']:
         for path, lang_src, lang_trg in modes['pair']:
@@ -27,7 +31,11 @@ def update_modes(pair_path):
 
 
 def append_pair_path(pair_path):
-    """type: (str) -> None"""
+    # type: (str) -> None
+    """
+    Args:
+        pair_path (str)
+    """
     pair_paths.append(pair_path)
     update_modes(pair_path)
 
