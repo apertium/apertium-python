@@ -1,4 +1,4 @@
-from streamparser import parse, LexicalUnit  # type: ignore  # noqa: F401  
+from streamparser import parse, LexicalUnit  # type: ignore  # noqa: F401
 
 import apertium  # type: ignore
 from apertium.utils import to_alpha3_code, execute, parse_mode_file  # type: ignore
