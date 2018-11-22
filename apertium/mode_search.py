@@ -1,7 +1,7 @@
 import os
 import re
 
-from apertium.utils import to_alpha3_code  # type: ignore
+from apertium.utils import to_alpha3_code  # type: ignore  # noqa: F401
 
 if False:
     from typing import List, Union, Tuple, Dict  # noqa: F401

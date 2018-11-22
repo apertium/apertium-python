@@ -1,5 +1,5 @@
-from apertium.iso639 import iso_639_codes  # type:ignore
-import apertium  # type:ignore
+from apertium.iso639 import iso_639_codes  # type: ignore
+import apertium  # type: ignore  # noqa: F401  
 import subprocess
 import re
 
