@@ -1,16 +1,10 @@
-Apertium + Python
-=================
-
-Contents
---------
-
-* [Usage](usage.md)
-* [Code Documentation](documentation.md)
+About
+=====
 
 Introduction
 ------------
 
-- The code-base is in development for the Gsoc '18 project called **Apertium API in Python**.
+- The code-base is in development for the GSoC '18 project called **Apertium API in Python**.
 - The Apertium core modules are written in C++.
 - This project is an attempt to make the Apertium modules available in python, which because of it's simplicity is more appealing to users.
 
@@ -25,12 +19,3 @@ Contribute
 
 - Issue Tracker: <https://www.github.com/apertium/apertium-python/issues>
 - Source Code: <https://www.github.com/apertium/apertium-python>
-
-Indices and tables
-------------------
-
-```eval_rst
-    * :ref:`genindex`
-    * :ref:`modindex`
-    * :ref:`search`
-```
