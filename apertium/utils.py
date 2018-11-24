@@ -12,6 +12,13 @@ iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 
 
 def to_alpha3_code(code):  # type: (str) -> str
+    """
+    Args:
+        code (str)
+
+    Returns:
+        str
+    """
     if '_' in code:
         code, variant = code.split('_')
         return '%s_%s' % ((iso639_codes_inverse[code], variant) if code in iso639_codes_inverse else (code, variant))
@@ -20,6 +27,14 @@ def to_alpha3_code(code):  # type: (str) -> str
 
 
 def execute(inp, commands):  # type: (str, List[List[str]]) -> str
+    """
+    Args:
+        inp (str)
+        commands (List[List[str]])
+
+    Returns:
+        str
+    """
     procs = []
     end = inp.encode()
     for i, command in enumerate(commands):
@@ -31,6 +46,13 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
 
 
 def parse_mode_file(mode_path):  # type: (str) -> List[List[str]]
+    """
+    Args:
+        mode_path (str)
+
+    Returns:
+        List[List[str]]
+    """
     mode_str = open(mode_path, 'r').read().strip()
     if mode_str:
         commands = []
