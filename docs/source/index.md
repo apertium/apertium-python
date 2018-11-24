@@ -7,6 +7,14 @@ Contents
 * [Usage](usage.md)
 * [About](about.md)
 
+Apertium
+--------
+
+```eval_rst
+.. automodule:: apertium
+    :members:
+```
+
 Analysis
 --------
 
