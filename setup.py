@@ -12,7 +12,7 @@ setup(
     keywords='apertium',
     author='James Sandy',
     author_email='mondaysandy3@gmail.com',
-    url='hhttps://github.com/apertium/apertium-python',
+    url='https://github.com/apertium/apertium',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Topic :: Text Processing :: Linguistic',
@@ -29,5 +29,4 @@ setup(
     ],
     
 )
-
 
