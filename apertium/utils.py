@@ -1,5 +1,11 @@
 import subprocess
 import re
+from platform import system
+from os import getenv
+from os import putenv
+from os.path import join
+from os.path import isdir
+
 
 if False:
     from typing import List, Dict, Tuple, Union  # noqa: F401
@@ -37,6 +43,15 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     """
     procs = []
     end = inp.encode()
+
+    # Adding the Apertium Binaries to
+    if system() == 'Windows':
+        install_path = getenv('LOCALAPPDATA')
+        current = getenv('path')
+        apertium_path = join(install_path, 'apertium-all-dev', 'bin')
+        if isdir(apertium_path):
+            update = f'{current}{apertium_path};'
+            putenv('path', update)
     for i, command in enumerate(commands):
         procs.append(
             subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),

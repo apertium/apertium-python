@@ -10,10 +10,10 @@ from os import getenv
 from os import listdir
 from distutils.dir_util import copy_tree
 from shutil import rmtree
-from subprocess import Popen
 
 
 class Installation:
+
     def __init__(self, languages: tuple):
         self._install_path = getenv('LOCALAPPDATA')
         self._apertium_path = join(self._install_path, 'apertium-all-dev')
@@ -30,7 +30,8 @@ class Installation:
 
         self._languages = languages
 
-    def _download_zip(self, download_files: dict, download_dir, extract_path):
+    @staticmethod
+    def _download_zip(download_files: dict, download_dir, extract_path):
 
         for zip_name, zip_link in download_files.items():
             zip_download_path = join(download_dir, zip_name)
@@ -92,7 +93,7 @@ class Installation:
         """
 
         # List of Mode Files
-        mode_path =  join(self._apertium_path, 'share', 'apertium', 'modes')
+        mode_path = join(self._apertium_path, 'share', 'apertium', 'modes')
         only_files = [f for f in listdir(mode_path) if isfile(join(mode_path, f)) and
                       'mode' in f]
 
@@ -121,22 +122,6 @@ class Installation:
             outfile.close()
             print(f"Closing {file}")
 
-    def add_to_system_path(self):
-        """Set System Variable: Path, using SETX
-         SETX is preferred over SET as
-         SETX modifies the value permanently, whereas
-         SET modifies the current shell's  environment values,
-         but it is temporary"""
-
-        curr_path_value = getenv('PATH')
-        if 'apertium' in curr_path_value:
-            print('Apertium path already exists in System Variable')
-            print('No changes done to System Variable')
-        else:
-            apertium_bin_path = join(self._apertium_path, 'bin')
-            Popen(['SETX', 'path', rf'{curr_path_value}\{apertium_bin_path};'])
-            print('Added path to System Variable')
-
 
 def main():
 
@@ -146,7 +131,7 @@ def main():
     p.download_apertium_windows()
     p.download_language_data()
     p.mode_editor()
-    p.add_to_system_path()
+
 
 if __name__ == '__main__':
     if system() == 'Windows':
