@@ -1,6 +1,7 @@
 from setuptools import setup
 from setuptools.command.install import install
 from atexit import register
+from platform import system
 import installation
 
 
@@ -11,7 +12,8 @@ class PostInstallCommand(install):
 
     @staticmethod
     def _post_install():
-        installation.main()
+        if system() == 'Windows':
+            installation.main()
 
 
 setup(
