@@ -6,6 +6,7 @@ import platform
 from distutils.dir_util import copy_tree
 from shutil import rmtree
 import logging
+import tempfile
 
 
 class Installer:
@@ -13,19 +14,12 @@ class Installer:
     def __init__(self, languages: tuple):
         self._install_path = os.getenv('LOCALAPPDATA')
         self._apertium_path = path.join(self._install_path, 'apertium-all-dev')
-        self._temp_path = os.getenv('TEMP')
-        self._download_path = path.join(self._temp_path, 'apertium_temp')
+        self._download_path = tempfile.mkdtemp()
         self._language_link = 'http://apertium.projectjj.com/win32/nightly/data.php?zip={}'
-
-        # Remove abandoned files from previous incomplete install
-        if path.isdir(self._download_path):
-            rmtree(self._download_path)
-        os.mkdir(self._download_path)
-
         self._languages = languages
-        logging.basicConfig(filename='installer.log',format='%(asctime)s %(message)s',
+        logging.basicConfig(filename='installer.log', format='%(asctime)s %(message)s',
                             filemode='w', level=logging.DEBUG)
-        self._logger=logging.getLogger()
+        self._logger = logging.getLogger()
         self._logger.setLevel(logging.DEBUG)
 
     def _download_zip(self, download_files: dict, download_dir, extract_path):
