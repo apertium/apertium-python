@@ -11,7 +11,7 @@ import tempfile
 
 class Installer:
 
-    def __init__(self, languages: tuple):
+    def __init__(self, languages):  # type: (Installer, tuple) -> None
         self._install_path = os.getenv('LOCALAPPDATA')
         self._apertium_path = path.join(self._install_path, 'apertium-all-dev')
         self._download_path = tempfile.mkdtemp()
@@ -22,7 +22,9 @@ class Installer:
         self._logger = logging.getLogger()
         self._logger.setLevel(logging.DEBUG)
 
-    def _download_zip(self, download_files: dict, download_dir, extract_path):
+    def _download_zip(self, download_files, download_dir, extract_path):
+        # type: (Installer, dict, str, str) -> None
+
         for zip_name, zip_link in download_files.items():
             zip_download_path = path.join(download_dir, zip_name)
             urlretrieve(zip_link, filename=zip_download_path)
@@ -36,7 +38,7 @@ class Installer:
             os.remove(zip_download_path)
             self._logger.info("%s removed", zip_name)
 
-    def download_apertium_windows(self):
+    def download_apertium_windows(self):  # type: (Installer) -> None
         """Installs Apertium-all-dev to %localappdata%"""
 
         download_dir = self._download_path
@@ -49,7 +51,7 @@ class Installer:
 
         self._download_zip(apertium_windows, download_dir, extract_path)
 
-    def download_language_data(self):
+    def download_language_data(self):  # type: (Installer) -> None
         """Installs Language Data to Apertium"""
 
         download_dir = self._download_path
@@ -73,7 +75,7 @@ class Installer:
 
         rmtree(path.join(extract_path, 'usr'))
 
-    def mode_editor(self):
+    def mode_editor(self):  # type: (Installer) -> None
         """The mode files need to be modified before being used on Windows System
 
         1. Replace /usr/share with %localappdata%\apertium-all-dev\share
