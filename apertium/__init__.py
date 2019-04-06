@@ -1,11 +1,9 @@
+import platform
+import os
 from apertium.mode_search import search_path
 from apertium.analysis import Analyzer, analyze  # noqa: F401
 from apertium.generation import Generator, generate  # noqa: F401
 from apertium.translation import Translator, translate  # noqa: F401
-from platform import system
-from os import getenv
-from os.path import join
-from os.path import isdir
 
 
 if False:
@@ -43,11 +41,11 @@ def append_pair_path(pair_path):  # type: (str) -> None
 
 
 def append_pair_path_windows():
-    if system() == 'Windows':
-        install_path = getenv('LOCALAPPDATA')
+    if platform.system() == 'Windows':
+        install_path = os.getenv('LOCALAPPDATA')
         apertium_lang_path = \
-            join(install_path, 'apertium-all-dev', 'share', 'apertium')
-        if isdir(apertium_lang_path):
+            os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
+        if os.path.isdir(apertium_lang_path):
             append_pair_path(apertium_lang_path)
 
 
