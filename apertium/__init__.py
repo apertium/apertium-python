@@ -40,7 +40,7 @@ def append_pair_path(pair_path):  # type: (str) -> None
     _update_modes(pair_path)
 
 
-def append_pair_path_windows():
+def append_pair_path_windows():  # type (None) -> None
     if platform.system() == 'Windows':
         install_path = os.getenv('LOCALAPPDATA')
         apertium_lang_path = \
