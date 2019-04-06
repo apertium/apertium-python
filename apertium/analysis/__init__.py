@@ -60,7 +60,7 @@ class Analyzer:
         Returns:
             List[LexicalUnit]
         """
-        apertium_des = execute(in_text, [[f'apertium-des{formatting}', '-n']])
+        apertium_des = execute(in_text, [['apertium-des{}'.format(formatting), '-n']])
         result = execute(apertium_des, self._get_commands())
         return self._postproc_text(result)
 

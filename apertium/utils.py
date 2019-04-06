@@ -48,7 +48,7 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
         current = os.getenv('path')
         apertium_path = path.join(install_path, 'apertium-all-dev', 'bin')
         if path.isdir(apertium_path):
-            update = f'{current}{apertium_path};'
+            update = '{}{};'.format(current, apertium_path)
             os.putenv('path', update)
     for i, command in enumerate(commands):
         procs.append(
