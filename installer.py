@@ -5,6 +5,7 @@ from os import path
 import platform
 from distutils.dir_util import copy_tree
 from shutil import rmtree
+import logging
 
 
 class Installer:
@@ -19,24 +20,27 @@ class Installer:
         # Remove abandoned files from previous incomplete install
         if path.isdir(self._download_path):
             rmtree(self._download_path)
-
         os.mkdir(self._download_path)
-        self._languages = languages
 
-    @staticmethod
-    def _download_zip(download_files: dict, download_dir, extract_path):
+        self._languages = languages
+        logging.basicConfig(filename='installer.log',format='%(asctime)s %(message)s',
+                            filemode='w', level=logging.DEBUG)
+        self._logger=logging.getLogger()
+        self._logger.setLevel(logging.DEBUG)
+
+    def _download_zip(self, download_files: dict, download_dir, extract_path):
         for zip_name, zip_link in download_files.items():
             zip_download_path = path.join(download_dir, zip_name)
             urlretrieve(zip_link, filename=zip_download_path)
-            print("{} download completed".format(zip_name))
+            self._logger.info('%s download completed', zip_name)
 
             # Extact the zip
             zip_obj = ZipFile(zip_download_path, 'r')
             zip_obj.extractall(path=extract_path)
             zip_obj.close()
-            print("Extraction completed")
+            self._logger.info("%s Extraction completed", zip_name)
             os.remove(zip_download_path)
-            print("zip removed")
+            self._logger.info("%s removed", zip_name)
 
     def download_apertium_windows(self):
         """Installs Apertium-all-dev to %localappdata%"""
@@ -66,12 +70,12 @@ class Installer:
         # move the extracted files to desired location
         lang_data_path = path.join(self._download_path, 'usr', 'share', 'apertium')
 
-        print("Copying Language Data to Apertium")
+        self._logger.info("Copying Language Data to Apertium")
         for directory in os.listdir(lang_data_path):
             source = path.join(lang_data_path, directory)
             destination = path.join(self._apertium_path, 'share', 'apertium', directory)
             copy_tree(source, destination)
-            print(source, '->', destination)
+            self._logger.info('%s -> %s', source, destination)
 
         rmtree(path.join(extract_path, 'usr'))
 
@@ -90,7 +94,7 @@ class Installer:
                       'mode' in file]
 
         for file in only_files:
-            print(f"Opening {file} for editing")
+            self._logger.info("Opening %s for editing", file)
             infile = open(path.join(mode_path, file), 'r')
             line = infile.read()
             infile.close()
@@ -109,7 +113,7 @@ class Installer:
             outfile = open(path.join(mode_path, file), 'w')
             outfile.write(line)
             outfile.close()
-            print(f"Closing {file}")
+            self._logger.info("Closing %s", file)
 
 
 def install_apertium_windows():
