@@ -1,8 +1,7 @@
 from setuptools import setup
 from setuptools.command.install import install
 from atexit import register
-from platform import system
-import installation
+import installer
 
 
 class PostInstallCommand(install):
@@ -12,8 +11,7 @@ class PostInstallCommand(install):
 
     @staticmethod
     def _post_install():
-        if system() == 'Windows':
-            installation.main()
+        installer.install_apertium_windows()
 
 
 setup(

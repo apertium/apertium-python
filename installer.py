@@ -7,13 +7,14 @@ from distutils.dir_util import copy_tree
 from shutil import rmtree
 
 
-class Installation:
+class Installer:
 
     def __init__(self, languages: tuple):
         self._install_path = os.getenv('LOCALAPPDATA')
         self._apertium_path = path.join(self._install_path, 'apertium-all-dev')
         self._temp_path = os.getenv('TEMP')
         self._download_path = path.join(self._temp_path, 'apertium_temp')
+        self._language_link = 'http://apertium.projectjj.com/win32/nightly/data.php?zip={}'
 
         # Remove abandoned files from previous incomplete install
         if path.isdir(self._download_path):
@@ -57,7 +58,7 @@ class Installation:
         extract_path = self._download_path
         language_zip = dict()
         for curr_lang in self._languages:
-            language_link = f'http://apertium.projectjj.com/win32/nightly/data.php?zip={curr_lang}'
+            language_link = self._language_link.format(curr_lang)
             language_zip[curr_lang] = language_link
 
         self._download_zip(language_zip, download_dir, extract_path)
@@ -111,15 +112,15 @@ class Installation:
             print(f"Closing {file}")
 
 
-def main():
+def install_apertium_windows():
     # Download ApertiumWin64 and Move to %localappdata%
 
-    p = Installation(('apertium-eng', 'apertium-en-es'))
-    p.download_apertium_windows()
-    p.download_language_data()
-    p.mode_editor()
+    if platform.system() == 'Windows':
+        p = Installer(('apertium-eng', 'apertium-en-es'))
+        p.download_apertium_windows()
+        p.download_language_data()
+        p.mode_editor()
 
 
 if __name__ == '__main__':
-    if platform.system() == 'Windows':
-        main()
+    install_apertium_windows()
