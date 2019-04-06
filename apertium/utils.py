@@ -44,7 +44,7 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     procs = []
     end = inp.encode()
 
-    # Adding the Apertium Binaries to
+    # Adding the Apertium Binaries to Process' Path
     if system() == 'Windows':
         install_path = getenv('LOCALAPPDATA')
         current = getenv('path')
