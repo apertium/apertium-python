@@ -1,5 +1,6 @@
 import platform
 import os
+
 from apertium.mode_search import search_path
 from apertium.analysis import Analyzer, analyze  # noqa: F401
 from apertium.generation import Generator, generate  # noqa: F401
