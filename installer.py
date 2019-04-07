@@ -11,7 +11,7 @@ class Installer:
 
     base_link = "http://apertium.projectjj.com/{}{}"
 
-    def __init__(self, languages):  # type: (Installer, tuple) -> None
+    def __init__(self, languages):  # type: (Installer, list) -> None
         self._install_path = os.getenv('LOCALAPPDATA')
         self._apertium_path = os.path.join(self._install_path, 'apertium-all-dev')
         self._download_path = tempfile.mkdtemp()
@@ -50,7 +50,7 @@ class Installer:
 
         self._download_zip(apertium_windows, download_dir, extract_path)
 
-    def download_language_data(self):  # type: (Installer) -> None
+    def download_package(self):  # type: (Installer) -> None
         """Installs Language Data to Apertium"""
 
         zip_path = ""
@@ -116,7 +116,7 @@ def install_apertium_windows():
     """Download ApertiumWin64 and Move to %localappdata%"""
 
     if platform.system() == 'Windows':
-        p = Installer(('apertium-eng', 'apertium-en-es'))
+        p = Installer(['apertium-eng', 'apertium-en-es'])
         p.download_apertium_windows()
-        p.download_language_data()
+        p.download_package()
         p.edit_modes()
