@@ -2,7 +2,6 @@ import subprocess
 import re
 import platform
 import os
-from os import path
 
 
 if False:
@@ -42,12 +41,12 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     procs = []
     end = inp.encode()
 
-    # Adding the Apertium Binaries to PATH
+    # Adding the Apertium Binaries to Process' PATH
     if platform.system() == 'Windows':
         install_path = os.getenv('LOCALAPPDATA')
         current = os.getenv('path')
-        apertium_path = path.join(install_path, 'apertium-all-dev', 'bin')
-        if path.isdir(apertium_path):
+        apertium_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
+        if os.path.isdir(apertium_path):
             update = '{}{};'.format(current, apertium_path)
             os.putenv('path', update)
     for i, command in enumerate(commands):
