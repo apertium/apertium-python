@@ -111,12 +111,15 @@ class Installer:
             with open(os.path.join(mode_path, file), 'w') as outfile:
                 outfile.write(line)
                 outfile.close()
+    
+    def install(self):
+        self.download_apertium_windows()
+        self.download_package()
+        self.edit_modes()
 
 def install_apertium_windows():
     """Download ApertiumWin64 and Move to %localappdata%"""
 
     if platform.system() == 'Windows':
         p = Installer(['apertium-eng', 'apertium-en-es'])
-        p.download_apertium_windows()
-        p.download_package()
-        p.edit_modes()
+        p.install()
