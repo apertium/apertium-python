@@ -31,6 +31,7 @@ setup(
     install_requires=[
         'apertium-streamparser==5.0.2',
     ],
+    test_suite = 'tests',
     packages=find_packages(exclude=['tests']),
     cmdclass={
         'install': PostInstallCommand,
