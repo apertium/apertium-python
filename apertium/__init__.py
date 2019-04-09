@@ -51,7 +51,7 @@ def append_pair_path_windows():  # type (None) -> None
 
 
 def update_path_windows():
-    '''Adding the Apertium Binaries to Process' PATH'''
+    """Adding the Apertium Binaries to Process' PATH"""
 
     if platform.system() == 'Windows':
         install_path = os.environ['LOCALAPPDATA']
