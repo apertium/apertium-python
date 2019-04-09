@@ -43,12 +43,12 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
 
     # Adding the Apertium Binaries to Process' PATH
     if platform.system() == 'Windows':
-        install_path = os.getenv('LOCALAPPDATA')
-        current = os.getenv('path')
+        install_path = os.environ['LOCALAPPDATA']
+        current = os.environ['path']
         apertium_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
         if os.path.isdir(apertium_path):
-            update = '{}{};'.format(current, apertium_path)
-            os.putenv('path', update)
+            update_path = '{}{};'.format(current, apertium_path)
+            os.environ['path'] = update_path
     for i, command in enumerate(commands):
         procs.append(
             subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),
