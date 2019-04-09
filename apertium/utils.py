@@ -1,12 +1,8 @@
 import subprocess
 import re
-import platform
-import os
-import logging
 
 if False:
     from typing import List, Dict, Tuple, Union  # noqa: F401
-
 
 import apertium  # noqa: F401
 from apertium.iso639 import iso_639_codes  # noqa: F401
@@ -41,19 +37,6 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     """
     procs = []
     end = inp.encode()
-
-    # Adding the Apertium Binaries to Process' PATH
-    if platform.system() == 'Windows':
-        install_path = os.environ['LOCALAPPDATA']
-        current = os.environ['path']
-        logging.info('Currennt path is %s', os.environ['path'])
-
-        apertium_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
-        if os.path.isdir(apertium_path):
-            update_path = '{};{};'.format(current, apertium_path)
-            os.environ['path'] = update_path
-            logging.info('Updated path is %s', os.environ['path'])
-
     for i, command in enumerate(commands):
         procs.append(
             subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),
