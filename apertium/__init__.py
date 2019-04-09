@@ -50,6 +50,19 @@ def append_pair_path_windows():  # type (None) -> None
             append_pair_path(apertium_lang_path)
 
 
+def update_path_windows():
+    '''Adding the Apertium Binaries to Process' PATH'''
+
+    if platform.system() == 'Windows':
+        install_path = os.environ['LOCALAPPDATA']
+        current = os.environ['path']
+
+        apertium_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
+        if os.path.isdir(apertium_path):
+            update_path = '{};{};'.format(current, apertium_path)
+            os.environ['path'] = update_path
+
+
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
@@ -57,3 +70,4 @@ pairs = {}  # type: Dict[str, str]
 for pair_path in pair_paths:
     _update_modes(pair_path)
 append_pair_path_windows()
+update_path_windows()
