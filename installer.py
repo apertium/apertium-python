@@ -35,7 +35,7 @@ class Installer:
             os.remove(zip_download_path)
             self._logger.info("%s removed", zip_name)
 
-    def download_apertium_windows(self):  # type: (Installer) -> None
+    def _download_apertium_windows(self):  # type: (Installer) -> None
         """Installs Apertium-all-dev to %localappdata%"""
 
         apertium_windows = {
@@ -45,7 +45,7 @@ class Installer:
 
         self._download_zip(apertium_windows, self._install_path)
 
-    def download_package(self):  # type: (Installer) -> None
+    def _download_package(self):  # type: (Installer) -> None
         """Installs Language Data to Apertium"""
 
         zip_path = ""
@@ -70,12 +70,11 @@ class Installer:
 
         shutil.rmtree(os.path.join(self._download_path, "usr"))
 
-    def edit_modes(self):  # type: (Installer) -> None
+    def _edit_modes(self):  # type: (Installer) -> None
         """The mode files need to be modified before being used on Windows System
 
         1. Replace /usr/share with %localappdata%\apertium-all-dev\share
         2. Replace "/" with "\" to make path compatible with Windows System
-        3. Remove single quotes as it causes FileNotFound Error
         """
 
         # List of Mode Files
@@ -92,10 +91,6 @@ class Installer:
                     if len(t) > 2 and t[0] == "'" and t[1] == "/":
                         t = t.replace("/", "\\")
                         t = t.replace(r"\usr", self._apertium_path)
-                        # Instead of calling eng.autogen.bin, cmd calls "eng.autogen.bin"
-                        # Raising Error: "File can't be opened error"
-                        # Hence removing quotes from file
-                        t = t.replace("'", "")
                         contents[i] = t
                 line = " ".join(contents)
                 with open(os.path.join(mode_path, f), "w") as outfile:
@@ -103,9 +98,9 @@ class Installer:
                     outfile.close()
 
     def install_windows(self):
-        self.download_apertium_windows()
-        self.download_package()
-        self.edit_modes()
+        self._download_apertium_windows()
+        self._download_package()
+        self._edit_modes()
 
 def install_apertium_windows():
     """Download ApertiumWin64 and Move to %localappdata%"""
