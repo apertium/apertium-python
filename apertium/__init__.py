@@ -59,7 +59,7 @@ def update_path_windows():
 
         apertium_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
         if os.path.isdir(apertium_path):
-            update_path = '{};{};'.format(current, apertium_path)
+            update_path = '{}{}{}{}'.format(current, os.pathsep, apertium_path, os.pathsep)
             os.environ['path'] = update_path
 
 
