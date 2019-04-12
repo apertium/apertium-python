@@ -8,55 +8,53 @@ from urllib.request import urlretrieve
 from zipfile import ZipFile
 
 class Installer:
-    base_link = "http://apertium.projectjj.com/{}{}"
+    base_link = "http://apertium.projectjj.com/{}"
 
     def __init__(self, languages):  # type: (Installer, list) -> None
         self._install_path = os.getenv("LOCALAPPDATA")
         self._apertium_path = os.path.join(self._install_path, "apertium-all-dev")
         self._download_path = tempfile.mkdtemp()
         self._languages = languages
-        logging.basicConfig(filename="installer.log", format="%(asctime)s %(message)s",
-                            filemode="w", level=logging.DEBUG)
+        logging.basicConfig(format="%(asctime)s %(message)s", level=logging.DEBUG)
         self._logger = logging.getLogger()
         self._logger.setLevel(logging.DEBUG)
 
-    def _download_zip(self, download_files, extract_path):  # type: (Installer, dict, str) -> None
-
+    def _download_zips(self, download_files, extract_path):  # type: (Installer, dict, str) -> None
         for zip_name, zip_link in download_files.items():
             zip_download_path = os.path.join(self._download_path, zip_name)
-            urlretrieve(zip_link, filename=zip_download_path)
+            urlretrieve(Installer.base_link.format(zip_link), filename=zip_download_path)
             self._logger.info("%s download completed", zip_name)
 
             # Extract the zip
-            zip_file = ZipFile(zip_download_path)
-            zip_file.extractall(path=extract_path)
-            zip_file.close()
-            self._logger.info("%s Extraction completed", zip_name)
-            os.remove(zip_download_path)
-            self._logger.info("%s removed", zip_name)
+            with ZipFile(zip_download_path) as zip_file:
+                zip_file.extractall(path=extract_path)
+                zip_file.close()
+                self._logger.info("%s Extraction completed", zip_name)
+                os.remove(zip_download_path)
+                self._logger.info("%s removed", zip_name)
 
     def _download_apertium_windows(self):  # type: (Installer) -> None
         """Installs Apertium-all-dev to %localappdata%"""
 
         apertium_windows = {
             "apertium-all-dev.zip":
-                Installer.base_link.format("/win64/nightly/apertium-all-dev.zip", "")
+                "/win64/nightly/apertium-all-dev.zip"
         }
 
-        self._download_zip(apertium_windows, self._install_path)
+        self._download_zips(apertium_windows, self._install_path)
 
     def _download_package(self):  # type: (Installer) -> None
         """Installs Language Data to Apertium"""
 
-        zip_path = ""
         if platform.system() == "Windows":
             zip_path = "win32/nightly/data.php?zip="
+        else:
+            raise ValueError("Installation for {} is not supported".format(platform.system()))
         language_zip = {}
         for curr_lang in self._languages:
-            language_link = Installer.base_link.format(zip_path, curr_lang)
-            language_zip[curr_lang] = language_link
+            language_zip[curr_lang] = zip_path + curr_lang
 
-        self._download_zip(language_zip, self._download_path)
+        self._download_zips(language_zip, self._download_path)
 
         # move the extracted files to desired location
         lang_data_path = os.path.join(self._download_path, "usr", "share", "apertium")
@@ -89,7 +87,7 @@ class Installer:
                 # Editing mode file to be compatible with windows platform
                 for i, t in enumerate(contents):
                     if len(t) > 2 and t[0] == "'" and t[1] == "/":
-                        t = t.replace("/", "\\")
+                        t = t.replace("/", os.sep)
                         t = t.replace(r"\usr", self._apertium_path)
                         contents[i] = t
                 line = " ".join(contents)
