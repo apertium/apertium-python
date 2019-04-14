@@ -28,17 +28,15 @@ class Installer:
             # Extract the zip
             with ZipFile(zip_download_path) as zip_file:
                 zip_file.extractall(path=extract_path)
-                zip_file.close()
-                self._logger.info("%s Extraction completed", zip_name)
-                os.remove(zip_download_path)
-                self._logger.info("%s removed", zip_name)
+            self._logger.info("%s Extraction completed", zip_name)
+            os.remove(zip_download_path)
+            self._logger.info("%s removed", zip_name)
 
     def _download_apertium_windows(self):  # type: (Installer) -> None
         """Installs Apertium-all-dev to %localappdata%"""
 
         apertium_windows = {
-            "apertium-all-dev.zip":
-                "/win64/nightly/apertium-all-dev.zip"
+            "apertium-all-dev.zip": "/win64/nightly/apertium-all-dev.zip",
         }
 
         self._download_zips(apertium_windows, self._install_path)
