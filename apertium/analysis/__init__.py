@@ -39,7 +39,7 @@ class Analyzer:
         """
         if self.lang not in self.analyzer_cmds:
             mode_path, mode = apertium.analyzers[self.lang]
-            mode_path = os.path.join(mode_path, "modes", "{}.mode".format(mode))
+            mode_path = os.path.join(mode_path, 'modes', '{}.mode'.format(mode))
             self.analyzer_cmds[self.lang] = parse_mode_file(mode_path)
             self.analyzer_path = [command[-1] for command in self.analyzer_cmds[self.lang]]
         return self.analyzer_path
@@ -56,12 +56,12 @@ class Analyzer:
         Returns:
             str
         """
-        with tempfile.NamedTemporaryFile("w") as input_file, tempfile.NamedTemporaryFile("r") as output_file:
+        with tempfile.NamedTemporaryFile('w') as input_file, tempfile.NamedTemporaryFile('r') as output_file:
             input_file.write(input_text)
             input_file.flush()
             x = analysis.FST()
             if not x.valid():
-                raise ValueError("FST Invalid")
+                raise ValueError('FST Invalid')
             x.analyze(automorf_path, input_file.name, output_file.name)
             return output_file.read()
 
