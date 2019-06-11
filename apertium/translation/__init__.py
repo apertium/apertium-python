@@ -155,7 +155,7 @@ class Translator:
         Returns:
             str
         """
-        if '%s-%s' % tuple(map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs:
+        if '{}-{}'.format(*map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs:
             pair = map(to_alpha3_code, [self.l1, self.l2])
         else:
             raise apertium.ModeNotInstalled()
@@ -171,7 +171,7 @@ class Translator:
             return result.decode()  # type: ignore
 
 
-def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt'):
+def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
     """
     Args:
         text (str)

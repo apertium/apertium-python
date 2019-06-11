@@ -41,10 +41,11 @@ def append_pair_path(pair_path: str) -> None:
 def append_pair_path_windows() -> None:
     if platform.system() == 'Windows':
         install_path = os.getenv('LOCALAPPDATA')
-        apertium_lang_path = \
-            os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
-        if os.path.isdir(apertium_lang_path):
-            append_pair_path(apertium_lang_path)
+        if install_path:
+            apertium_lang_path = \
+                os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
+            if os.path.isdir(apertium_lang_path):
+                append_pair_path(apertium_lang_path)
 
 
 def update_path_windows() -> None:
