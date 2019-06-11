@@ -31,3 +31,6 @@ after_success:
 notifications:
     on_failure: change
     on_success: change
+matrix:
+    allow_failures:
+        - python: nightly

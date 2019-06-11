@@ -9,7 +9,7 @@ flake8-bugbear = "*"
 flake8-builtins = "*"
 flake8-commas = "*"
 flake8-comprehensions = "*"
-flake8-eradicate = "*"
+flake8-eradicate = { version = "*", markers = "python_version > '3.5'" }
 flake8-import-order = "*"
 flake8-quotes = "*"
 mypy = "*"

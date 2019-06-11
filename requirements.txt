@@ -1,1 +1,0 @@
-apertium-streamparser==5.0.2
