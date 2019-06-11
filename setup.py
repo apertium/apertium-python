@@ -1,9 +1,10 @@
 from atexit import register
 from os import path
-from setuptools import setup, find_packages
-from setuptools.command.install import install
 
 import installer
+
+from setuptools import find_packages, setup  # noqa: I202
+from setuptools.command.install import install
 
 
 class PostInstallCommand(install):

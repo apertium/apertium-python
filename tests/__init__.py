@@ -2,7 +2,7 @@ import os
 import sys
 import unittest
 
-from streamparser import parse, SReading, known
+from streamparser import known, SReading
 
 base_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 sys.path.append(base_path)
@@ -28,7 +28,7 @@ class TestAnalyze(unittest.TestCase):
 
     def test_uninstalled_mode(self):
         with self.assertRaises(apertium.ModeNotInstalled):
-            analyzer = apertium.Analyzer('spa')
+            apertium.Analyzer('spa')
 
 
 class TestGenerate(unittest.TestCase):
@@ -43,7 +43,7 @@ class TestGenerate(unittest.TestCase):
         self.assertEqual(lexical_units, 'cats cats')
 
     def test_generator_bare(self):
-        generator = apertium.Generator('en')        
+        generator = apertium.Generator('en')
         lexical_units = generator.generate('cat<n><pl>')
         self.assertEqual(lexical_units, 'cat<n><pl>')
 

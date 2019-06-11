@@ -3,12 +3,13 @@ dist: xenial
 cache:
     pip: true
 python:
-    - '3.4'
     - '3.5'
     - '3.6'
+    - '3.7'
     - 'nightly'
 install:
-    - travis_retry pip install -r requirements-dev.txt
+    - pip install pipenv
+    - travis_retry pipenv install --dev --system
 before_script:
     - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev

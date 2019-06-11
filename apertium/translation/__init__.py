@@ -1,11 +1,9 @@
 import re
-from subprocess import Popen, PIPE, CalledProcessError
+from subprocess import CalledProcessError, PIPE, Popen
+from typing import Dict, List, Optional, Tuple, Union
 
-if False:
-    from typing import List, Dict, Tuple, Union, Optional, NamedTuple  # noqa: F401
-
-import apertium  # noqa: F401
-from apertium.utils import to_alpha3_code, execute, parse_mode_file  # noqa: F401
+import apertium  # noqa: E402
+from apertium.utils import execute, parse_mode_file, to_alpha3_code  # noqa: E402
 
 
 class Translator:
@@ -16,7 +14,7 @@ class Translator:
         l2 (str)
     """
 
-    def __init__(self, l1, l2):  # type: (Translator, str, str) -> None
+    def __init__(self, l1: str, l2: str) -> None:
         """
         Args:
             l1 (str)
@@ -40,19 +38,19 @@ class Translator:
             self.translation_cmds[(l1, l2)] = parse_mode_file(mode_path)
         return self.translation_cmds[(l1, l2)]
 
-    def _get_format(self, format, deformat, reformat):  # type: (Translator, Optional[str], Optional[str], Optional[str]) -> Tuple[Optional[str], Optional[str]]
+    def _get_format(self, formatting: Optional[str], deformat: Optional[str], reformat: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
         """
         Args:
-            format (Optional[str])
+            formatting (Optional[str])
             deformat (Optional[str])
             reformat (Optional[str])
 
         Returns:
             Tuple[Optional[str], Optional[str]]
         """
-        if format:
-            deformat = 'apertium-des' + format
-            reformat = 'apertium-re' + format
+        if formatting:
+            deformat = 'apertium-des' + formatting
+            reformat = 'apertium-re' + formatting
         else:
             if 'apertium-des' not in deformat:  # type: ignore
                 deformat = 'apertium-des' + deformat  # type: ignore
@@ -145,19 +143,19 @@ class Translator:
             result = re.sub(rb'\0$', b'', text)  # type: ignore
         return result  # type: ignore
 
-    def translate(self, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):  # type: (Translator, str, bool, Optional[str], str, str) -> str
+    def translate(self, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
         """
         Args:
             text (str)
             mark_unknown (bool)
-            format (Optional[str])
+            formatting (Optional[str])
             deformat (str)
             reformat (str)
 
         Returns:
             str
         """
-        if '%s-%s' % tuple(map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs:  # type: ignore
+        if '%s-%s' % tuple(map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs:
             pair = map(to_alpha3_code, [self.l1, self.l2])
         else:
             raise apertium.ModeNotInstalled()
@@ -165,7 +163,7 @@ class Translator:
         if pair is not None:
             l1, l2 = pair
             cmds = list(self._get_commands(l1, l2))
-            unsafe_deformat, unsafe_reformat = self._get_format(format, deformat, reformat)
+            unsafe_deformat, unsafe_reformat = self._get_format(formatting, deformat, reformat)
             deformater, reformater = self._validate_formatters(unsafe_deformat, unsafe_reformat)
             deformatted = self._get_deformat(str(deformater), text)
             output = execute(deformatted, cmds)
@@ -173,12 +171,12 @@ class Translator:
             return result.decode()  # type: ignore
 
 
-def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', reformat='txt'):  # type: (str, str, str, bool, Optional[str], str, str) -> str
+def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt'):
     """
     Args:
         text (str)
         mark_unknown (bool)
-        format (Optional[str])
+        formatting (Optional[str])
         deformat (str)
         reformat (str)
 
@@ -186,4 +184,4 @@ def translate(l1, l2, text, mark_unknown=False, format=None, deformat='txt', ref
         str
     """
     translator = apertium.Translator(l1, l2)
-    return translator.translate(text, mark_unknown, format, deformat, reformat)
+    return translator.translate(text, mark_unknown, formatting, deformat, reformat)

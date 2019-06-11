@@ -1,17 +1,15 @@
-import subprocess
 import re
-
-if False:
-    from typing import List, Dict, Tuple, Union  # noqa: F401
+import subprocess
+from typing import List
 
 import apertium  # noqa: F401
-from apertium.iso639 import iso_639_codes  # noqa: F401
+from apertium.iso639 import iso_639_codes
 
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 
 
-def to_alpha3_code(code):  # type: (str) -> str
+def to_alpha3_code(code: str) -> str:
     """
     Args:
         code (str)
@@ -26,7 +24,7 @@ def to_alpha3_code(code):  # type: (str) -> str
         return iso639_codes_inverse[code] if code in iso639_codes_inverse else code
 
 
-def execute(inp, commands):  # type: (str, List[List[str]]) -> str
+def execute(inp: str, commands: List[List[str]]) -> str:
     """
     Args:
         inp (str)
@@ -45,7 +43,7 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     return end.decode()
 
 
-def parse_mode_file(mode_path):  # type: (str) -> List[List[str]]
+def parse_mode_file(mode_path: str) -> List[List[str]]:
     """
     Args:
         mode_path (str)

@@ -33,7 +33,8 @@ install:
   - SET PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
   - python --version
   - python -c "import sys,platform,struct; print(sys.platform, platform.machine(), struct.calcsize('P') * 8, )"
-  - pip install -r requirements-dev.txt
+  - pip install pipenv
+  - pipenv install --dev --system
   - python setup.py install
 build: false
 test_script:
