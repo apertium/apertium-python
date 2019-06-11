@@ -1,6 +1,6 @@
 import platform
 import tempfile
-
+from typing import ByteString
 if platform.system() == 'Linux':
     from apertium.swig.linux import lttoolbox
 elif platform.system() == 'Windows':
@@ -16,7 +16,7 @@ class LtProc:
         output_text (str)
     """
 
-    def __init__(self, input_text, arg_index, path):
+    def __init__(self, input_text, arg_index, path):  # type: (LtProc, str, int, str) -> None
         """
         Args:
             input_text (str)
@@ -46,7 +46,7 @@ class LtProc:
             fst.analyze(self.path, input_file.name, output_file.name)
             self.output_text = output_file.read()
 
-    def execute(self):
+    def execute(self):  # type: (LtProc) -> ByteString
         """
         Executes the required method, depending upon the argument for lt-proc
 
@@ -54,7 +54,7 @@ class LtProc:
             self (LtProc)
 
         Returns:
-            (bytes)
+            (ByteString)
         """
         if self.arg_index == '-w':
             self.analyze()
