@@ -62,9 +62,9 @@ def update_path_windows() -> None:
 
 
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
-analyzers: Dict[str, Tuple[str, str]] = {}
-generators: Dict[str, Tuple[str, str]] = {}
-pairs: Dict[str, str] = {}
+analyzers = {}  # type: Dict[str, Tuple[str, str]]
+generators = {}  # type: Dict[str, Tuple[str, str]]
+pairs = {}  # type: Dict[str, str]
 for pair_path in pair_paths:
     _update_modes(pair_path)
 append_pair_path_windows()
