@@ -6,7 +6,7 @@ if False:
 
 import apertium  # noqa: F401
 from apertium.iso639 import iso_639_codes  # noqa: F401
-
+from apertium import lttoolbox
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 
@@ -38,6 +38,13 @@ def execute(inp, commands):  # type: (str, List[List[str]]) -> str
     procs = []
     end = inp.encode()
     for i, command in enumerate(commands):
+        if 'lt-proc' and '-w' in command:
+            arg_index = command.index('-w')
+            automorf_path = command[-1]
+            ltp = lttoolbox.LtProc(end.decode(), command[arg_index], automorf_path)
+            end = ltp.execute()
+            continue
+
         procs.append(
             subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),
         )
