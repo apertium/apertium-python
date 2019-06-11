@@ -6,7 +6,7 @@ if False:
 
 import apertium  # noqa: F401
 from apertium.iso639 import iso_639_codes  # noqa: F401
-from apertium import lttoolbox
+from apertium import lttoolbox  # noqa: F401
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 
