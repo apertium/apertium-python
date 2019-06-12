@@ -1,11 +1,10 @@
 import os
-from streamparser import parse, LexicalUnit  # noqa: F401
+from typing import Dict, List
+
+from streamparser import LexicalUnit, parse
 
 import apertium
-from apertium.utils import to_alpha3_code, execute, parse_mode_file
-
-if False:
-    from typing import List, Union, Dict  # noqa: F401
+from apertium.utils import execute, parse_mode_file, to_alpha3_code
 
 
 class Analyzer:
@@ -15,7 +14,7 @@ class Analyzer:
         lang (str)
     """
 
-    def __init__(self, lang):  # type: (Analyzer, str) -> None
+    def __init__(self, lang: str) -> None:
         """
         Args:
             lang (str)

@@ -1,3 +1,6 @@
 [flake8]
-max-line-length=160
-exclude=apertium/swig/
+ignore = W504
+max-line-length = 160
+import-order-style = google
+exclude = apertium/swig/, docs/source/conf.py
+application-import-names = apertium

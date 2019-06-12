@@ -1,21 +1,18 @@
-import platform
 import os
+import platform
+from typing import Dict, Tuple
 
+from apertium.analysis import analyze, Analyzer  # noqa: F401
+from apertium.generation import generate, Generator  # noqa: F401
 from apertium.mode_search import search_path
-from apertium.analysis import Analyzer, analyze  # noqa: F401
-from apertium.generation import Generator, generate  # noqa: F401
-from apertium.translation import Translator, translate  # noqa: F401
-
-
-if False:
-    from typing import List, Dict, Tuple  # noqa: F401
+from apertium.translation import translate, Translator  # noqa: F401
 
 
 class ModeNotInstalled(ValueError):
     pass
 
 
-def _update_modes(pair_path):  # type: (str) -> None
+def _update_modes(pair_path: str) -> None:
     """
     Args:
         pair_path (str)
@@ -32,7 +29,7 @@ def _update_modes(pair_path):  # type: (str) -> None
             generators[lang_pair] = (dirpath, modename)
 
 
-def append_pair_path(pair_path):  # type: (str) -> None
+def append_pair_path(pair_path: str) -> None:
     """
     Args:
         pair_path (str)
@@ -41,16 +38,17 @@ def append_pair_path(pair_path):  # type: (str) -> None
     _update_modes(pair_path)
 
 
-def append_pair_path_windows():  # type (None) -> None
+def append_pair_path_windows() -> None:
     if platform.system() == 'Windows':
         install_path = os.getenv('LOCALAPPDATA')
-        apertium_lang_path = \
-            os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
-        if os.path.isdir(apertium_lang_path):
-            append_pair_path(apertium_lang_path)
+        if install_path:
+            apertium_lang_path = \
+                os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
+            if os.path.isdir(apertium_lang_path):
+                append_pair_path(apertium_lang_path)
 
 
-def update_path_windows():
+def update_path_windows() -> None:
     """Adding the Apertium Binaries to Process' PATH"""
 
     if platform.system() == 'Windows':

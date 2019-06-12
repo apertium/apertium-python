@@ -1,10 +1,7 @@
-from streamparser import parse, LexicalUnit  # noqa: F401
+from typing import Dict, List, Union
 
 import apertium
-from apertium.utils import to_alpha3_code, execute, parse_mode_file
-
-if False:
-    from typing import List, Union, Tuple, Dict  # noqa: F401
+from apertium.utils import execute, parse_mode_file, to_alpha3_code
 
 
 class Generator:
@@ -14,7 +11,7 @@ class Generator:
         lang (str)
     """
 
-    def __init__(self, lang):  # type: (Generator, str) -> None
+    def __init__(self, lang: str) -> None:
         """
         Args:
             lang (str)
@@ -22,17 +19,17 @@ class Generator:
         self.generator_cmds = {}  # type: Dict[str, List[List[str]]]
         self.lang = lang  # type: str
 
-    def _get_commands(self):  # type: (Generator) -> List[List[str]]
+    def _get_commands(self) -> List[List[str]]:
         """
         Returns:
             List[List[str]]
         """
         if self.lang not in self.generator_cmds:
             mode_path, mode = apertium.generators[self.lang]
-            self.generator_cmds[self.lang] = parse_mode_file(mode_path+'/modes/'+mode+'.mode')
+            self.generator_cmds[self.lang] = parse_mode_file(mode_path + '/modes/' + mode + '.mode')
         return self.generator_cmds[self.lang]
 
-    def generate(self, in_text, formatting='none'):  # type: (Generator, str, str) -> Union[str, List[str]]
+    def generate(self, in_text: str, formatting: str = 'none') -> Union[str, List[str]]:
         """
         Args:
             in_text (str)
@@ -51,7 +48,7 @@ class Generator:
             raise apertium.ModeNotInstalled(self.lang)
 
 
-def generate(lang, in_text, formatting='none'):  # type: (str, str, str) -> Union[str, List[str]]
+def generate(lang: str, in_text: str, formatting: str = 'none') -> Union[str, List[str]]:
     """
     Args:
         lang (str)
