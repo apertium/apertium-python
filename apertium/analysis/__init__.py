@@ -35,6 +35,7 @@ class Analyzer:
             mode_path, mode = apertium.analyzers[self.lang]
             abs_mode_path = os.path.join(mode_path, 'modes', '{}.mode'.format(mode))
             self.analyzer_cmds[self.lang] = parse_mode_file(abs_mode_path)
+
         return self.analyzer_cmds[self.lang]
 
     @staticmethod
@@ -63,7 +64,9 @@ class Analyzer:
             List[LexicalUnit]
         """
         self._get_commands()
-        self.analyzer_cmds[self.lang].insert(0, ['apertium-des{}'.format(formatting), '-n'])
+        deformatter = ['apertium-des{}'.format(formatting), '-n']
+        if deformatter not in self.analyzer_cmds[self.lang]:
+            self.analyzer_cmds[self.lang].insert(0, deformatter)
         result = execute(in_text, self.analyzer_cmds[self.lang])
         return self._postproc_text(result)
 

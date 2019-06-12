@@ -1,6 +1,7 @@
 import platform
 import tempfile
 from typing import ByteString  # noqa: F401
+
 if platform.system() == 'Linux':
     from apertium.swig.linux import lttoolbox
 elif platform.system() == 'Windows':
@@ -16,7 +17,7 @@ class LtProc:
         output_text (str)
     """
 
-    def __init__(self, input_text, arg_index, path):  # type: (LtProc, str, int, str) -> None
+    def __init__(self, input_text: str, arg_index: str, path: str) -> None:
         """
         Args:
             input_text (str)
@@ -28,7 +29,7 @@ class LtProc:
         self.input_text = input_text
         self.output_text = ''
 
-    def analyze(self):  # type: (LtProc) -> None
+    def analyze(self) -> None:
         """
         Reads formatted text from apertium-des and returns its analysed text
 
@@ -46,7 +47,7 @@ class LtProc:
             fst.analyze(self.path, input_file.name, output_file.name)
             self.output_text = output_file.read()
 
-    def execute(self):  # type: (LtProc) -> ByteString
+    def execute(self) -> ByteString:
         """
         Executes the required method, depending upon the argument for lt-proc
 
