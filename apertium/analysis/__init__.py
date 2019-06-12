@@ -19,14 +19,14 @@ class Analyzer:
         Args:
             lang (str)
         """
-        self.analyzer_cmds = {}  # type: Dict[str, List[List[str]]]
-        self.lang = to_alpha3_code(lang)  # type: str
+        self.analyzer_cmds: Dict[str, List[List[str]]] = {}
+        self.lang: str = to_alpha3_code(lang)
         if self.lang not in apertium.analyzers:
             raise apertium.ModeNotInstalled(self.lang)
         else:
             self.path, self.mode = apertium.analyzers[self.lang]
 
-    def _get_commands(self):  # type: (Analyzer) -> List[List[str]]
+    def _get_commands(self) -> List[List[str]]:
         """
         Returns:
             List[List[str]]
@@ -38,7 +38,7 @@ class Analyzer:
         return self.analyzer_cmds[self.lang]
 
     @staticmethod
-    def _postproc_text(result):  # type: (str) -> List[LexicalUnit]
+    def _postproc_text(result: str) -> List[LexicalUnit]:
         """
         Postprocesses the input
 
@@ -51,7 +51,7 @@ class Analyzer:
         lexical_units = list(parse(result))
         return lexical_units
 
-    def analyze(self, in_text, formatting='txt'):  # type: (Analyzer, str, str) -> List[LexicalUnit]
+    def analyze(self, in_text: str, formatting: str = 'txt') -> List[LexicalUnit]:
         """
         Runs apertium to analyze the input
 
@@ -68,7 +68,7 @@ class Analyzer:
         return self._postproc_text(result)
 
 
-def analyze(lang, in_text, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
+def analyze(lang: str, in_text: str, formatting: str = 'txt') -> List[LexicalUnit]:
     """
     Args:
         lang (str)

@@ -20,11 +20,11 @@ class Translator:
             l1 (str)
             l2 (str)
         """
-        self.translation_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
+        self.translation_cmds: Dict[Tuple[str, str], List[List[str]]] = {}  # type
         self.l1 = l1
         self.l2 = l2
 
-    def _get_commands(self, l1, l2):  # type: (Translator, str, str) -> List[List[str]]
+    def _get_commands(self, l1: str, l2: str) -> List[List[str]]:
         """
         Args:
             l1 (str)
@@ -59,7 +59,7 @@ class Translator:
 
         return deformat, reformat
 
-    def _check_ret_code(self, proc):  # type: (Translator, Popen) -> None
+    def _check_ret_code(self, proc: Popen) -> None:
         """
         Args:
             proc (Popen)
@@ -67,7 +67,7 @@ class Translator:
         if proc.returncode != 0:
             raise CalledProcessError()  # type: ignore
 
-    def _validate_formatters(self, deformat, reformat):  # type: (Translator, Optional[str], Optional[str]) -> Tuple[Union[str, object], Union[str, object]]
+    def _validate_formatters(self, deformat: Optional[str], reformat: Optional[str]) -> Tuple[Union[str, object], Union[str, object]]:
         """
         Args:
             deformat (Optional[str])
@@ -76,7 +76,7 @@ class Translator:
         Returns:
             Tuple[Union[str, object], Union[str, object]]
         """
-        def valid1(elt, lst):  # type: (Optional[str], List[object]) -> Union[str, object]
+        def valid1(elt: Optional[str], lst: List[object]) -> Union[str, object]:
             """
             Args:
                 elt (Optional[str])
@@ -105,7 +105,7 @@ class Translator:
         ]
         return valid1(deformat, deformatters), valid1(reformat, reformatters)
 
-    def _get_deformat(self, deformat, text):  # type: (Translator, str, str) -> str
+    def _get_deformat(self, deformat: str, text: str) -> str:
         """
         Args:
             deformat (str)
@@ -125,7 +125,7 @@ class Translator:
         res = str(deformatted)
         return res
 
-    def _get_reformat(self, reformat, text):  # type: (Translator, str, str) -> str
+    def _get_reformat(self, reformat: str, text: str) -> str:
         """
         Args:
             reformat (str)
