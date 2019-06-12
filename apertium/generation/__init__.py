@@ -16,8 +16,8 @@ class Generator:
         Args:
             lang (str)
         """
-        self.generator_cmds: Dict[str, List[List[str]]] = {}
-        self.lang: str = lang
+        self.generator_cmds = {}  # type: Dict[str, List[List[str]]]
+        self.lang = lang  # type: str
 
     def _get_commands(self) -> List[List[str]]:
         """

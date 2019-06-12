@@ -19,8 +19,8 @@ class Analyzer:
         Args:
             lang (str)
         """
-        self.analyzer_cmds: Dict[str, List[List[str]]] = {}
-        self.lang: str = to_alpha3_code(lang)
+        self.analyzer_cmds = {}  # type: Dict[str, List[List[str]]]
+        self.lang = to_alpha3_code(lang)  # type: str
         if self.lang not in apertium.analyzers:
             raise apertium.ModeNotInstalled(self.lang)
         else:

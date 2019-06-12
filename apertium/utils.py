@@ -3,8 +3,8 @@ import subprocess
 from typing import List
 
 import apertium  # noqa: F401
-from apertium.iso639 import iso_639_codes
 from apertium import lttoolbox
+from apertium.iso639 import iso_639_codes
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 

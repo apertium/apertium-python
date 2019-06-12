@@ -20,7 +20,7 @@ class Translator:
             l1 (str)
             l2 (str)
         """
-        self.translation_cmds: Dict[Tuple[str, str], List[List[str]]] = {}  # type
+        self.translation_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
         self.l1 = l1
         self.l2 = l2
 
