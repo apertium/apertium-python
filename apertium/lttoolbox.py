@@ -2,10 +2,7 @@ import platform
 import tempfile
 from typing import ByteString  # noqa: F401
 
-if platform.system() == 'Linux':
-    from apertium.swig.linux import lttoolbox
-elif platform.system() == 'Windows':
-    pass
+import lttoolbox
 
 
 class LtProc:
