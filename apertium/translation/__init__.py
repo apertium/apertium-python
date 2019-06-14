@@ -3,7 +3,7 @@ from subprocess import CalledProcessError, PIPE, Popen
 from typing import Dict, List, Optional, Tuple, Union
 
 import apertium  # noqa: E402
-from apertium.utils import execute, parse_mode_file, to_alpha3_code  # noqa: E402
+from apertium.utils import execute_pipeline, parse_mode_file, to_alpha3_code  # noqa: E402
 
 
 class Translator:
@@ -166,7 +166,7 @@ class Translator:
             unsafe_deformat, unsafe_reformat = self._get_format(formatting, deformat, reformat)
             deformater, reformater = self._validate_formatters(unsafe_deformat, unsafe_reformat)
             deformatted = self._get_deformat(str(deformater), text)
-            output = execute(deformatted, cmds)
+            output = execute_pipeline(deformatted, cmds)
             result = self._get_reformat(str(reformater), output).strip()
             return result.decode()  # type: ignore
 

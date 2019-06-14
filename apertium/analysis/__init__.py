@@ -4,7 +4,7 @@ from typing import Dict, List
 from streamparser import LexicalUnit, parse
 
 import apertium
-from apertium.utils import execute, parse_mode_file, to_alpha3_code
+from apertium.utils import execute_pipeline, parse_mode_file, to_alpha3_code
 
 
 class Analyzer:
@@ -67,7 +67,7 @@ class Analyzer:
         deformatter = ['apertium-des{}'.format(formatting), '-n']
         if deformatter not in self.analyzer_cmds[self.lang]:
             self.analyzer_cmds[self.lang].insert(0, deformatter)
-        result = execute(in_text, self.analyzer_cmds[self.lang])
+        result = execute_pipeline(in_text, self.analyzer_cmds[self.lang])
         return self._postproc_text(result)
 
 

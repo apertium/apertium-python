@@ -1,4 +1,3 @@
-import platform
 import tempfile
 from typing import ByteString  # noqa: F401
 

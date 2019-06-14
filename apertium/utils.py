@@ -24,7 +24,7 @@ def to_alpha3_code(code: str) -> str:
         return iso639_codes_inverse[code] if code in iso639_codes_inverse else code
 
 
-def execute(inp: str, commands: List[List[str]]) -> str:
+def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     """
     Args:
         inp (str)
@@ -36,17 +36,16 @@ def execute(inp: str, commands: List[List[str]]) -> str:
     procs = []
     end = inp.encode()
     for i, command in enumerate(commands):
-        if 'lt-proc' and '-w' in command:
+        if 'lt-proc' in command and '-w' in command:
             arg_index = command.index('-w')
             automorf_path = command[-1]
             ltp = lttoolbox.LtProc(end.decode(), command[arg_index], automorf_path)
             end = ltp.execute()
-            continue
-
-        procs.append(
-            subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),
-        )
-        end, _ = procs[i].communicate(end)
+        else:
+            procs.append(
+                subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),
+            )
+            end, _ = procs[i].communicate(end)
     return end.decode()
 
 

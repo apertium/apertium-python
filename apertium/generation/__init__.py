@@ -1,7 +1,7 @@
 from typing import Dict, List, Union
 
 import apertium
-from apertium.utils import execute, parse_mode_file, to_alpha3_code
+from apertium.utils import execute_pipeline, parse_mode_file, to_alpha3_code
 
 
 class Generator:
@@ -42,7 +42,7 @@ class Generator:
 
         if self.lang in apertium.generators:
             commands = list(self._get_commands())
-            result = execute(in_text, commands)
+            result = execute_pipeline(in_text, commands)
             return result.rstrip('\x00')
         else:
             raise apertium.ModeNotInstalled(self.lang)
