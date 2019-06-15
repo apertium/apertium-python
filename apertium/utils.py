@@ -33,19 +33,14 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     Returns:
         str
     """
-    procs = []
     end = inp.encode()
-    for i, command in enumerate(commands):
-        if 'lt-proc' in command and '-w' in command:
-            arg_index = command.index('-w')
-            automorf_path = command[-1]
-            ltp = lttoolbox.LtProc(end.decode(), command[arg_index], automorf_path)
-            end = ltp.execute()
+    for command in commands:
+        if 'lt-proc' in command and ('-w' in command or '-g' in command):
+                ltp = lttoolbox.LtProc(command, end.decode())
+                end = ltp.execute()
         else:
-            procs.append(
-                subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),
-            )
-            end, _ = procs[i].communicate(end)
+            proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            end, _ = proc.communicate(end)
     return end.decode()
 
 

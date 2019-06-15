@@ -1,7 +1,7 @@
-#! /bin/bash
+#!/usr/bin/env bash
 sudo apt-get install -y swig build-essential python3-setuptools
 git clone -b swig_wrapper https://github.com/Vaydheesh/lttoolbox.git
-cd lttoolbox || return
+cd lttoolbox || set -e
 ./autogen.sh && ./configure && make
-cd python || return
+cd python || set -e
 python3 setup.py install

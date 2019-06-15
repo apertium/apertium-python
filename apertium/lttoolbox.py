@@ -1,5 +1,5 @@
 import tempfile
-from typing import ByteString  # noqa: F401
+from typing import ByteString, List  # noqa: F401
 
 import lttoolbox
 
@@ -7,41 +7,22 @@ import lttoolbox
 class LtProc:
     """
     Attributes:
-        arg_index (int)
+        command (List)
         path (str)
         input_text (str)
         output_text (str)
     """
 
-    def __init__(self, input_text: str, arg_index: str, path: str) -> None:
+    def __init__(self, command: List, input_text: str) -> None:
         """
         Args:
+            command (List)
             input_text (str)
-            arg_index (int)
-            path (str)
         """
-        self.arg_index = arg_index
-        self.path = path
+        self.command = command
+        self.path = command[-1]
         self.input_text = input_text
         self.output_text = ''
-
-    def analyze(self) -> None:
-        """
-        Reads formatted text from apertium-des and returns its analysed text
-
-        Args:
-            self (LtProc)
-        Returns:
-            None
-        """
-        with tempfile.NamedTemporaryFile('w') as input_file, tempfile.NamedTemporaryFile('r') as output_file:
-            input_file.write(self.input_text)
-            input_file.flush()
-            fst = lttoolbox.FST()
-            if not fst.valid():
-                raise ValueError('FST Invalid')
-            fst.analyze(self.path, input_file.name, output_file.name)
-            self.output_text = output_file.read()
 
     def execute(self) -> ByteString:
         """
@@ -53,6 +34,18 @@ class LtProc:
         Returns:
             (ByteString)
         """
-        if self.arg_index == '-w':
-            self.analyze()
+        with tempfile.NamedTemporaryFile('w') as input_file, tempfile.NamedTemporaryFile('r') as output_file:
+            input_file.write(self.input_text)
+            input_file.flush()
+            lttoolbox.LtLocale.tryToSetLocale()
+            fst = lttoolbox.FST()
+            fst.setDictionaryCaseMode(True)
+            if not fst.valid():
+                raise ValueError('FST Invalid')
+            if '-w' in self.command:
+                fst.analyze(self.path, input_file.name, output_file.name)
+            elif '-g' in self.command:
+                fst.generate(self.path, input_file.name, output_file.name)
+
+            self.output_text = output_file.read()
             return self.output_text.encode()

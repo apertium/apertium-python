@@ -10,7 +10,7 @@ python:
 install:
     - pip install pipenv
     - travis_retry pipenv install --dev --system
-    - ./BuildSwigWrapper.sh
+    - ./build-swig-wrapper.sh
 before_script:
     - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
