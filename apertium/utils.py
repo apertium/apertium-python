@@ -36,8 +36,8 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     end = inp.encode()
     for command in commands:
         if 'lt-proc' in command and ('-w' in command or '-g' in command):
-                ltp = lttoolbox.LtProc(command, end.decode())
-                end = ltp.execute()
+            ltp = lttoolbox.LtProc(command, end.decode())
+            end = ltp.execute()
         else:
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             end, _ = proc.communicate(end)

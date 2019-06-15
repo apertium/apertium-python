@@ -39,10 +39,10 @@ class LtProc:
             input_file.flush()
             lttoolbox.LtLocale.tryToSetLocale()
             fst = lttoolbox.FST()
-            fst.setDictionaryCaseMode(True)
             if not fst.valid():
                 raise ValueError('FST Invalid')
             if '-w' in self.command:
+                fst.setDictionaryCaseMode(True)
                 fst.analyze(self.path, input_file.name, output_file.name)
             elif '-g' in self.command:
                 fst.generate(self.path, input_file.name, output_file.name)
