@@ -1,3 +1,4 @@
+import logging
 import os
 import platform
 from typing import Dict, Tuple
@@ -69,3 +70,5 @@ for pair_path in pair_paths:
     _update_modes(pair_path)
 append_pair_path_windows()
 update_path_windows()
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.WARNING)
+logger = logging.getLogger()

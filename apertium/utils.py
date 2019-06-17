@@ -1,4 +1,3 @@
-import logging
 import subprocess
 import tempfile
 from typing import List
@@ -36,14 +35,9 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         str
     """
     end = inp.encode()
-    logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
     for command in commands:
         if 'lt-proc' == command[0]:
-            arg = ''
-            if len(command) == 3:
-                arg = command[1][1]
+            arg = command[1][1] if len(command) == 3 else ''
             path = command[-1]
             with tempfile.NamedTemporaryFile('w') as input_file, tempfile.NamedTemporaryFile('r') as output_file:
                 text = end.decode()
@@ -56,7 +50,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                 fst.lt_proc(arg, path, input_file.name, output_file.name)
                 end = output_file.read().encode()
         else:
-            logger.info('Calling subprocess %s', command[0])
+            apertium.logger.warning('%s Calling subprocess %s', __name__, command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             end, _ = proc.communicate(end)
     return end.decode()
