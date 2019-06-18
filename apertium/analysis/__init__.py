@@ -1,9 +1,10 @@
+import os
 from typing import Dict, List
 
 from streamparser import LexicalUnit, parse
 
 import apertium
-from apertium.utils import execute, parse_mode_file, to_alpha3_code
+from apertium.utils import execute_pipeline, parse_mode_file, to_alpha3_code
 
 
 class Analyzer:
@@ -25,17 +26,20 @@ class Analyzer:
         else:
             self.path, self.mode = apertium.analyzers[self.lang]
 
-    def _get_commands(self):  # type: (Analyzer) -> List[List[str]]
+    def _get_commands(self) -> List[List[str]]:
         """
         Returns:
             List[List[str]]
         """
         if self.lang not in self.analyzer_cmds:
             mode_path, mode = apertium.analyzers[self.lang]
-            self.analyzer_cmds[self.lang] = parse_mode_file(mode_path + '/modes/' + mode + '.mode')
+            abs_mode_path = os.path.join(mode_path, 'modes', '{}.mode'.format(mode))
+            self.analyzer_cmds[self.lang] = parse_mode_file(abs_mode_path)
+
         return self.analyzer_cmds[self.lang]
 
-    def _postproc_text(self, result):  # type: (Analyzer, str) -> List[LexicalUnit]
+    @staticmethod
+    def _postproc_text(result: str) -> List[LexicalUnit]:
         """
         Postprocesses the input
 
@@ -48,7 +52,7 @@ class Analyzer:
         lexical_units = list(parse(result))
         return lexical_units
 
-    def analyze(self, in_text, formatting='txt'):  # type: (Analyzer, str, str) -> List[LexicalUnit]
+    def analyze(self, in_text: str, formatting: str = 'txt') -> List[LexicalUnit]:
         """
         Runs apertium to analyze the input
 
@@ -59,12 +63,15 @@ class Analyzer:
         Returns:
             List[LexicalUnit]
         """
-        apertium_des = execute(in_text, [['apertium-des{}'.format(formatting), '-n']])
-        result = execute(apertium_des, self._get_commands())
+        self._get_commands()
+        deformatter = ['apertium-des{}'.format(formatting), '-n']
+        if deformatter not in self.analyzer_cmds[self.lang]:
+            self.analyzer_cmds[self.lang].insert(0, deformatter)
+        result = execute_pipeline(in_text, self.analyzer_cmds[self.lang])
         return self._postproc_text(result)
 
 
-def analyze(lang, in_text, formatting='txt'):  # type: (str, str, str) -> List[LexicalUnit]
+def analyze(lang: str, in_text: str, formatting: str = 'txt') -> List[LexicalUnit]:
     """
     Args:
         lang (str)

@@ -1,10 +1,11 @@
-import re
 import subprocess
+import tempfile
 from typing import List
+
+import lttoolbox
 
 import apertium  # noqa: F401
 from apertium.iso639 import iso_639_codes
-
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 
@@ -24,7 +25,7 @@ def to_alpha3_code(code: str) -> str:
         return iso639_codes_inverse[code] if code in iso639_codes_inverse else code
 
 
-def execute(inp: str, commands: List[List[str]]) -> str:
+def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     """
     Args:
         inp (str)
@@ -33,13 +34,25 @@ def execute(inp: str, commands: List[List[str]]) -> str:
     Returns:
         str
     """
-    procs = []
     end = inp.encode()
-    for i, command in enumerate(commands):
-        procs.append(
-            subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE),
-        )
-        end, _ = procs[i].communicate(end)
+    for command in commands:
+        if 'lt-proc' == command[0]:
+            arg = command[1][1] if len(command) == 3 else ''
+            path = command[-1]
+            with tempfile.NamedTemporaryFile('w') as input_file, tempfile.NamedTemporaryFile('r') as output_file:
+                text = end.decode()
+                input_file.write(text)
+                input_file.flush()
+                lttoolbox.LtLocale.tryToSetLocale()
+                fst = lttoolbox.FST()
+                if not fst.valid():
+                    raise ValueError('FST Invalid')
+                fst.lt_proc(arg, path, input_file.name, output_file.name)
+                end = output_file.read().encode()
+        else:
+            apertium.logger.warning('Calling subprocess %s', command[0])
+            proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            end, _ = proc.communicate(end)
     return end.decode()
 
 
@@ -51,7 +64,8 @@ def parse_mode_file(mode_path: str) -> List[List[str]]:
     Returns:
         List[List[str]]
     """
-    mode_str = open(mode_path, 'r').read().strip()
+    with open(mode_path) as mode_file:
+        mode_str = mode_file.read().strip()
     if mode_str:
         commands = []
         for cmd in mode_str.strip().split('|'):
@@ -59,7 +73,6 @@ def parse_mode_file(mode_path: str) -> List[List[str]]:
             # modes.xml instead; this is brittle (what if a path
             # has | or ' in it?)
             cmd = cmd.replace('$2', '').replace('$1', '-g')
-            cmd = re.sub(r'^\s*(\S*)', r'\g<1> -z', cmd)
             commands.append([c.strip("'") for c in cmd.split()])
         return commands
     else:

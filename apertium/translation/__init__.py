@@ -3,7 +3,7 @@ from subprocess import CalledProcessError, PIPE, Popen
 from typing import Dict, List, Optional, Tuple, Union
 
 import apertium  # noqa: E402
-from apertium.utils import execute, parse_mode_file, to_alpha3_code  # noqa: E402
+from apertium.utils import execute_pipeline, parse_mode_file, to_alpha3_code  # noqa: E402
 
 
 class Translator:
@@ -24,7 +24,7 @@ class Translator:
         self.l1 = l1
         self.l2 = l2
 
-    def _get_commands(self, l1, l2):  # type: (Translator, str, str) -> List[List[str]]
+    def _get_commands(self, l1: str, l2: str) -> List[List[str]]:
         """
         Args:
             l1 (str)
@@ -59,7 +59,7 @@ class Translator:
 
         return deformat, reformat
 
-    def _check_ret_code(self, proc):  # type: (Translator, Popen) -> None
+    def _check_ret_code(self, proc: Popen) -> None:
         """
         Args:
             proc (Popen)
@@ -67,7 +67,7 @@ class Translator:
         if proc.returncode != 0:
             raise CalledProcessError()  # type: ignore
 
-    def _validate_formatters(self, deformat, reformat):  # type: (Translator, Optional[str], Optional[str]) -> Tuple[Union[str, object], Union[str, object]]
+    def _validate_formatters(self, deformat: Optional[str], reformat: Optional[str]) -> Tuple[Union[str, object], Union[str, object]]:
         """
         Args:
             deformat (Optional[str])
@@ -76,7 +76,7 @@ class Translator:
         Returns:
             Tuple[Union[str, object], Union[str, object]]
         """
-        def valid1(elt, lst):  # type: (Optional[str], List[object]) -> Union[str, object]
+        def valid1(elt: Optional[str], lst: List[object]) -> Union[str, object]:
             """
             Args:
                 elt (Optional[str])
@@ -105,7 +105,7 @@ class Translator:
         ]
         return valid1(deformat, deformatters), valid1(reformat, reformatters)
 
-    def _get_deformat(self, deformat, text):  # type: (Translator, str, str) -> str
+    def _get_deformat(self, deformat: str, text: str) -> str:
         """
         Args:
             deformat (str)
@@ -125,7 +125,7 @@ class Translator:
         res = str(deformatted)
         return res
 
-    def _get_reformat(self, reformat, text):  # type: (Translator, str, str) -> str
+    def _get_reformat(self, reformat: str, text: str) -> str:
         """
         Args:
             reformat (str)
@@ -166,7 +166,7 @@ class Translator:
             unsafe_deformat, unsafe_reformat = self._get_format(formatting, deformat, reformat)
             deformater, reformater = self._validate_formatters(unsafe_deformat, unsafe_reformat)
             deformatted = self._get_deformat(str(deformater), text)
-            output = execute(deformatted, cmds)
+            output = execute_pipeline(deformatted, cmds)
             result = self._get_reformat(str(reformater), output).strip()
             return result.decode()  # type: ignore
 
