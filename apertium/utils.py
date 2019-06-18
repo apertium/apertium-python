@@ -50,7 +50,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                 fst.lt_proc(arg, path, input_file.name, output_file.name)
                 end = output_file.read().encode()
         else:
-            apertium.logger.warning('%s Calling subprocess %s', __name__, command[0])
+            apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             end, _ = proc.communicate(end)
     return end.decode()
