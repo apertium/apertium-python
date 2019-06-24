@@ -1,7 +1,9 @@
+import os
 import subprocess
 import tempfile
 from typing import List
 
+import lextools
 import lttoolbox
 
 import apertium  # noqa: F401
@@ -36,23 +38,35 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     """
     end = inp.encode()
     for command in commands:
+        lttoolbox.LtLocale.tryToSetLocale()
+        input_file = tempfile.NamedTemporaryFile('w', delete=False)
+        output_file = tempfile.NamedTemporaryFile('r', delete=False)
+        arg = command[1][1] if len(command) == 3 else ''
+        path = command[-1]
+        wrapper_flag = True
+        input_file_name, output_file_name = input_file.name, output_file.name
+        with open(input_file_name, 'w') as input_file:
+            text = end.decode()
+            input_file.write(text)
         if 'lt-proc' == command[0]:
-            arg = command[1][1] if len(command) == 3 else ''
-            path = command[-1]
-            with tempfile.NamedTemporaryFile('w') as input_file, tempfile.NamedTemporaryFile('r') as output_file:
-                text = end.decode()
-                input_file.write(text)
-                input_file.flush()
-                lttoolbox.LtLocale.tryToSetLocale()
-                fst = lttoolbox.FST()
-                if not fst.valid():
-                    raise ValueError('FST Invalid')
-                fst.lt_proc(arg, path, input_file.name, output_file.name)
-                end = output_file.read().encode()
+            fst = lttoolbox.FST()
+            if not fst.valid():
+                raise ValueError('FST Invalid')
+            fst = lttoolbox.FST()
+            fst.lt_proc(arg, path, input_file_name, output_file_name)
+        elif 'lrx-proc' == command[0]:
+            lrx = lextools.LRX()
+            lrx.lrx_proc(arg, path, input_file.name, output_file.name)
         else:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             end, _ = proc.communicate(end)
+            wrapper_flag = False
+        if wrapper_flag:
+            with open(output_file_name) as output_file:
+                end = output_file.read().encode()
+        os.remove(input_file_name)
+        os.remove(output_file_name)
     return end.decode()
 
 
