@@ -29,40 +29,44 @@ def to_alpha3_code(code: str) -> str:
 
 def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     """
-    Args:
-        inp (str)
-        commands (List[List[str]])
+    Executes the given list of commands and returns the final output
 
     Returns:
         str
     """
     end = inp.encode()
     for command in commands:
-        lttoolbox.LtLocale.tryToSetLocale()
-        input_file = tempfile.NamedTemporaryFile('w', delete=False)
-        output_file = tempfile.NamedTemporaryFile('r', delete=False)
+        # On Windows platform the file can't be opened once again
+        # The file is first opened in python for writing and then
+        # opened again with swig wrapper
+        # NamedTemporaryFile gets deleted (if delete=True) upon closing,
+        # so manually delete the file afterwards
+        input_file = tempfile.NamedTemporaryFile(delete=False)
+        output_file = tempfile.NamedTemporaryFile(delete=False)
         arg = command[1][1] if len(command) == 3 else ''
         path = command[-1]
-        wrapper_flag = True
+        used_wrapper = True
         input_file_name, output_file_name = input_file.name, output_file.name
         with open(input_file_name, 'w') as input_file:
             text = end.decode()
             input_file.write(text)
         if 'lt-proc' == command[0]:
+            lttoolbox.LtLocale.tryToSetLocale()
             fst = lttoolbox.FST()
             if not fst.valid():
                 raise ValueError('FST Invalid')
             fst = lttoolbox.FST()
             fst.lt_proc(arg, path, input_file_name, output_file_name)
         elif 'lrx-proc' == command[0]:
+            lextools.LtLocale.tryToSetLocale()
             lrx = lextools.LRX()
             lrx.lrx_proc(arg, path, input_file.name, output_file.name)
         else:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             end, _ = proc.communicate(end)
-            wrapper_flag = False
-        if wrapper_flag:
+            used_wrapper = False
+        if used_wrapper:
             with open(output_file_name) as output_file:
                 end = output_file.read().encode()
         os.remove(input_file_name)
