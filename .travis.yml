@@ -3,12 +3,8 @@ dist: xenial
 cache:
     pip: true
     directories:
-        - $PIPENV_CACHE_DIR
-env:
-    global:
-        - PIPENV_CACHE_DIR=$HOME/.cache/pipenv
-        - PIPENV_VENV_IN_PROJECT=1
-        - PIPENV_IGNORE_VIRTUALENVS=1
+        - /usr/local/bin
+        - /usr/local/lib/python$TRAVIS_PYTHON_VERSION/site-packages
 python:
     - '3.5'
     - '3.6'
@@ -16,7 +12,7 @@ python:
     - 'nightly'
 install:
     - pip install pipenv
-    - pipenv install --dev
+    - pipenv install --dev --system
 before_script:
     - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
