@@ -7,6 +7,8 @@ cache:
 env:
     global:
         - PIPENV_CACHE_DIR=$HOME/.cache/pipenv
+        - PIPENV_VENV_IN_PROJECT=1
+        - PIPENV_IGNORE_VIRTUALENVS=1
 python:
     - '3.5'
     - '3.6'
@@ -14,7 +16,7 @@ python:
     - 'nightly'
 install:
     - pip install pipenv
-    - travis_retry pipenv install --dev --system
+    - pipenv install --dev
 before_script:
     - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
