@@ -2,6 +2,11 @@ language: python
 dist: xenial
 cache:
     pip: true
+    directories:
+        - $PIPENV_CACHE_DIR
+env:
+    global:
+        - PIPENV_CACHE_DIR=$HOME/.cache/pipenv
 python:
     - '3.5'
     - '3.6'
