@@ -1,9 +1,8 @@
 import os
 import re
+from typing import Dict, List, Tuple, Union  # noqa: F401
 
 from apertium.utils import to_alpha3_code
-
-from typing import Dict, List, Tuple, Union  # noqa: F401
 
 
 def is_loop(dirpath: str, rootpath: str, real_root: (Union[None, str]) = None) -> bool:
