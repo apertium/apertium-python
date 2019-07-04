@@ -3,9 +3,13 @@ import subprocess
 import tempfile
 from typing import List
 
-import apertium_core
-import lextools
-import lttoolbox
+try:
+    import apertium_core
+    import lextools
+    import lttoolbox
+    wrapper_available = True
+except ImportError:
+    wrapper_available = False
 
 import apertium  # noqa: F401
 from apertium.iso639 import iso_639_codes
@@ -42,48 +46,50 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         # opened again with swig wrapper
         # NamedTemporaryFile gets deleted (if delete=True) upon closing,
         # so manually delete the file afterwards
-        input_file = tempfile.NamedTemporaryFile(delete=False)
-        output_file = tempfile.NamedTemporaryFile(delete=False)
-        arg = command[1][1] if len(command) >= 3 else ''
-        path = command[-1]
         used_wrapper = True
-        input_file_name, output_file_name = input_file.name, output_file.name
-        with open(input_file_name, 'w') as input_file:
-            text = end.decode()
-            input_file.write(text)
-        if 'lt-proc' == command[0]:
-            lttoolbox.LtLocale.tryToSetLocale()
-            fst = lttoolbox.FST()
-            if not fst.valid():
-                raise ValueError('FST Invalid')
-            fst = lttoolbox.FST()
-            fst.lt_proc(arg, path, input_file_name, output_file_name)
-        elif 'lrx-proc' == command[0]:
-            lextools.LtLocale.tryToSetLocale()
-            lrx = lextools.LRX()
-            lrx.lrx_proc(arg, path, input_file.name, output_file.name)
-        elif 'apertium-transfer' == command[0]:
-            obj = apertium_core.apertium()
-            obj.transfer_text(arg, command[2], command[3], input_file.name, output_file.name)
-        elif 'apertium-interchunk' == command[0]:
-            obj = apertium_core.apertium()
-            obj.interchunk_text(arg, command[1], command[2], input_file.name, output_file.name)
-        elif 'apertium-postchunk' == command[0]:
-            obj = apertium_core.apertium()
-            obj.postchunk_text(arg, command[1], command[2], input_file.name, output_file.name)
-        elif 'apertium-pretransfer' == command[0]:
-            obj = apertium_core.apertium()
-            obj.pretransfer(arg, input_file.name, output_file.name)
-        else:
+        if wrapper_available:
+            input_file = tempfile.NamedTemporaryFile(delete=False)
+            output_file = tempfile.NamedTemporaryFile(delete=False)
+            arg = command[1][1] if len(command) >= 3 else ''
+            path = command[-1]
+            input_file_name, output_file_name = input_file.name, output_file.name
+            with open(input_file_name, 'w') as input_file:
+                text = end.decode()
+                input_file.write(text)
+            if 'lt-proc' == command[0]:
+                lttoolbox.LtLocale.tryToSetLocale()
+                fst = lttoolbox.FST()
+                if not fst.valid():
+                    raise ValueError('FST Invalid')
+                fst = lttoolbox.FST()
+                fst.lt_proc(arg, path, input_file_name, output_file_name)
+            elif 'lrx-proc' == command[0]:
+                lextools.LtLocale.tryToSetLocale()
+                lrx = lextools.LRX()
+                lrx.lrx_proc(arg, path, input_file.name, output_file.name)
+            elif 'apertium-transfer' == command[0]:
+                obj = apertium_core.apertium()
+                obj.transfer_text(arg, command[2], command[3], input_file.name, output_file.name)
+            elif 'apertium-interchunk' == command[0]:
+                obj = apertium_core.apertium()
+                obj.interchunk_text(arg, command[1], command[2], input_file.name, output_file.name)
+            elif 'apertium-postchunk' == command[0]:
+                obj = apertium_core.apertium()
+                obj.postchunk_text(arg, command[1], command[2], input_file.name, output_file.name)
+            elif 'apertium-pretransfer' == command[0]:
+                obj = apertium_core.apertium()
+                obj.pretransfer(arg, input_file.name, output_file.name)
+            else:
+                used_wrapper = False
+            if used_wrapper:
+                with open(output_file_name) as output_file:
+                    end = output_file.read().encode()
+            os.remove(input_file_name)
+            os.remove(output_file_name)
+        if not wrapper_available or not used_wrapper:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             end, _ = proc.communicate(end)
-            used_wrapper = False
-        if used_wrapper:
-            with open(output_file_name) as output_file:
-                end = output_file.read().encode()
-        os.remove(input_file_name)
-        os.remove(output_file_name)
     return end.decode()
 
 
