@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Dict, List, Tuple, Union  # noqa: F401
+from typing import Dict, List, Tuple, Union
 
 from apertium.utils import to_alpha3_code
 
