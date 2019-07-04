@@ -24,7 +24,7 @@ script:
         mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports;
         cat .mypy_coverage/any-exprs.txt;
         coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//');
-        if (( $(echo "$coverage < 95" | bc -l) )); then
+        if (( $(echo "$coverage < 90" | bc -l) )); then
             exit 1;
         fi;
       fi
