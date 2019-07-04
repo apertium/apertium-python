@@ -3,6 +3,7 @@ import subprocess
 import tempfile
 from typing import List
 
+import apertium_core
 import lextools
 import lttoolbox
 
@@ -43,7 +44,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         # so manually delete the file afterwards
         input_file = tempfile.NamedTemporaryFile(delete=False)
         output_file = tempfile.NamedTemporaryFile(delete=False)
-        arg = command[1][1] if len(command) == 3 else ''
+        arg = command[1][1] if len(command) >= 3 else ''
         path = command[-1]
         used_wrapper = True
         input_file_name, output_file_name = input_file.name, output_file.name
@@ -61,6 +62,18 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
             lextools.LtLocale.tryToSetLocale()
             lrx = lextools.LRX()
             lrx.lrx_proc(arg, path, input_file.name, output_file.name)
+        elif 'apertium-transfer' == command[0]:
+            obj = apertium_core.apertium()
+            obj.transfer_text(arg, command[2], command[3], input_file.name, output_file.name)
+        elif 'apertium-interchunk' == command[0]:
+            obj = apertium_core.apertium()
+            obj.interchunk_text(arg, command[1], command[2], input_file.name, output_file.name)
+        elif 'apertium-postchunk' == command[0]:
+            obj = apertium_core.apertium()
+            obj.postchunk_text(arg, command[1], command[2], input_file.name, output_file.name)
+        elif 'apertium-pretransfer' == command[0]:
+            obj = apertium_core.apertium()
+            obj.pretransfer(arg, input_file.name, output_file.name)
         else:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
