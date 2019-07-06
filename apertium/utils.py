@@ -7,9 +7,9 @@ try:
     import apertium_core
     import lextools
     import lttoolbox
-    wrapper_available = True
+    wrappers_available = True
 except ImportError:
-    wrapper_available = False
+    wrappers_available = False
 
 import apertium  # noqa: F401
 from apertium.iso639 import iso_639_codes
@@ -41,13 +41,11 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     """
     end = inp.encode()
     for command in commands:
-        # On Windows platform the file can't be opened once again
-        # The file is first opened in python for writing and then
-        # opened again with swig wrapper
-        # NamedTemporaryFile gets deleted (if delete=True) upon closing,
-        # so manually delete the file afterwards
+        # On Windows, a NamedTemporaryFile with delete=True can only be opened once. 
+        # Since the file is opened both by Python and the C++ SWIG wrappers, we use
+        # delete=False and manually delete the file.
         used_wrapper = True
-        if wrapper_available:
+        if wrappers_available:
             input_file = tempfile.NamedTemporaryFile(delete=False)
             output_file = tempfile.NamedTemporaryFile(delete=False)
             arg = command[1][1] if len(command) >= 3 else ''
@@ -86,8 +84,9 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                     end = output_file.read().encode()
             os.remove(input_file_name)
             os.remove(output_file_name)
-        if not wrapper_available or not used_wrapper:
-            apertium.logger.warning('Calling subprocess %s', command[0])
+        if not wrappers_available or not used_wrapper:
+            if not used_wrapper:
+                apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             end, _ = proc.communicate(end)
     return end.decode()
