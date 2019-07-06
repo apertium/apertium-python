@@ -17,6 +17,7 @@ before_script:
     - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
     - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
     - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en apertium-eng
+    - python3 setup.py test
     - ./build-swig-wrapper.sh
 script:
     - flake8 --verbose apertium
@@ -24,7 +25,7 @@ script:
         mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports;
         cat .mypy_coverage/any-exprs.txt;
         coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//');
-        if (( $(echo "$coverage < 95" | bc -l) )); then
+        if (( $(echo "$coverage < 90" | bc -l) )); then
             exit 1;
         fi;
       fi

@@ -14,3 +14,9 @@ cd apertium-lex-tools
 ./autogen.sh --enable-python-bindings && make -j2
 cd python
 python3 setup.py install
+
+git clone --depth 1 https://github.com/apertium/apertium.git
+cd apertium
+./autogen.sh --enable-python-bindings && make -j2
+cd python
+python3 setup.py install
