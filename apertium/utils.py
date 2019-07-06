@@ -41,7 +41,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     """
     end = inp.encode()
     for command in commands:
-        # On Windows, a NamedTemporaryFile with delete=True can only be opened once. 
+        # On Windows, a NamedTemporaryFile with delete=True can only be opened once.
         # Since the file is opened both by Python and the C++ SWIG wrappers, we use
         # delete=False and manually delete the file.
         used_wrapper = True
