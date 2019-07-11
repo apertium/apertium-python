@@ -17,8 +17,8 @@ cd python
 python3 setup.py install
 popd
 
-git clone --depth 1 https://github.com/apertium/apertium.git
-pushd apertium
+git clone --depth 1 https://github.com/apertium/apertium.git apertium-core
+pushd apertium-core
 ./autogen.sh --enable-python-bindings && make -j2
 cd python
 python3 setup.py install
