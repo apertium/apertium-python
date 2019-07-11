@@ -77,6 +77,9 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
             elif 'apertium-pretransfer' == command[0]:
                 obj = apertium_core.apertium()
                 obj.pretransfer(arg, input_file.name, output_file.name)
+            elif 'apertium-tagger' == command[0]:
+                command += [input_file.name, output_file.name]
+                apertium_core.tagger(len(command), command)
             else:
                 used_wrapper = False
             if used_wrapper:
