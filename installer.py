@@ -1,4 +1,6 @@
 from distutils.dir_util import copy_tree
+from typing import Optional
+import distro
 import logging
 import os
 import platform
@@ -8,10 +10,10 @@ from urllib.request import urlretrieve
 from zipfile import ZipFile
 
 
-class Installer:
+class Windows:
     base_link = 'http://apertium.projectjj.com/{}'
 
-    def __init__(self, languages):  # type: (Installer, list) -> None
+    def __init__(self, languages: list) -> None:
         self._install_path = os.getenv('LOCALAPPDATA')
         self._apertium_path = os.path.join(self._install_path, 'apertium-all-dev')
         self._download_path = tempfile.mkdtemp()
@@ -20,7 +22,7 @@ class Installer:
         self._logger = logging.getLogger()
         self._logger.setLevel(logging.DEBUG)
 
-    def _download_zips(self, download_files, extract_path):  # type: (Installer, dict, str) -> None
+    def _download_zips(self, download_files: dict, extract_path: Optional[str]) -> None:
         for zip_name, zip_link in download_files.items():
             zip_download_path = os.path.join(self._download_path, zip_name)
             urlretrieve(Installer.base_link.format(zip_link), filename=zip_download_path)
@@ -33,7 +35,7 @@ class Installer:
             os.remove(zip_download_path)
             self._logger.info('%s removed', zip_name)
 
-    def _download_apertium_windows(self):  # type: (Installer) -> None
+    def _download_apertium_windows(self) -> None:
         """Installs Apertium-all-dev to %localappdata%"""
 
         apertium_windows = {
@@ -42,7 +44,7 @@ class Installer:
 
         self._download_zips(apertium_windows, self._install_path)
 
-    def _download_package(self):  # type: (Installer) -> None
+    def _download_package(self) -> None:
         """Installs Language Data to Apertium"""
 
         if platform.system() == 'Windows':
@@ -67,7 +69,7 @@ class Installer:
 
         shutil.rmtree(os.path.join(self._download_path, 'usr'))
 
-    def _edit_modes(self):  # type: (Installer) -> None
+    def _edit_modes(self) -> None:
         r"""The mode files need to be modified before being used on Windows System
 
         1. Replace /usr/share with %localappdata%\apertium-all-dev\share
