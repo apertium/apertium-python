@@ -5,6 +5,7 @@ from typing import Dict, Tuple
 
 from apertium.analysis import analyze, Analyzer  # noqa: F401
 from apertium.generation import generate, Generator  # noqa: F401
+from apertium.installer import install_language_pack
 from apertium.mode_search import search_path
 from apertium.translation import translate, Translator  # noqa: F401
 

@@ -20,3 +20,4 @@ sphinx = "*"
 
 [packages]
 apertium-streamparser = "*"
+distro = "*"

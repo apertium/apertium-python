@@ -5,12 +5,14 @@ import logging
 import os
 import platform
 import shutil
+import subprocess
 import tempfile
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
 
 class Windows:
+    """Download ApertiumWin64 and Move to %localappdata%"""
     base_link = 'http://apertium.projectjj.com/{}'
 
     def __init__(self, languages: list) -> None:
@@ -25,7 +27,7 @@ class Windows:
     def _download_zips(self, download_files: dict, extract_path: Optional[str]) -> None:
         for zip_name, zip_link in download_files.items():
             zip_download_path = os.path.join(self._download_path, zip_name)
-            urlretrieve(Installer.base_link.format(zip_link), filename=zip_download_path)
+            urlretrieve(Windows.base_link.format(zip_link), filename=zip_download_path)
             self._logger.info('%s download completed', zip_name)
 
             # Extract the zip
@@ -96,15 +98,45 @@ class Windows:
                     outfile.write(line)
                     outfile.close()
 
-    def install_windows(self):
+    def install_apertium_base(self) -> None:
         self._download_apertium_windows()
+
+    def install_apertium_language(self) -> None:
         self._download_package()
         self._edit_modes()
 
 
-def install_apertium_windows():
-    """Download ApertiumWin64 and Move to %localappdata%"""
+class Ubuntu:
+    def __init__(self, languages: list) -> None:
+        self._languages = languages
+        init_script = 'wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash'
+        subprocess.run(init_script, shell=True, check=True)
+        self._languages = languages
 
+    @staticmethod
+    def _download_package(packages: list) -> None:
+        command = 'sudo apt-get -f --allow-unauthenticated install {}'
+        for package in packages:
+            subprocess.run(command.format(package), shell=True, check=True)
+
+    def install_apertium_language(self) -> None:
+        install_packages = self._languages
+        self._download_package(install_packages)
+
+    def install_apertium_base(self) -> None:
+        self._download_package(['apertium-all-dev'])
+
+
+def install_language_pack(languages: list = None, install_base: bool = False) -> None:
+    if languages is None:
+        languages = ['apertium-eng', 'apertium-en-es']
+    apertium_installer = None
     if platform.system() == 'Windows':
-        p = Installer(['apertium-eng', 'apertium-en-es'])
-        p.install_windows()
+        apertium_installer = Windows(languages)
+    elif distro.name() == 'Ubuntu':
+        apertium_installer = Ubuntu(languages)
+    else:
+        raise ValueError('Installation on {} not supported'.format(distro.name()))
+    if install_base:
+        apertium_installer.install_apertium_base()
+    apertium_installer.install_apertium_language()

@@ -14,9 +14,7 @@ install:
     - pip install pipenv
     - pipenv install --dev --system
 before_script:
-    - wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
-    - sudo apt-get -f --allow-unauthenticated install apertium-all-dev
-    - sudo apt-get -f --allow-unauthenticated install apertium-nno-nob apertium-es-en apertium-eng
+    - python3 setup.py install
     - python3 setup.py test
     - ./build-swig-wrapper.sh
 script:

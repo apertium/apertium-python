@@ -1,8 +1,5 @@
 from atexit import register
 from os import path
-
-import installer
-
 from setuptools import find_packages, setup  # noqa: I202
 from setuptools.command.install import install
 
@@ -14,7 +11,8 @@ class PostInstallCommand(install):
 
     @staticmethod
     def _post_install():
-        installer.install_apertium_windows()
+        import apertium
+        apertium.installer.install_language_pack(['apertium-eng', 'apertium-en-es'], install_base=True)
 
 
 setup(
@@ -27,6 +25,7 @@ setup(
     python_requires='>=3.4',
     install_requires=[
         'apertium-streamparser==5.0.2',
+        'distro',
     ],
     test_suite='tests',
     packages=find_packages(exclude=['tests']),
