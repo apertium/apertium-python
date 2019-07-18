@@ -2,5 +2,5 @@
 ignore = W504
 max-line-length = 160
 import-order-style = google
-exclude = apertium/swig/, docs/source/conf.py
+exclude = docs/source/conf.py
 application-import-names = apertium

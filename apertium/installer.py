@@ -1,11 +1,11 @@
 from distutils.dir_util import copy_tree
-from typing import Optional
 import logging
 import os
 import platform
 import shutil
 import subprocess
 import tempfile
+from typing import Optional
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
