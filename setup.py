@@ -28,6 +28,7 @@ setup(
         'distro',
     ],
     test_suite='tests',
+    package_data={'apertium': ['py.typed']},
     packages=find_packages(exclude=['tests']),
     cmdclass={
         'install': PostInstallCommand,
