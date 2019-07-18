@@ -88,8 +88,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
             os.remove(input_file_name)
             os.remove(output_file_name)
         if not wrappers_available or not used_wrapper:
-            if not used_wrapper:
-                apertium.logger.warning('Calling subprocess %s', command[0])
+            apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             end, _ = proc.communicate(end)
     return end.decode()
