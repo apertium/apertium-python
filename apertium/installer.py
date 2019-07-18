@@ -1,6 +1,5 @@
 from distutils.dir_util import copy_tree
 from typing import Optional
-import distro
 import logging
 import os
 import platform
@@ -9,6 +8,8 @@ import subprocess
 import tempfile
 from urllib.request import urlretrieve
 from zipfile import ZipFile
+
+import distro
 
 
 class Windows:
