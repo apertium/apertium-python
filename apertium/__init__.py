@@ -1,6 +1,7 @@
 import logging
 import os
 import platform
+import sys
 from typing import Dict, Tuple
 
 from apertium.analysis import analyze, Analyzer  # noqa: F401
@@ -62,7 +63,8 @@ def update_path_windows() -> None:
             update_path = '{}{}{}{}'.format(current, os.pathsep, apertium_path, os.pathsep)
             os.environ['path'] = update_path
 
-
+if platform.system() == 'Linux':
+    sys.path.append('/usr/lib/python3/dist-packages')
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
