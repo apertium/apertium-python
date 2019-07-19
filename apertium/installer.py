@@ -5,6 +5,7 @@ import platform
 import shutil
 import subprocess
 import tempfile
+import urllib.request
 from typing import List, Optional
 from urllib.request import urlretrieve
 from zipfile import ZipFile
@@ -22,7 +23,7 @@ class Windows:
         self._logger = logging.getLogger()
         self._logger.setLevel(logging.DEBUG)
 
-    def _download_zips(self, download_files: dict, extract_path: Optional[str]) -> None:
+    def _download_zip(self, download_files: dict, extract_path: Optional[str]) -> None:
         for zip_name, zip_link in download_files.items():
             zip_download_path = os.path.join(self._download_path, zip_name)
             urlretrieve(Windows.base_link.format(zip_link), filename=zip_download_path)
@@ -42,17 +43,17 @@ class Windows:
             'apertium-all-dev.zip': '/win64/nightly/apertium-all-dev.zip',
         }
 
-        self._download_zips(apertium_windows, self._install_path)
+        self._download_zip(apertium_windows, self._install_path)
 
-    def _download_package(self, packages: List[str]) -> None:
-        """Installs Language Data to Apertium"""
+    def _download_packages(self, packages: List[str]) -> None:
+        """Installs Packages to %localappdata%/Apertium"""
 
         zip_path = 'win32/nightly/data.php?zip='
         package_zip = {}
         for curr_package in packages:
             package_zip[curr_package] = zip_path + curr_package
 
-        self._download_zips(package_zip, self._download_path)
+        self._download_zip(package_zip, self._download_path)
 
         # move the extracted files to desired location
         lang_data_path = os.path.join(self._download_path, 'usr', 'share', 'apertium')
@@ -97,7 +98,7 @@ class Windows:
         self._download_apertium_windows()
 
     def install_apertium_language(self, language: List[str]) -> None:
-        self._download_package(language)
+        self._download_packages(language)
         self._edit_modes()
 
     def install_wrapper(self, swig_wrappers: List[str]) -> None:
@@ -106,23 +107,30 @@ class Windows:
 
 class Ubuntu:
     def __init__(self) -> None:
-        init_script = 'wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash'
-        subprocess.run(init_script, shell=True, check=True)
+        pass
 
     @staticmethod
-    def _download_package(packages: List[str]) -> None:
+    def _install_package_source() -> None:
+        install_script_url = 'http://apertium.projectjj.com/apt/install-nightly.sh'
+        with tempfile.NamedTemporaryFile('w') as install_script:
+            urllib.request.urlretrieve(install_script_url, install_script.name)
+            subprocess.call('sudo bash {}'.format(install_script.name), shell=True)
+
+    @staticmethod
+    def _download_packages(packages: List[str]) -> None:
         command = 'sudo apt-get -f --allow-unauthenticated install {}'
         for package in packages:
             subprocess.run(command.format(package), shell=True, check=True)
 
     def install_apertium_language(self, languages: List[str]) -> None:
-        self._download_package(languages)
+        self._download_packages(languages)
 
     def install_apertium_base(self) -> None:
-        self._download_package(['apertium-all-dev'])
+        self._install_package_source()
+        self._download_packages(['apertium-all-dev'])
 
     def install_wrapper(self, swig_wrappers: List[str]) -> None:
-        self._download_package(swig_wrappers)
+        self._download_packages(swig_wrappers)
 
 
 def get_installer_object():
