@@ -63,6 +63,7 @@ def update_path_windows() -> None:
             update_path = '{}{}{}{}'.format(current, os.pathsep, apertium_path, os.pathsep)
             os.environ['path'] = update_path
 
+
 if platform.system() == 'Linux':
     sys.path.append('/usr/lib/python3/dist-packages')
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
