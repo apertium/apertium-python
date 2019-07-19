@@ -28,7 +28,7 @@ script:
         fi;
       fi
     - coverage run -m unittest --verbose --buffer tests
-    - coverage report --show-missing --fail-under 85 --include 'apertium/**' --omit 'apertium/installer.py'
+    - coverage report --show-missing --fail-under 85 --include 'apertium/**'
 after_success:
     - coveralls
 notifications:
