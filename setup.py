@@ -25,7 +25,6 @@ setup(
     python_requires='>=3.4',
     install_requires=[
         'apertium-streamparser==5.0.2',
-        'distro',
     ],
     test_suite='tests',
     package_data={'apertium': ['py.typed']},

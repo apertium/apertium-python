@@ -9,8 +9,6 @@ from typing import Optional
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
-import distro
-
 
 class Windows:
     """Download ApertiumWin64 and Move to %localappdata%"""
@@ -132,12 +130,19 @@ def install_language_pack(languages: list = None, install_base: bool = False) ->
     if languages is None:
         languages = ['apertium-eng', 'apertium-en-es']
     apertium_installer = None
-    if platform.system() == 'Windows':
+    user_platform = platform.system()
+    if apertium_installer == 'Windows':
         apertium_installer = Windows(languages)
-    elif distro.name() == 'Ubuntu':
-        apertium_installer = Ubuntu(languages)
+    elif apertium_installer == 'Linux':
+        distro_name = ''
+        with open('/etc/os-release') as os_release:
+            distro_name = os_release.readline().split('"')[-1]
+        if distro_name == 'Ubuntu':
+            apertium_installer = Ubuntu(languages)
+        else:
+            raise ValueError('Installation on {} not supported'.format(distro_name))
     else:
-        raise ValueError('Installation on {} not supported'.format(distro.name()))
+        raise ValueError('{} is not supported'.format(apertium_installer))
     if install_base:
         apertium_installer.install_apertium_base()
     apertium_installer.install_apertium_language()
