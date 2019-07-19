@@ -5,7 +5,6 @@ import platform
 import shutil
 import subprocess
 import tempfile
-import urllib.request
 from typing import List, Optional
 from urllib.request import urlretrieve
 from zipfile import ZipFile
@@ -113,7 +112,7 @@ class Ubuntu:
     def _install_package_source() -> None:
         install_script_url = 'http://apertium.projectjj.com/apt/install-nightly.sh'
         with tempfile.NamedTemporaryFile('w') as install_script:
-            urllib.request.urlretrieve(install_script_url, install_script.name)
+            urlretrieve(install_script_url, install_script.name)
             subprocess.call('sudo bash {}'.format(install_script.name), shell=True)
 
     @staticmethod
