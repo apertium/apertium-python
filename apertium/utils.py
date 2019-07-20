@@ -1,9 +1,13 @@
 import os
+import platform
+import sys
 import subprocess
 import tempfile
 from typing import List
 
 try:
+    if platform.system() == 'Linux':
+        sys.path.append('/usr/lib/python3/dist-packages')
     import apertium_core
     import lextools
     import lttoolbox

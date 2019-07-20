@@ -122,6 +122,15 @@ class Ubuntu:
         execute = subprocess.run(command)
         execute.check_returncode()
 
+    @staticmethod
+    def _rename_wrappers():
+        dist_package = '/usr/lib/python3/dist-packages'
+        for f in os.listdir(dist_package):
+            if f.startswith('_lttoolbox'):
+                old_name = os.path.join(dist_package, f)
+                new_name = os.path.join(dist_package, '{}.so'.format(f.split('.')[0]))
+                subprocess.run(['sudo', 'mv', old_name, new_name])
+
     def install_apertium_language(self, languages: List[str]) -> None:
         self._download_packages(languages)
 
@@ -131,10 +140,10 @@ class Ubuntu:
 
     def install_wrapper(self, swig_wrappers: List[str]) -> None:
         self._download_packages(swig_wrappers)
+        self._rename_wrappers()
 
 
 def get_installer_object():
-    apertium_installer = None
     if platform.system() == 'Windows':
         apertium_installer = Windows()
     elif platform.system() == 'Linux':

@@ -64,8 +64,6 @@ def update_path_windows() -> None:
             os.environ['path'] = update_path
 
 
-if platform.system() == 'Linux':
-    sys.path.append('/usr/lib/python3/dist-packages')
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
