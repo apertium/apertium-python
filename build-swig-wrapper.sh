@@ -10,11 +10,3 @@ cd python
 make -j2
 python3 setup.py install
 popd
-
-git clone --depth 1 https://github.com/apertium/apertium.git apertium-core
-pushd apertium-core
-./autogen.sh --enable-python-bindings
-cd python
-make -j2
-python3 setup.py install
-popd

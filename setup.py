@@ -14,7 +14,8 @@ class PostInstallCommand(install):
         import apertium
         apertium.installer.install_apertium()
         apertium.installer.install_language_pack(['apertium-eng', 'apertium-en-es'])
-        apertium.installer.install_wrapper(['python3-lttoolbox'])
+        apertium.installer.install_wrapper(['python3-apertium', 'python3-apertium-lex-tools', 
+                                            'python3-lttoolbox'])
 
 setup(
     name='apertium-python',

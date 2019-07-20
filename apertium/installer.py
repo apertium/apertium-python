@@ -123,13 +123,21 @@ class Ubuntu:
         execute.check_returncode()
 
     @staticmethod
-    def _rename_wrappers():
+    def _rename_wrappers(wrapper_name: dict = None):
+        if wrapper_name is None:
+            wrapper_name = {
+                'python3-apertium': '_apertium_core',
+                'python3-apertium-lex-tools': '_lextools',
+                'python3-lttoolbox': '_lttoolbox',
+            }
         dist_package = '/usr/lib/python3/dist-packages'
-        for f in os.listdir(dist_package):
-            if f.startswith('_lttoolbox'):
-                old_name = os.path.join(dist_package, f)
-                new_name = os.path.join(dist_package, '{}.so'.format(f.split('.')[0]))
-                subprocess.run(['sudo', 'mv', old_name, new_name])
+        for wrapper in wrapper_name.values():
+            for f in os.listdir(dist_package):
+                if f.startswith(wrapper):
+                    old_name = os.path.join(dist_package, f)
+                    new_name = os.path.join(dist_package, '{}.so'.format(f.split('.')[0]))
+                    if old_name != new_name:
+                        subprocess.run(['sudo', 'mv', old_name, new_name])
 
     def install_apertium_language(self, languages: List[str]) -> None:
         self._download_packages(languages)
