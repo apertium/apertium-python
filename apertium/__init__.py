@@ -1,7 +1,6 @@
 import logging
 import os
 import platform
-import sys
 from typing import Dict, Tuple
 
 from apertium.analysis import analyze, Analyzer  # noqa: F401

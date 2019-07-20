@@ -1,7 +1,7 @@
 import os
 import platform
-import sys
 import subprocess
+import sys
 import tempfile
 from typing import List
 
