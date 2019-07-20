@@ -113,13 +113,14 @@ class Ubuntu:
         install_script_url = 'http://apertium.projectjj.com/apt/install-nightly.sh'
         with tempfile.NamedTemporaryFile('w') as install_script:
             urlretrieve(install_script_url, install_script.name)
-            subprocess.call('sudo bash {}'.format(install_script.name), shell=True)
+            execute = subprocess.run(['sudo', 'bash', install_script.name])
+            execute.check_returncode()
 
     @staticmethod
     def _download_packages(packages: List[str]) -> None:
-        command = 'sudo apt-get -f --allow-unauthenticated install {}'
-        for package in packages:
-            subprocess.run(command.format(package), shell=True, check=True)
+        command = ['sudo', 'apt-get', 'install'] + packages
+        execute = subprocess.run(command)
+        execute.check_returncode()
 
     def install_apertium_language(self, languages: List[str]) -> None:
         self._download_packages(languages)
