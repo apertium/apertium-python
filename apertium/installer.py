@@ -96,7 +96,7 @@ class Windows:
     def install_apertium_base(self) -> None:
         self._download_apertium_windows()
 
-    def install_apertium_language(self, language: List[str]) -> None:
+    def install_apertium_module(self, language: List[str]) -> None:
         self._download_packages(language)
         self._edit_modes()
 
@@ -139,7 +139,7 @@ class Ubuntu:
                     if old_name != new_name:
                         subprocess.run(['sudo', 'mv', old_name, new_name])
 
-    def install_apertium_language(self, languages: List[str]) -> None:
+    def install_apertium_module(self, languages: List[str]) -> None:
         self._download_packages(languages)
 
     def install_apertium_base(self) -> None:
@@ -169,11 +169,10 @@ def install_apertium() -> None:
     apertium_installer.install_apertium_base()
 
 
-def install_language_pack(languages: List[str] = None) -> None:
-    if languages is None:
-        languages = ['apertium-eng', 'apertium-en-es']
+def install_module(modules: List[str] = None) -> None:
+    apertium_modules = ['apertium-{}'.format(module) for module in modules]
     apertium_installer = get_installer_object()
-    apertium_installer.install_apertium_language(languages)
+    apertium_installer.install_apertium_module(apertium_modules)
 
 
 def install_wrapper(swig_wrappers: List[str]) -> None:
