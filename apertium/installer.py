@@ -35,15 +35,6 @@ class Windows:
             os.remove(zip_download_path)
             self._logger.info('%s removed', zip_name)
 
-    def _download_apertium_windows(self) -> None:
-        """Installs Apertium-all-dev to %localappdata%"""
-
-        apertium_windows = {
-            'apertium-all-dev.zip': '/win64/nightly/apertium-all-dev.zip',
-        }
-
-        self._download_zip(apertium_windows, self._install_path)
-
     def _download_packages(self, packages: List[str]) -> None:
         """Installs Packages to %localappdata%/Apertium"""
 
@@ -94,20 +85,24 @@ class Windows:
                     outfile.close()
 
     def install_apertium_base(self) -> None:
-        self._download_apertium_windows()
+        """Installs Apertium-all-dev to %localappdata%"""
+
+        apertium_windows = {
+            'apertium-all-dev.zip': '/win64/nightly/apertium-all-dev.zip',
+        }
+
+        self._download_zip(apertium_windows, self._install_path)
 
     def install_apertium_module(self, language: List[str]) -> None:
         self._download_packages(language)
         self._edit_modes()
 
     def install_wrapper(self, swig_wrappers: List[str]) -> None:
+        # TODO: create installer for wrappers on windows
         pass
 
 
 class Ubuntu:
-    def __init__(self) -> None:
-        pass
-
     @staticmethod
     def _install_package_source() -> None:
         install_script_url = 'http://apertium.projectjj.com/apt/install-nightly.sh'
@@ -118,18 +113,17 @@ class Ubuntu:
 
     @staticmethod
     def _download_packages(packages: List[str]) -> None:
-        command = ['sudo', 'apt-get', 'install'] + packages
+        command = ['sudo', 'apt-get', 'install', '-y'] + packages
         execute = subprocess.run(command)
         execute.check_returncode()
 
     @staticmethod
-    def _rename_wrappers(wrapper_name: dict = None):
-        if wrapper_name is None:
-            wrapper_name = {
-                'python3-apertium': '_apertium_core',
-                'python3-apertium-lex-tools': '_lextools',
-                'python3-lttoolbox': '_lttoolbox',
-            }
+    def _rename_wrappers():
+        wrapper_name = {
+            'python3-apertium': '_apertium_core',
+            'python3-apertium-lex-tools': '_lextools',
+            'python3-lttoolbox': '_lttoolbox',
+        }
         dist_package = '/usr/lib/python3/dist-packages'
         for wrapper in wrapper_name.values():
             for f in os.listdir(dist_package):
@@ -151,30 +145,28 @@ class Ubuntu:
         self._rename_wrappers()
 
 
-def get_installer_object():
+def get_installer():
     if platform.system() == 'Windows':
-        apertium_installer = Windows()
-    elif platform.system() == 'Linux':
+        return Windows()
+    if platform.system() == 'Linux':
         with open('/etc/os-release') as os_release:
             distro_name = os_release.readline().split('=')[-1].strip().replace('"', '')
         if distro_name == 'Ubuntu':
-            apertium_installer = Ubuntu()
-        else:
-            raise ValueError('Installation on {} not supported'.format(distro_name))
-    return apertium_installer
+            return Ubuntu()
+    raise ValueError('Installation on {} not supported'.format(platform.system()))
 
 
 def install_apertium() -> None:
-    apertium_installer = get_installer_object()
-    apertium_installer.install_apertium_base()
+    installer = get_installer()
+    installer.install_apertium_base()
 
 
 def install_module(modules: List[str] = None) -> None:
     apertium_modules = ['apertium-{}'.format(module) for module in modules]
-    apertium_installer = get_installer_object()
-    apertium_installer.install_apertium_module(apertium_modules)
+    installer = get_installer()
+    installer.install_apertium_module(apertium_modules)
 
 
 def install_wrapper(swig_wrappers: List[str]) -> None:
-    apertium_installer = get_installer_object()
-    apertium_installer.install_wrapper(swig_wrappers)
+    installer = get_installer()
+    installer.install_wrapper(swig_wrappers)
