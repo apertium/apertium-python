@@ -5,7 +5,7 @@ import platform
 import shutil
 import subprocess
 import tempfile
-from typing import List, Optional
+from typing import Optional
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
@@ -35,14 +35,11 @@ class Windows:
             os.remove(zip_download_path)
             self._logger.info('%s removed', zip_name)
 
-    def _download_packages(self, packages: List[str]) -> None:
+    def _download_package(self, package: str) -> None:
         """Installs Packages to %localappdata%/Apertium"""
 
         zip_path = 'win32/nightly/data.php?zip='
-        package_zip = {}
-        for curr_package in packages:
-            package_zip[curr_package] = zip_path + curr_package
-
+        package_zip = {package: zip_path + package}
         self._download_zip(package_zip, self._download_path)
 
         # move the extracted files to desired location
@@ -93,11 +90,11 @@ class Windows:
 
         self._download_zip(apertium_windows, self._install_path)
 
-    def install_apertium_module(self, language: List[str]) -> None:
-        self._download_packages(language)
+    def install_apertium_module(self, language: str) -> None:
+        self._download_package(language)
         self._edit_modes()
 
-    def install_wrapper(self, swig_wrappers: List[str]) -> None:
+    def install_wrapper(self, swig_wrapper: str) -> None:
         # TODO: create installer for wrappers on windows
         pass
 
@@ -112,8 +109,8 @@ class Ubuntu:
             execute.check_returncode()
 
     @staticmethod
-    def _download_packages(packages: List[str]) -> None:
-        command = ['sudo', 'apt-get', 'install', '-y'] + packages
+    def _download_package(package: str) -> None:
+        command = ['sudo', 'apt-get', 'install', '-y', package]
         execute = subprocess.run(command)
         execute.check_returncode()
 
@@ -133,15 +130,15 @@ class Ubuntu:
                     if old_name != new_name:
                         subprocess.run(['sudo', 'mv', old_name, new_name])
 
-    def install_apertium_module(self, languages: List[str]) -> None:
-        self._download_packages(languages)
+    def install_apertium_module(self, language: str) -> None:
+        self._download_package(language)
 
     def install_apertium_base(self) -> None:
         self._install_package_source()
-        self._download_packages(['apertium-all-dev'])
+        self._download_package('apertium-all-dev')
 
-    def install_wrapper(self, swig_wrappers: List[str]) -> None:
-        self._download_packages(swig_wrappers)
+    def install_wrapper(self, swig_wrapper: str) -> None:
+        self._download_package(swig_wrapper)
         self._rename_wrappers()
 
 
@@ -161,12 +158,12 @@ def install_apertium() -> None:
     installer.install_apertium_base()
 
 
-def install_module(modules: List[str] = None) -> None:
-    apertium_modules = ['apertium-{}'.format(module) for module in modules]
+def install_module(module: str = None) -> None:
+    apertium_module = 'apertium-{}'.format(module)
     installer = get_installer()
-    installer.install_apertium_module(apertium_modules)
+    installer.install_apertium_module(apertium_module)
 
 
-def install_wrapper(swig_wrappers: List[str]) -> None:
+def install_wrapper(swig_wrapper: str) -> None:
     installer = get_installer()
-    installer.install_wrapper(swig_wrappers)
+    installer.install_wrapper(swig_wrapper)
