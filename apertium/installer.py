@@ -115,7 +115,7 @@ class Ubuntu:
         execute.check_returncode()
 
     @staticmethod
-    def _rename_wrappers():
+    def _rename_wrappers() -> None:
         wrapper_name = {
             'python3-apertium': '_apertium_core',
             'python3-apertium-lex-tools': '_lextools',

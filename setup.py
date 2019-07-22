@@ -2,6 +2,8 @@ from atexit import register
 from os import path
 from setuptools import find_packages, setup  # noqa: I202
 from setuptools.command.install import install
+import sys
+from unittest.mock import Mock
 
 
 class PostInstallCommand(install):
@@ -11,6 +13,9 @@ class PostInstallCommand(install):
 
     @staticmethod
     def _post_install():
+        # mock apertium-streamparser for importing apertium
+        sys.modules['streamparser'] = Mock()
+
         import apertium
         apertium.installer.install_apertium()
         apertium.installer.install_module('eng')
