@@ -12,9 +12,9 @@ python:
     - 'nightly'
 install:
     - pip install pipenv
+    - python3 setup.py install
     - pipenv install --dev --system
 before_script:
-    - python3 setup.py install
     - python3 setup.py test
     - ./build-swig-wrapper.sh
 script:
