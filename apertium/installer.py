@@ -143,9 +143,10 @@ class Ubuntu:
 
 
 def get_installer():
-    if platform.system() == 'Windows':
+    system = platform.system()
+    if system == 'Windows':
         return Windows()
-    elif platform.system() == 'Linux':
+    elif system == 'Linux':
         with open('/etc/os-release') as os_release:
             distro_name = os_release.readline().split('=')[-1].strip().replace('"', '')
         if distro_name == 'Ubuntu':
@@ -153,7 +154,7 @@ def get_installer():
         else:
             raise ValueError('Installation on {} not supported'.format(distro_name))
     else:
-        raise ValueError('Installation on {} not supported'.format(platform.system()))
+        raise ValueError('Installation on {} not supported'.format(system))
 
 
 def install_apertium() -> None:
@@ -161,7 +162,7 @@ def install_apertium() -> None:
     installer.install_apertium_base()
 
 
-def install_module(module: str = None) -> None:
+def install_module(module: str) -> None:
     apertium_module = 'apertium-{}'.format(module)
     installer = get_installer()
     installer.install_apertium_module(apertium_module)
