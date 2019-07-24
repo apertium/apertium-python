@@ -3,7 +3,6 @@ from os import path
 from setuptools import find_packages, setup  # noqa: I202
 from setuptools.command.install import install
 import sys
-from unittest.mock import Mock
 
 
 class PostInstallCommand(install):
@@ -13,10 +12,8 @@ class PostInstallCommand(install):
 
     @staticmethod
     def _post_install():
-        # mock apertium-streamparser for importing apertium
-        sys.modules['streamparser'] = Mock()
-
         import apertium
+
         apertium.installer.install_apertium()
         apertium.installer.install_module('eng')
         apertium.installer.install_module('en-es')
@@ -32,7 +29,7 @@ setup(
     long_description_content_type='text/markdown; charset=UTF-8',
     url='https://github.com/apertium/apertium-python',
     python_requires='>=3.4',
-    install_requires=[
+    setup_requires=[
         'apertium-streamparser==5.0.2',
     ],
     test_suite='tests',
