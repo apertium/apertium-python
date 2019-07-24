@@ -13,9 +13,9 @@ python:
 install:
     - pip install pipenv
     - python3 setup.py install
+    - python3 setup.py test
     - pipenv install --dev --system
 before_script:
-    - python3 setup.py test
     - ./build-swig-wrapper.sh
 script:
     - flake8 --verbose apertium
