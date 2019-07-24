@@ -13,11 +13,11 @@ python:
 install:
     - pip install pipenv
     - python3 setup.py install
-    - python3 setup.py test
     - pipenv install --dev --system
 before_script:
     - ./build-swig-wrapper.sh
 script:
+    - python3 setup.py test
     - flake8 --verbose apertium
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
         mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports;
