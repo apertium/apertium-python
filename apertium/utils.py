@@ -54,10 +54,9 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
             input_file = tempfile.NamedTemporaryFile(delete=False, mode='w')
             output_file = tempfile.NamedTemporaryFile(delete=False)
             input_file_name, output_file_name = input_file.name, output_file.name
-            
+
             arg = command[1][1] if len(command) >= 3 else ''
             path = command[-1]
-
             text = end.decode()
             input_file.write(text)
             input_file.close()
