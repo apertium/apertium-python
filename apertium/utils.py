@@ -51,17 +51,17 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         # delete=False and manually delete the file.
         used_wrapper = True
         if wrappers_available:
-            input_file = tempfile.NamedTemporaryFile(delete=False)
+            input_file = tempfile.NamedTemporaryFile(delete=False, mode='w')
             output_file = tempfile.NamedTemporaryFile(delete=False)
-            # file handles are opened by default, and needs to be closed to use on windows
-            input_file.close()
-            output_file.close()
+            input_file_name, output_file_name = input_file.name, output_file.name
+            
             arg = command[1][1] if len(command) >= 3 else ''
             path = command[-1]
-            input_file_name, output_file_name = input_file.name, output_file.name
-            with open(input_file_name, 'w') as input_file:
-                text = end.decode()
-                input_file.write(text)
+
+            text = end.decode()
+            input_file.write(text)
+            input_file.close()
+
             if 'lt-proc' == command[0]:
                 lttoolbox.LtLocale.tryToSetLocale()
                 fst = lttoolbox.FST()
@@ -90,9 +90,12 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                 apertium_core.tagger(len(command), command)
             else:
                 used_wrapper = False
+
             if used_wrapper:
-                with open(output_file_name) as output_file:
-                    end = output_file.read().encode()
+                output_file.seek(0)
+                end = output_file.read().encode()
+            output_file.close()
+
             os.remove(input_file_name)
             os.remove(output_file_name)
         if not wrappers_available or not used_wrapper:
