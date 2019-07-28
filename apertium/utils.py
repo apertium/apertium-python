@@ -53,6 +53,9 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         if wrappers_available:
             input_file = tempfile.NamedTemporaryFile(delete=False)
             output_file = tempfile.NamedTemporaryFile(delete=False)
+            # file handles are opened by default, and needs to be closed to use on windows
+            input_file.close()
+            output_file.close()
             arg = command[1][1] if len(command) >= 3 else ''
             path = command[-1]
             input_file_name, output_file_name = input_file.name, output_file.name
