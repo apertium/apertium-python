@@ -93,7 +93,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
 
             if used_wrapper:
                 output_file.seek(0)
-                end = output_file.read().encode()
+                end = output_file.read()
             output_file.close()
 
             os.remove(input_file_name)
