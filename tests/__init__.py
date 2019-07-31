@@ -1,4 +1,7 @@
+import importlib.util
 import os
+import platform
+import shutil
 import sys
 import unittest
 
@@ -67,6 +70,33 @@ class TestGenerate(unittest.TestCase):
     def test_uninstalled_mode(self):
         with self.assertRaises(apertium.ModeNotInstalled):
             apertium.generate('spa', 'cat<n><pl>')
+
+
+class TestInstallation(unittest.TestCase):
+    def test_apertium_base(self):
+        apertium.installer.install_apertium()
+        apertium_exists = False
+        if shutil.which('lt-proc'):
+            apertium_exists = True
+        self.assertTrue(apertium_exists, 'apertium binaries not find')
+
+    def test_install_module(self):
+        apertium.installer.install_module('kir')
+        importlib.reload(apertium)
+        try:
+            apertium.analyze('kir', 'cats')
+        except apertium.ModeNotInstalled:
+            self.fail('apetium.install_module not working')
+
+    def test_install_wrapper(self):
+        apertium.installer.install_wrapper('python3-lttoolbox')
+        if platform.system() == 'Linux':
+            sys.path.append('/usr/lib/python3/dist-packages')
+        spec = importlib.util.find_spec('lttoolbox')
+        apertium_exists = False
+        if spec:
+            apertium_exists = True
+        self.assertTrue(apertium_exists, 'Wrapper not installed')
 
 
 class TestTranslate(unittest.TestCase):
