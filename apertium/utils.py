@@ -56,34 +56,32 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
             input_file_name, output_file_name = input_file.name, output_file.name
 
             arg = command[1][1] if len(command) >= 3 else ''
-            path = command[-1]
+            dictionary_path = command[-1]
             text = end.decode()
             input_file.write(text)
             input_file.close()
 
             if 'lt-proc' == command[0]:
                 lttoolbox.LtLocale.tryToSetLocale()
-                fst = lttoolbox.FST()
+                fst = lttoolbox.FST(dictionary_path)
                 if not fst.valid():
                     raise ValueError('FST Invalid')
-                fst = lttoolbox.FST()
-                fst.lt_proc(arg, path, input_file_name, output_file_name)
+                fst.lt_proc(arg, input_file_name, output_file_name)
             elif 'lrx-proc' == command[0]:
                 lextools.LtLocale.tryToSetLocale()
-                lrx = lextools.LRX()
-                lrx.lrx_proc(arg, path, input_file.name, output_file.name)
+                lrx = lextools.LRXProc(dictionary_path)
+                lrx.lrx_proc(arg, input_file.name, output_file.name)
             elif 'apertium-transfer' == command[0]:
-                obj = apertium_core.apertium()
-                obj.transfer_text(arg, command[2], command[3], input_file.name, output_file.name)
+                obj = apertium_core.transfer(command[2], command[3])
+                obj.transfer_text(arg, input_file.name, output_file.name)
             elif 'apertium-interchunk' == command[0]:
-                obj = apertium_core.apertium()
-                obj.interchunk_text(arg, command[1], command[2], input_file.name, output_file.name)
+                obj = apertium_core.interchunk(command[1], command[2])
+                obj.interchunk_text(arg, input_file.name, output_file.name)
             elif 'apertium-postchunk' == command[0]:
-                obj = apertium_core.apertium()
-                obj.postchunk_text(arg, command[1], command[2], input_file.name, output_file.name)
+                obj = apertium_core.postchunk(command[1], command[2])
+                obj.postchunk_text(arg, input_file.name, output_file.name)
             elif 'apertium-pretransfer' == command[0]:
-                obj = apertium_core.apertium()
-                obj.pretransfer(arg, input_file.name, output_file.name)
+                apertium_core.pretransfer(arg, input_file.name, output_file.name)
             elif 'apertium-tagger' == command[0]:
                 command += [input_file.name, output_file.name]
                 apertium_core.tagger(len(command), command)
