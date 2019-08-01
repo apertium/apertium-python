@@ -73,19 +73,19 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                 lrx = lextools.LRXProc(dictionary_path)
                 lrx.lrx_proc(arg, input_file.name, output_file.name)
             elif 'apertium-transfer' == command[0]:
-                obj = apertium_core.transfer(command[2], command[3])
+                obj = apertium_core.ApertiumTransfer(command[2], command[3])
                 obj.transfer_text(arg, input_file.name, output_file.name)
             elif 'apertium-interchunk' == command[0]:
-                obj = apertium_core.interchunk(command[1], command[2])
+                obj = apertium_core.ApertiumInterchunk(command[1], command[2])
                 obj.interchunk_text(arg, input_file.name, output_file.name)
             elif 'apertium-postchunk' == command[0]:
-                obj = apertium_core.postchunk(command[1], command[2])
+                obj = apertium_core.ApertiumPostchunk(command[1], command[2])
                 obj.postchunk_text(arg, input_file.name, output_file.name)
             elif 'apertium-pretransfer' == command[0]:
                 apertium_core.pretransfer(arg, input_file.name, output_file.name)
             elif 'apertium-tagger' == command[0]:
                 command += [input_file.name, output_file.name]
-                apertium_core.tagger(len(command), command)
+                apertium_core.ApertiumTagger(len(command), command)
             else:
                 used_wrapper = False
 
