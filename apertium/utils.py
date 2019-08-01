@@ -56,18 +56,19 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
             input_file_name, output_file_name = input_file.name, output_file.name
 
             arg = command[1][1] if len(command) >= 3 else ''
-            dictionary_path = command[-1]
             text = end.decode()
             input_file.write(text)
             input_file.close()
 
             if 'lt-proc' == command[0]:
+                dictionary_path = command[-1]
                 lttoolbox.LtLocale.tryToSetLocale()
                 fst = lttoolbox.FST(dictionary_path)
                 if not fst.valid():
                     raise ValueError('FST Invalid')
                 fst.lt_proc(arg, input_file_name, output_file_name)
             elif 'lrx-proc' == command[0]:
+                dictionary_path = command[-1]
                 lextools.LtLocale.tryToSetLocale()
                 lrx = lextools.LRXProc(dictionary_path)
                 lrx.lrx_proc(arg, input_file.name, output_file.name)
