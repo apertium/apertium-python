@@ -73,9 +73,30 @@ class TestGenerate(unittest.TestCase):
 
 
 class TestInstallation(unittest.TestCase):
-    def test_apertium_base(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         apertium.installer.install_apertium()
-        self.assertIsNotNone(shutil.which('lt-proc'), 'apertium binaries not installed')
+
+    def test_apertium_transfer(self):
+        self.assertIsNotNone(shutil.which('apertium-transfer'), 'apertium-transfer not available')
+
+    def test_apertium_postchunk(self):
+        self.assertIsNotNone(shutil.which('apertium-postchunk'), 'apertium-postchunk not available')
+
+    def test_apertium_interchunk(self):
+        self.assertIsNotNone(shutil.which('apertium-interchunk'), 'apertium-interchunk not available')
+
+    def test_apertium_pretransfer(self):
+        self.assertIsNotNone(shutil.which('apertium-pretransfer'), 'apertium-pretransfer not available')
+
+    def test_apertium_tagger(self):
+        self.assertIsNotNone(shutil.which('apertium-tagger'), 'apertium-tagger not available')
+
+    def test_lt_proc(self):
+        self.assertIsNotNone(shutil.which('lt-proc'), 'lt-proc not available')
+
+    def test_lrx_proc(self):
+        self.assertIsNotNone(shutil.which('lrx-proc'), 'lrx-proc not available')
 
     def test_install_module(self):
         language = 'kir'
