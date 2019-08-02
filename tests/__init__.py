@@ -73,30 +73,15 @@ class TestGenerate(unittest.TestCase):
 
 
 class TestInstallation(unittest.TestCase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def test_apertium_installer(self):
         apertium.installer.install_apertium()
-
-    def test_apertium_transfer(self):
-        self.assertIsNotNone(shutil.which('apertium-transfer'), 'apertium-transfer not available')
-
-    def test_apertium_postchunk(self):
-        self.assertIsNotNone(shutil.which('apertium-postchunk'), 'apertium-postchunk not available')
-
-    def test_apertium_interchunk(self):
-        self.assertIsNotNone(shutil.which('apertium-interchunk'), 'apertium-interchunk not available')
-
-    def test_apertium_pretransfer(self):
-        self.assertIsNotNone(shutil.which('apertium-pretransfer'), 'apertium-pretransfer not available')
-
-    def test_apertium_tagger(self):
-        self.assertIsNotNone(shutil.which('apertium-tagger'), 'apertium-tagger not available')
-
-    def test_lt_proc(self):
-        self.assertIsNotNone(shutil.which('lt-proc'), 'lt-proc not available')
-
-    def test_lrx_proc(self):
-        self.assertIsNotNone(shutil.which('lrx-proc'), 'lrx-proc not available')
+        apertium_processes = ['apertium-destxt', 'apertium-interchunk', 'apertium-postchunk',
+                              'apertium-pretransfer', 'apertium-tagger', 'apertium-transfer',
+                              'lrx-proc', 'lt-proc'
+                              ]
+        for process in apertium_processes:
+            self.assertIsNotNone(shutil.which(process), 'apertium installer not working. {} not available on system path'.format(process))
+            break
 
     def test_install_module(self):
         language = 'kir'
