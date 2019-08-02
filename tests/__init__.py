@@ -74,6 +74,8 @@ class TestGenerate(unittest.TestCase):
 
 class TestInstallation(unittest.TestCase):
     def test_apertium_installer(self):
+        # This test doesn't remove existing apertium binaries.
+        # So it is possible that apertium.installer.install_apertium() isn't working
         apertium.installer.install_apertium()
         apertium_processes = ['apertium-destxt', 'apertium-interchunk', 'apertium-postchunk',
                               'apertium-pretransfer', 'apertium-tagger', 'apertium-transfer',
