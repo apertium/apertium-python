@@ -1,4 +1,7 @@
+import importlib.util
 import os
+import platform
+import shutil
 import sys
 import unittest
 
@@ -67,6 +70,32 @@ class TestGenerate(unittest.TestCase):
     def test_uninstalled_mode(self):
         with self.assertRaises(apertium.ModeNotInstalled):
             apertium.generate('spa', 'cat<n><pl>')
+
+
+class TestInstallation(unittest.TestCase):
+    def test_apertium_installer(self):
+        # This test doesn't remove existing apertium binaries.
+        # So it is possible that apertium.installer.install_apertium() isn't working
+        apertium.installer.install_apertium()
+        apertium_processes = ['apertium-destxt', 'apertium-interchunk', 'apertium-postchunk',
+                              'apertium-pretransfer', 'apertium-tagger', 'apertium-transfer',
+                              'lrx-proc', 'lt-proc'
+                              ]
+        for process in apertium_processes:
+            self.assertIsNotNone(shutil.which(process), 'apertium installer not working. {} not available on system path'.format(process))
+            break
+
+    def test_install_module(self):
+        language = 'kir'
+        apertium.installer.install_module(language)
+        importlib.reload(apertium)
+        self.assertIn(language, apertium.analyzers, 'apetium.install_module not working')
+
+    def test_install_wrapper(self):
+        apertium.installer.install_wrapper('python3-lttoolbox')
+        if platform.system() == 'Linux':
+            sys.path.append('/usr/lib/python3/dist-packages')
+        self.assertIsNotNone(importlib.util.find_spec('lttoolbox'), 'Wrapper not installed')
 
 
 class TestTranslate(unittest.TestCase):
