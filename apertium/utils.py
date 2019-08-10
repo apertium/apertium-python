@@ -12,6 +12,7 @@ try:
     import apertium_core
     import lextools
     import lttoolbox
+    import constraint_grammar
     wrappers_available = True
 except ImportError:
     wrappers_available = False
@@ -86,6 +87,11 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
             elif 'apertium-tagger' == command[0]:
                 command += [input_file.name, output_file.name]
                 apertium_core.ApertiumTagger(len(command), command)
+            elif 'cg-proc' == command[0]:
+                dictionary_path = command[-1]
+                obj = constraint_grammar.CGProc(dictionary_path)
+                cg_proc_command = command[:-1]
+                obj.cg_proc(len(cg_proc_command), cg_proc_command, input_file.name, output_file.name)
             else:
                 used_wrapper = False
 
