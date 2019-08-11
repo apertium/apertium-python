@@ -91,6 +91,7 @@ class TestInstallation(unittest.TestCase):
         importlib.reload(apertium)
         self.assertIn(language, apertium.analyzers, 'apetium.install_module not working')
 
+    @unittest.skipIf(platform.system() == 'Windows', 'wrappers not available for windows')
     def test_install_wrapper(self):
         apertium.installer.install_wrapper('python3-lttoolbox')
         if platform.system() == 'Linux':
@@ -111,7 +112,10 @@ class TestTranslate(unittest.TestCase):
         self.assertEqual(translated, 'Gatos')
 
     def test_kaz_tat(self):
-        apertium.installer.install_module('kaz-tat')
-        importlib.reload(apertium)
         translated = apertium.translate('kaz', 'tat', 'мысық')
+        self.assertEqual(translated, 'мәче')
+
+    def test_translator_kaz_tat(self):
+        translator = apertium.Translator('kaz', 'tat')
+        translated = translator.translate('мысық')
         self.assertEqual(translated, 'мәче')
