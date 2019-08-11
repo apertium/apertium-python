@@ -12,6 +12,7 @@ try:
     import apertium_core
     import lextools
     import lttoolbox
+    import constraint_grammar
     wrappers_available = True
 except ImportError:
     wrappers_available = False
@@ -73,19 +74,24 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                 lrx = lextools.LRXProc(dictionary_path)
                 lrx.lrx_proc(arg, input_file.name, output_file.name)
             elif 'apertium-transfer' == command[0]:
-                obj = apertium_core.ApertiumTransfer(command[2], command[3])
-                obj.transfer_text(arg, input_file.name, output_file.name)
+                transfer = apertium_core.ApertiumTransfer(command[2], command[3])
+                transfer.transfer_text(arg, input_file.name, output_file.name)
             elif 'apertium-interchunk' == command[0]:
-                obj = apertium_core.ApertiumInterchunk(command[1], command[2])
-                obj.interchunk_text(arg, input_file.name, output_file.name)
+                interchunk = apertium_core.ApertiumInterchunk(command[1], command[2])
+                interchunk.interchunk_text(arg, input_file.name, output_file.name)
             elif 'apertium-postchunk' == command[0]:
-                obj = apertium_core.ApertiumPostchunk(command[1], command[2])
-                obj.postchunk_text(arg, input_file.name, output_file.name)
+                postchunk = apertium_core.ApertiumPostchunk(command[1], command[2])
+                postchunk.postchunk_text(arg, input_file.name, output_file.name)
             elif 'apertium-pretransfer' == command[0]:
                 apertium_core.pretransfer(arg, input_file.name, output_file.name)
             elif 'apertium-tagger' == command[0]:
                 command += [input_file.name, output_file.name]
                 apertium_core.ApertiumTagger(len(command), command)
+            elif 'cg-proc' == command[0]:
+                dictionary_path = command[-1]
+                cg = constraint_grammar.CGProc(dictionary_path)
+                cg_proc_command = command[:-1]
+                cg.cg_proc(len(cg_proc_command), cg_proc_command, input_file.name, output_file.name)
             else:
                 used_wrapper = False
 
