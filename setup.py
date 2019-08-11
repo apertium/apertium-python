@@ -17,6 +17,7 @@ class PostInstallCommand(install):
         apertium.installer.install_apertium()
         apertium.installer.install_module('eng')
         apertium.installer.install_module('en-es')
+        apertium.installer.install_module('kaz-tat')
         apertium.installer.install_wrapper('python3-apertium')
         apertium.installer.install_wrapper('python3-apertium-lex-tools')
         apertium.installer.install_wrapper('python3-lttoolbox')
