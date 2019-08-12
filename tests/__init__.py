@@ -105,6 +105,7 @@ class TestSubProcess(unittest.TestCase):
         test_analyze = TestAnalyze()
         test_analyze.test_analyzer_en()
         test_analyze.test_analyze_en()
+        apertium.utils.wrappers_available = True
 
     def test_generate_en_subprocess(self):
         apertium.utils.wrappers_available = False
@@ -115,12 +116,14 @@ class TestSubProcess(unittest.TestCase):
         test_generate.test_single()
         test_generate.test_multiple()
         test_generate.test_bare()
+        apertium.utils.wrappers_available = True
 
     def test_translate_en_es_subprocess(self):
         apertium.utils.wrappers_available = False
         test_translate = TestTranslate()
         test_translate.test_translator_en_spa()
         test_translate.test_en_spa()
+        apertium.utils.wrappers_available = True
 
 
 class TestTranslate(unittest.TestCase):
