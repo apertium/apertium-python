@@ -24,14 +24,14 @@
 Performing Morphological Analysis
 
 Method 1: Create a `Analyzer` object and call its `analyze` method.
-```
+```python
 In [1]: import apertium
 In [2]: a = apertium.Analyzer('en')
 In [3]: a.analyze('cats')
 Out[3]: [cats/cat<n><pl>, ./.<sent>]
 ```
 Method 2: Calling `analyze` method directly.
-```
+```python
 In [1]: import apertium
 In [2]: apertium.analyze('en', 'cats')
 Out[2]: cats/cat<n><pl>
@@ -41,14 +41,14 @@ Out[2]: cats/cat<n><pl>
 Performing Morphological Generation
 
 Method 1:  Create a `Generator` object and call its `generate` method.
-``` 
+```python
 In [1]: import apertium
 In [2]: g = apertium.Generator('en')
 In [3]: g.generate('^cat<n><pl>$')
 Out[3]: 'cats'
 ```
 Method 2: Calling `generate()` directly.
-``` 
+```python
 In [1]: import apertium
 In [2]: apertium.generate('en', '^cat<n><pl>$')
 Out[2]: 'cats'
@@ -56,21 +56,21 @@ Out[2]: 'cats'
 
 ### Installing more modes from other language data
 One can also install modes by providing the path to the lang-data using this simple function
-```
+```python
 In [1]: import apertium
 In [2]: apertium.append_pair_path('..')
 ```
 
 ### Tagger
 Method 1:  Create a `Tagger` object and call its `tag` method.
-```
+```python
 In [1]: import apertium
 In [2]: tagger = apertium.Tagger('eng')
 In [3]: tagger.tag('cats')
 Out[3]: [cats/cat<n><pl>]
 ```
 Method 2: Calling `tag()` directly.
-```
+```python
 In [1]: import apertium
 In [2]: apertium.tag('en', 'cats')
 Out[2]: [cats/cat<n><pl>]
@@ -78,14 +78,14 @@ Out[2]: [cats/cat<n><pl>]
 
 ### Translation
 Method 1:  Create a `Translator` object and call its `translate` method.
-```
+```python
 In [1]: import apertium
 In [2]: t = apertium.Translator('eng', 'spa')
 In [3]: t.translate('cats')
 Out[3]: 'Gatos'
 ```
 Method 2: Calling `translate()` directly.
-```
+```python
 In [1]: import apertium
 In [2]: apertium.translate('en', 'spa', 'cats')
 Out[2]: 'Gatos'
