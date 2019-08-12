@@ -119,3 +119,24 @@ class TestTranslate(unittest.TestCase):
         translator = apertium.Translator('kaz', 'tat')
         translated = translator.translate('мысық')
         self.assertEqual(translated, 'мәче')
+
+
+class TestTagger(unittest.TestCase):
+    def test_tagger_en(self):
+        tagger = apertium.Tagger('en')
+        lexical_units = tagger.tag('cats')
+        lexical_unit = lexical_units[0]
+        self.assertListEqual(lexical_unit.readings, [[SReading(baseform='cat', tags=['n', 'pl'])]])
+        self.assertEqual(lexical_unit.wordform, 'cats')
+        self.assertEqual(lexical_unit.knownness, known)
+
+    def test_tag_en(self):
+        lexical_units = apertium.tag('eng', 'cats')
+        lexical_unit = lexical_units[0]
+        self.assertListEqual(lexical_unit.readings, [[SReading(baseform='cat', tags=['n', 'pl'])]])
+        self.assertEqual(lexical_unit.wordform, 'cats')
+        self.assertEqual(lexical_unit.knownness, known)
+
+    def test_uninstalled_mode(self):
+        with self.assertRaises(apertium.ModeNotInstalled):
+            apertium.Tagger('spa')

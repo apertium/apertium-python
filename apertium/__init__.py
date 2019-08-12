@@ -7,6 +7,7 @@ from apertium.analysis import analyze, Analyzer  # noqa: F401
 from apertium.generation import generate, Generator  # noqa: F401
 from apertium.installer import install_module  # noqa: F401
 from apertium.mode_search import search_path
+from apertium.tagger import tag, Tagger  # noqa: F401
 from apertium.translation import translate, Translator  # noqa: F401
 
 
@@ -29,6 +30,9 @@ def _update_modes(pair_path: str) -> None:
     if modes['generator']:
         for dirpath, modename, lang_pair in modes['generator']:
             generators[lang_pair] = (dirpath, modename)
+    if modes['tagger']:
+        for dirpath, modename, lang_pair in modes['tagger']:
+            taggers[lang_pair] = (dirpath, modename)
 
 
 def append_pair_path(pair_path: str) -> None:
@@ -66,6 +70,7 @@ def update_path_windows() -> None:
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
 analyzers = {}  # type: Dict[str, Tuple[str, str]]
 generators = {}  # type: Dict[str, Tuple[str, str]]
+taggers = {}  # type: Dict[str, Tuple[str, str]]
 pairs = {}  # type: Dict[str, str]
 for pair_path in pair_paths:
     _update_modes(pair_path)
