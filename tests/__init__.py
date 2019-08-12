@@ -125,6 +125,13 @@ class TestSubProcess(unittest.TestCase):
         test_translate.test_en_spa()
         apertium.utils.wrappers_available = True
 
+    def test_tagger_en_subprocess(self):
+        apertium.utils.wrappers_available = False
+        test_tagger = TestTagger()
+        test_tagger.test_tagger_en()
+        test_tagger.test_tag_en()
+        apertium.utils.wrappers_available = True
+
 
 class TestTranslate(unittest.TestCase):
     @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
