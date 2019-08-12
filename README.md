@@ -61,11 +61,32 @@ In [1]: import apertium
 In [2]: apertium.append_pair_path('..')
 ```
 
+### Tagger
+Method 1:  One can create ```Tagger``` objects on which ```tag()``` function can be run.
+```python
+In [1]: import apertium
+In [2]: tagger = apertium.Tagger('eng')
+In [3]: tagger.tag('cats')
+Out[3]: [cats/cat<n><pl>]
+```
+Method 2: Running ```tag()``` directly.
+```python
+In [1]: import apertium
+In [2]: apertium.tag('en', 'cats')
+Out[2]: [cats/cat<n><pl>]
+```
+
 ### Translation
-Performing Translations
+Method 1:  One can create ```Translator``` objects on which ```translate()``` function can be run.
 ```python
 In [1]: import apertium
 In [2]: t = apertium.Translator('eng', 'spa')
 In [3]: t.translate('cats')
 Out[3]: 'Gatos'
+```
+Method 2: Running ```translate()``` directly.
+```python
+In [1]: import apertium
+In [2]: apertium.translate('en', 'spa', 'cats')
+Out[2]: 'Gatos'
 ```
