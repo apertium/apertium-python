@@ -23,7 +23,7 @@
 ### Analysis
 Performing Morphological Analysis
 
-Method 1: Create `Analyzer` object and call its `analyze()` method.
+Method 1: Create a `Analyzer` object and call its `analyze` method.
 ```
 In [1]: import apertium
 In [2]: a = apertium.Analyzer('en')
@@ -40,7 +40,7 @@ Out[2]: cats/cat<n><pl>
 ### Generation
 Performing Morphological Generation
 
-Method 1:  Create `Generator` and call its `generate()` method.
+Method 1:  Create a `Generator` object and call its `generate` method.
 ``` 
 In [1]: import apertium
 In [2]: g = apertium.Generator('en')
@@ -62,7 +62,7 @@ In [2]: apertium.append_pair_path('..')
 ```
 
 ### Tagger
-Method 1:  Create `Tagger` object and call its `tag` method.
+Method 1:  Create a `Tagger` object and call its `tag` method.
 ```
 In [1]: import apertium
 In [2]: tagger = apertium.Tagger('eng')
@@ -77,7 +77,7 @@ Out[2]: [cats/cat<n><pl>]
 ```
 
 ### Translation
-Method 1:  Create `Translator` object and call its `translate()` method.
+Method 1:  Create a `Translator` object and call its `translate` method.
 ```
 In [1]: import apertium
 In [2]: t = apertium.Translator('eng', 'spa')
