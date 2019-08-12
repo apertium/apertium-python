@@ -13,9 +13,6 @@
 ## About the Exisiting Code Base
 - The exisiting code base has the subprocess and swig wrapper implementation of the basic functions of Apertium. 
 
-## ToDo
-- ToDo is present in form of issues https://github.com/apertium/apertium-python/issues
-
 ## Usage of library
 
 - For multiple invocations `Method 1` is more performant, as the dictionary needs to be loaded only once.
@@ -23,14 +20,14 @@
 ### Analysis
 Performing Morphological Analysis
 
-Method 1: Create a `Analyzer` object and call its `analyze` method.
+Method 1: Create an `Analyzer` object and call its `analyze` method.
 ```python
 In [1]: import apertium
 In [2]: a = apertium.Analyzer('en')
 In [3]: a.analyze('cats')
 Out[3]: [cats/cat<n><pl>, ./.<sent>]
 ```
-Method 2: Calling `analyze` method directly.
+Method 2: Calling `analyze()` directly.
 ```python
 In [1]: import apertium
 In [2]: apertium.analyze('en', 'cats')
