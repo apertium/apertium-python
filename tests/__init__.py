@@ -99,6 +99,40 @@ class TestInstallation(unittest.TestCase):
         self.assertIsNotNone(importlib.util.find_spec('lttoolbox'), 'Wrapper not installed')
 
 
+class TestSubProcess(unittest.TestCase):
+    def test_analyze_en_subprocess(self):
+        apertium.utils.wrappers_available = False
+        test_analyze = TestAnalyze()
+        test_analyze.test_analyzer_en()
+        test_analyze.test_analyze_en()
+        apertium.utils.wrappers_available = True
+
+    def test_generate_en_subprocess(self):
+        apertium.utils.wrappers_available = False
+        test_generate = TestGenerate()
+        test_generate.test_generator_single()
+        test_generate.test_generator_multiple()
+        test_generate.test_generator_bare()
+        test_generate.test_single()
+        test_generate.test_multiple()
+        test_generate.test_bare()
+        apertium.utils.wrappers_available = True
+
+    def test_translate_en_es_subprocess(self):
+        apertium.utils.wrappers_available = False
+        test_translate = TestTranslate()
+        test_translate.test_translator_en_spa()
+        test_translate.test_en_spa()
+        apertium.utils.wrappers_available = True
+
+    def test_tagger_en_subprocess(self):
+        apertium.utils.wrappers_available = False
+        test_tagger = TestTagger()
+        test_tagger.test_tagger_en()
+        test_tagger.test_tag_en()
+        apertium.utils.wrappers_available = True
+
+
 class TestTranslate(unittest.TestCase):
     @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
     def test_translator_en_spa(self):
