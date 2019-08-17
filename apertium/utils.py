@@ -38,6 +38,16 @@ def to_alpha3_code(code: str) -> str:
         return iso639_codes_inverse[code] if code in iso639_codes_inverse else code
 
 
+def deformatter(text: str) -> str:
+    """
+    This function is a text format processor. Data should be passed
+    through this processor before being piped to lt-proc.
+    """
+    escape_chars = b'[]{}?^$@\\'
+    _special_chars_map = {i: '\\' + chr(i) for i in escape_chars}
+    return '{}.[][\n]'.format(text.translate(_special_chars_map))
+
+
 def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     """
     Executes the given list of commands and returns the final output
@@ -54,9 +64,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         if wrappers_available:
             if 'apertium-destxt' == command[0]:
                 used_wrapper = True
-                _special_chars_map = {i: '\\' + chr(i) for i in b'[]{}?^$@\\'}
-                text = end.decode()
-                output = '{}.[][\n]'.format(text.translate(_special_chars_map))
+                output = deformatter(end.decode())
                 end = output.encode()
             else:
                 input_file = tempfile.NamedTemporaryFile(delete=False, mode='w')
