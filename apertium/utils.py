@@ -45,7 +45,7 @@ def deformatter(text: str) -> str:
     """
     escape_chars = b'[]{}?^$@\\'
     _special_chars_map = {i: '\\' + chr(i) for i in escape_chars}
-    return '{}.[][\n]'.format(text.translate(_special_chars_map))
+    return '{}[][\n]'.format(text.translate(_special_chars_map))
 
 
 def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
@@ -82,23 +82,29 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                     fst = lttoolbox.FST(dictionary_path)
                     if not fst.valid():
                         raise ValueError('FST Invalid')
-                    fst.lt_proc(arg, input_file_name, output_file_name)
+                    lt_proc_command = command[:-1]
+                    fst.lt_proc(len(lt_proc_command), lt_proc_command, input_file.name, output_file.name)
                 elif 'lrx-proc' == command[0]:
                     dictionary_path = command[-1]
                     lextools.LtLocale.tryToSetLocale()
                     lrx = lextools.LRXProc(dictionary_path)
-                    lrx.lrx_proc(arg, input_file.name, output_file.name)
+                    lrx_proc_command = command[:-1]
+                    lrx.lrx_proc(len(lrx_proc_command), lrx_proc_command, input_file.name, output_file.name)
                 elif 'apertium-transfer' == command[0]:
-                    transfer = apertium_core.ApertiumTransfer(command[2], command[3])
-                    transfer.transfer_text(arg, input_file.name, output_file.name)
+                    transfer = apertium_core.ApertiumTransfer(command[-2], command[-1])
+                    transfer_command = command[:-2]
+                    transfer.transfer_text(len(transfer_command), transfer_command, input_file.name, output_file.name)
                 elif 'apertium-interchunk' == command[0]:
-                    interchunk = apertium_core.ApertiumInterchunk(command[1], command[2])
-                    interchunk.interchunk_text(arg, input_file.name, output_file.name)
+                    interchunk = apertium_core.ApertiumInterchunk(command[-2], command[-1])
+                    interchunk_command = command[:-2]
+                    interchunk.interchunk_text(len(interchunk_command), interchunk_command, input_file.name, output_file.name)
                 elif 'apertium-postchunk' == command[0]:
-                    postchunk = apertium_core.ApertiumPostchunk(command[1], command[2])
-                    postchunk.postchunk_text(arg, input_file.name, output_file.name)
+                    postchunk = apertium_core.ApertiumPostchunk(command[-2], command[-1])
+                    postchunk_command = command[:-2]
+                    postchunk.postchunk_text(len(postchunk_command), postchunk_command, input_file.name, output_file.name)
                 elif 'apertium-pretransfer' == command[0]:
-                    apertium_core.pretransfer(arg, input_file.name, output_file.name)
+                    command = ['apertium-pretransfer', '']
+                    apertium_core.pretransfer(len(command), command, input_file.name, output_file.name)
                 elif 'apertium-tagger' == command[0]:
                     command += [input_file.name, output_file.name]
                     apertium_core.ApertiumTagger(len(command), command)
@@ -115,8 +121,8 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                     end = output_file.read()
                 output_file.close()
 
-                os.remove(input_file_name)
-                os.remove(output_file_name)
+                os.remove(input_file.name)
+                os.remove(output_file.name)
         if not wrappers_available or not used_wrapper:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
