@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -xe
 
-sudo apt-get install -y swig build-essential python3-setuptools
+sudo apt-get install -y cmake libboost-dev libicu-dev swig build-essential python3-setuptools
 
 git clone --depth 1 -b wrapper_getopt https://github.com/apertium/apertium-lex-tools.git
 pushd apertium-lex-tools
