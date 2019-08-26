@@ -27,7 +27,7 @@ make -j2
 python3 setup.py install
 popd
 
-git clone -b swig --depth 1 https://github.com/Vaydheesh/cg3.git
+git clone --depth 1 https://github.com/TinoDidriksen/cg3.git
 pushd cg3
 cmake -DENABLE_PYTHON_BINDINGS:BOOL=ON .
 cd python
