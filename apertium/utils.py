@@ -81,34 +81,34 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         # delete=False and manually delete the file.
         used_wrapper = True
         command = tuple(command)
-        if command not in wrapper_objects.keys():
-            if 'lt-proc' == command[0]:
-                lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
-                lttoolbox.LtLocale.tryToSetLocale()
-                fst = FSTProc(dictionary_path, arg)
-                if not fst.valid():
-                    raise ValueError('FST Invalid')
-                wrapper_objects[command] = fst
-            elif 'lrx-proc' == command[0]:
-                dictionary_path = command[-1]
-                lextools.LtLocale.tryToSetLocale()
-                lrx = LRX(dictionary_path)
-                wrapper_objects[command] = lrx
-            elif 'apertium-transfer' == command[0]:
-                transfer = apertium_core.ApertiumTransfer(command[-2], command[-1])
-                wrapper_objects[command] = transfer
-            elif 'apertium-interchunk' == command[0]:
-                interchunk = apertium_core.ApertiumInterchunk(command[-2], command[-1])
-                wrapper_objects[command] = interchunk
-            elif 'apertium-postchunk' == command[0]:
-                postchunk = apertium_core.ApertiumPostchunk(command[-2], command[-1])
-                wrapper_objects[command] = postchunk
-            elif 'cg-proc' == command[0]:
-                dictionary_path = command[-1]
-                cg = constraint_grammar.CGProc(dictionary_path)
-                wrapper_objects[command] = cg
-
         if wrappers_available:
+            if command not in wrapper_objects.keys():
+                if 'lt-proc' == command[0]:
+                    lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
+                    lttoolbox.LtLocale.tryToSetLocale()
+                    fst = FSTProc(dictionary_path, arg)
+                    if not fst.valid():
+                        raise ValueError('FST Invalid')
+                    wrapper_objects[command] = fst
+                elif 'lrx-proc' == command[0]:
+                    dictionary_path = command[-1]
+                    lextools.LtLocale.tryToSetLocale()
+                    lrx = LRX(dictionary_path)
+                    wrapper_objects[command] = lrx
+                elif 'apertium-transfer' == command[0]:
+                    transfer = apertium_core.ApertiumTransfer(command[-2], command[-1])
+                    wrapper_objects[command] = transfer
+                elif 'apertium-interchunk' == command[0]:
+                    interchunk = apertium_core.ApertiumInterchunk(command[-2], command[-1])
+                    wrapper_objects[command] = interchunk
+                elif 'apertium-postchunk' == command[0]:
+                    postchunk = apertium_core.ApertiumPostchunk(command[-2], command[-1])
+                    wrapper_objects[command] = postchunk
+                elif 'cg-proc' == command[0]:
+                    dictionary_path = command[-1]
+                    cg = constraint_grammar.CGProc(dictionary_path)
+                    wrapper_objects[command] = cg
+
             if 'apertium-destxt' == command[0]:
                 output = deformatter(end.decode())
                 end = output.encode()
