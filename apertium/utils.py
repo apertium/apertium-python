@@ -3,7 +3,7 @@ import platform
 import subprocess
 import sys
 import tempfile
-from typing import List
+from typing import List, Tuple
 
 try:
     if platform.system() == 'Linux':
@@ -23,7 +23,8 @@ from apertium.iso639 import iso_639_codes
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 escape_chars = b'[]{}?^$@\\'
 special_chars_map = {i: '\\' + chr(i) for i in escape_chars}
-wrapper_objects = {}
+initialized_wrappers = {}
+used_wrapper = True
 
 if wrappers_available:
     class FSTProc(lttoolbox.FST):
@@ -67,6 +68,86 @@ def deformatter(text: str) -> str:
     return '{}[][\n]'.format(text.translate(special_chars_map))
 
 
+def handle_command_with_wrapper(command: Tuple, end: bytes) -> bytes:
+    """
+    Executes the given command via wrappers
+    """
+    global initialized_wrappers
+    global used_wrapper
+    if command not in initialized_wrappers.keys():
+        if 'lt-proc' == command[0]:
+            lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
+            lttoolbox.LtLocale.tryToSetLocale()
+            fst = FSTProc(dictionary_path, arg)
+            if not fst.valid():
+                raise ValueError('FST Invalid')
+            initialized_wrappers[command] = fst
+        elif 'lrx-proc' == command[0]:
+            dictionary_path = command[-1]
+            lextools.LtLocale.tryToSetLocale()
+            lrx = LRX(dictionary_path)
+            initialized_wrappers[command] = lrx
+        elif 'apertium-transfer' == command[0]:
+            transfer = apertium_core.ApertiumTransfer(command[-2], command[-1])
+            initialized_wrappers[command] = transfer
+        elif 'apertium-interchunk' == command[0]:
+            interchunk = apertium_core.ApertiumInterchunk(command[-2], command[-1])
+            initialized_wrappers[command] = interchunk
+        elif 'apertium-postchunk' == command[0]:
+            postchunk = apertium_core.ApertiumPostchunk(command[-2], command[-1])
+            initialized_wrappers[command] = postchunk
+        elif 'cg-proc' == command[0]:
+            dictionary_path = command[-1]
+            cg = constraint_grammar.CGProc(dictionary_path)
+            initialized_wrappers[command] = cg
+
+    input_file = tempfile.NamedTemporaryFile(delete=False, mode='w')
+    output_file = tempfile.NamedTemporaryFile(delete=False)
+
+    text = end.decode()
+    input_file.write(text)
+    input_file.close()
+
+    if 'lt-proc' == command[0]:
+        fst = initialized_wrappers[command]
+        lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
+        fst.lt_proc(lt_proc_command, input_file.name, output_file.name)
+    elif 'lrx-proc' == command[0]:
+        lextools.LtLocale.tryToSetLocale()
+        lrx = initialized_wrappers[command]
+        lrx.lrx_proc(command, input_file.name, output_file.name)
+    elif 'apertium-transfer' == command[0]:
+        transfer = initialized_wrappers[command]
+        transfer.transfer_text(command, input_file.name, output_file.name)
+    elif 'apertium-interchunk' == command[0]:
+        interchunk = initialized_wrappers[command]
+        interchunk.interchunk_text(command, input_file.name, output_file.name)
+    elif 'apertium-postchunk' == command[0]:
+        postchunk = initialized_wrappers[command]
+        postchunk.postchunk_text(command, input_file.name, output_file.name)
+    elif 'apertium-pretransfer' == command[0]:
+        apertium_core.pretransfer(command, input_file.name, output_file.name)
+    elif 'apertium-tagger' == command[0]:
+        command = list(command)
+        command += [input_file.name, output_file.name]
+        command = tuple(command)
+        apertium_core.ApertiumTagger(command)
+    elif 'cg-proc' == command[0]:
+        cg = initialized_wrappers[command]
+        cg.cg_proc(command, input_file.name, output_file.name)
+    else:
+        used_wrapper = False
+
+    if used_wrapper:
+        output_file.seek(0)
+        end = output_file.read()
+    output_file.close()
+
+    os.remove(input_file.name)
+    os.remove(output_file.name)
+    return end
+
+
 def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     """
     Executes the given list of commands and returns the final output
@@ -81,84 +162,13 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         # delete=False and manually delete the file.
         used_wrapper = True
         command = tuple(command)
+        if 'apertium-destxt' == command[0]:
+            output = deformatter(end.decode())
+            end = output.encode()
+            continue
+
         if wrappers_available:
-            if command not in wrapper_objects.keys():
-                if 'lt-proc' == command[0]:
-                    lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
-                    lttoolbox.LtLocale.tryToSetLocale()
-                    fst = FSTProc(dictionary_path, arg)
-                    if not fst.valid():
-                        raise ValueError('FST Invalid')
-                    wrapper_objects[command] = fst
-                elif 'lrx-proc' == command[0]:
-                    dictionary_path = command[-1]
-                    lextools.LtLocale.tryToSetLocale()
-                    lrx = LRX(dictionary_path)
-                    wrapper_objects[command] = lrx
-                elif 'apertium-transfer' == command[0]:
-                    transfer = apertium_core.ApertiumTransfer(command[-2], command[-1])
-                    wrapper_objects[command] = transfer
-                elif 'apertium-interchunk' == command[0]:
-                    interchunk = apertium_core.ApertiumInterchunk(command[-2], command[-1])
-                    wrapper_objects[command] = interchunk
-                elif 'apertium-postchunk' == command[0]:
-                    postchunk = apertium_core.ApertiumPostchunk(command[-2], command[-1])
-                    wrapper_objects[command] = postchunk
-                elif 'cg-proc' == command[0]:
-                    dictionary_path = command[-1]
-                    cg = constraint_grammar.CGProc(dictionary_path)
-                    wrapper_objects[command] = cg
-
-            if 'apertium-destxt' == command[0]:
-                output = deformatter(end.decode())
-                end = output.encode()
-                continue
- 
-            input_file = tempfile.NamedTemporaryFile(delete=False, mode='w')
-            output_file = tempfile.NamedTemporaryFile(delete=False)
-
-            text = end.decode()
-            input_file.write(text)
-            input_file.close()
-
-            if 'lt-proc' == command[0]:
-                fst = wrapper_objects[command]
-                lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
-                fst.lt_proc(lt_proc_command, input_file.name, output_file.name)
-            elif 'lrx-proc' == command[0]:
-                lextools.LtLocale.tryToSetLocale()
-                lrx = wrapper_objects[command]
-                lrx.lrx_proc(command, input_file.name, output_file.name)
-            elif 'apertium-transfer' == command[0]:
-                transfer = wrapper_objects[command]
-                transfer.transfer_text(command, input_file.name, output_file.name)
-            elif 'apertium-interchunk' == command[0]:
-                interchunk = wrapper_objects[command]
-                interchunk.interchunk_text(command, input_file.name, output_file.name)
-            elif 'apertium-postchunk' == command[0]:
-                postchunk = wrapper_objects[command]
-                postchunk.postchunk_text(command, input_file.name, output_file.name)
-            elif 'apertium-pretransfer' == command[0]:
-                apertium_core.pretransfer(command, input_file.name, output_file.name)
-            elif 'apertium-tagger' == command[0]:
-                command = list(command)
-                command += [input_file.name, output_file.name]
-                command = tuple(command)
-                apertium_core.ApertiumTagger(command)
-            elif 'cg-proc' == command[0]:
-                cg = wrapper_objects[command]
-                cg.cg_proc(command, input_file.name, output_file.name)
-            else:
-                used_wrapper = False
-
-            if used_wrapper:
-                output_file.seek(0)
-                end = output_file.read()
-            output_file.close()
-
-            os.remove(input_file.name)
-            os.remove(output_file.name)
-
+            end = handle_command_with_wrapper(command, end)
         if not wrappers_available or not used_wrapper:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
