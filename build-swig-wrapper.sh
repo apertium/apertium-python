@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -xe
 
-sudo apt-get install -y cmake libboost-dev libicu-dev swig build-essential python3-setuptools
+wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
+sudo apt-get install -y lttoolbox-dev cmake libboost-dev libicu-dev swig build-essential python3-setuptools
 
 git clone --depth 1 https://github.com/apertium/apertium-lex-tools.git
 pushd apertium-lex-tools
