@@ -24,7 +24,6 @@ iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 escape_chars = b'[]{}?^$@\\'
 special_chars_map = {i: '\\' + chr(i) for i in escape_chars}
 initialized_wrappers = {}
-used_wrapper = True
 
 if wrappers_available:
     class FSTProc(lttoolbox.FST):
@@ -72,8 +71,7 @@ def handle_command_with_wrapper(command: Tuple, end: bytes) -> bytes:
     """
     Executes the given command via wrappers
     """
-    global initialized_wrappers
-    global used_wrapper
+    used_wrapper = True
     if command not in initialized_wrappers.keys():
         if 'lt-proc' == command[0]:
             lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
@@ -145,7 +143,7 @@ def handle_command_with_wrapper(command: Tuple, end: bytes) -> bytes:
 
     os.remove(input_file.name)
     os.remove(output_file.name)
-    return end
+    return end, used_wrapper
 
 
 def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
@@ -168,7 +166,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
             continue
 
         if wrappers_available:
-            end = handle_command_with_wrapper(command, end)
+            end, used_wrapper = handle_command_with_wrapper(command, end)
         if not wrappers_available or not used_wrapper:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
