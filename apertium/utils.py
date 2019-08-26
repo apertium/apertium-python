@@ -67,7 +67,7 @@ def deformatter(text: str) -> str:
     return '{}[][\n]'.format(text.translate(special_chars_map))
 
 
-def handle_command_with_wrapper(command: Tuple, end: bytes) -> bytes:
+def handle_command_with_wrapper(command: Tuple, end: bytes) -> Tuple[bytes, bool]:
     """
     Executes the given command via wrappers
     """
@@ -143,6 +143,7 @@ def handle_command_with_wrapper(command: Tuple, end: bytes) -> bytes:
 
     os.remove(input_file.name)
     os.remove(output_file.name)
+
     return end, used_wrapper
 
 
