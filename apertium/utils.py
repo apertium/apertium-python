@@ -113,6 +113,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
                 output = deformatter(end.decode())
                 end = output.encode()
                 continue
+ 
             input_file = tempfile.NamedTemporaryFile(delete=False, mode='w')
             output_file = tempfile.NamedTemporaryFile(delete=False)
 
@@ -157,6 +158,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
 
             os.remove(input_file.name)
             os.remove(output_file.name)
+
         if not wrappers_available or not used_wrapper:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
