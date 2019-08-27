@@ -1,32 +1,7 @@
 #!/usr/bin/env bash
 set -xe
 
-wget http://apertium.projectjj.com/apt/install-nightly.sh -O - | sudo bash
-sudo apt-get install -y lttoolbox-dev cmake libboost-dev libicu-dev swig build-essential python3-setuptools
-
-git clone --depth 1 https://github.com/apertium/apertium-lex-tools.git
-pushd apertium-lex-tools
-./autogen.sh --enable-python-bindings
-cd python
-make -j2
-python3 setup.py install
-popd
-
-git clone --depth 1 https://github.com/apertium/apertium.git apertium-core
-pushd apertium-core
-./autogen.sh --enable-python-bindings
-cd python
-make -j2
-python3 setup.py install
-popd
-
-git clone --depth 1 https://github.com/apertium/lttoolbox.git
-pushd lttoolbox
-./autogen.sh --enable-python-bindings
-cd python
-make -j2
-python3 setup.py install
-popd
+sudo apt-get install -y cmake libboost-dev libicu-dev swig build-essential python3-setuptools
 
 git clone --depth 1 https://github.com/TinoDidriksen/cg3.git
 pushd cg3
