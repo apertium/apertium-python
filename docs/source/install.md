@@ -1,19 +1,20 @@
 Installation
-=====
+============
 
-From Github
---------
+From PyPI
+-----------
 
 - Clone the project and perform `python setup.py install`
+
+
+    pip install apertium-python
+
+- For developers
 
 
     git clone https://github.com/apertium/apertium-python.git
     cd apertium-python
     python setup.py install
-
-- For developers
-
-
     pip install pipenv
     pipenv install --dev --system
 

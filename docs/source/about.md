@@ -11,11 +11,11 @@ Introduction
 About the Existing Code Base
 -----------------------------
 
-- The exisiting code base has the subprocess and swig wrapper implementation of the basic functions of Apertium.
+- The existing codebase has `Subprocess` and SWIG wrapper implementations of the basic functions used by Apertium modules.
 
-Contribute
-----------
+Contributing
+------------
 
 - Issue Tracker: <https://www.github.com/apertium/apertium-python/issues>
 - Source Code: <https://www.github.com/apertium/apertium-python>
-- Run Unittests by executing `python setup.py test`
+- Run unit tests with `python setup.py test`.

@@ -54,7 +54,7 @@ One can also install modes by providing the path to the lang-data using this sim
     In [2]: apertium.append_pair_path('..')
 
 Tagger
------------
+------
 
 Performing Tagging::
 

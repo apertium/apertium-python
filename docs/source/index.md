@@ -33,7 +33,7 @@ Generation
 ```
 
 Tagger
------------
+------
 
 ```eval_rst
 .. automodule:: apertium.tagger

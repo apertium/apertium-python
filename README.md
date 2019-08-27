@@ -11,14 +11,12 @@
 - This project is an attempt to make the Apertium modules available in python, which because of it's simplicity is more appealing to users.
 
 ## About the Exisiting Code Base
-- The exisiting code base has the subprocess and swig wrapper implementation of the basic functions of Apertium.
+- The existing codebase has `Subprocess` and SWIG wrapper implementations of the basic functions used by Apertium modules.
 
 ## Installation
 - Installation on Ubuntu and Windows is natively supported
     ```bash
-    git clone https://github.com/apertium/apertium-python.git
-    cd apertium-python
-    python setup.py install
+    pip install apertium-python
     ```
 
 - For developers, pipenv can be used to install the dependencies
