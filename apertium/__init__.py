@@ -1,10 +1,6 @@
-__author__ = 'Sushain K. Cherivirala, Lokendra Singh, Arghya Bhatttacharya, Andi Qu'
-__license__ = """
-              GNU General Public License v3.0
-              You should have received a copy of the GNU General Public License
-              along with this program; if not, see <http://www.gnu.org/licenses/>.
-              """
-__version__ = '0.0.0'
+__author__ = 'Lokendra Singh, Sushain K. Cherivirala, Arghya Bhatttacharya, Andi Qu'
+__license__ = 'GNU General Public License v3.0'
+__version__ = '0.1.0'
 
 import logging
 import os

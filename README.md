@@ -15,8 +15,8 @@
 
 ## Installation
 - Installation on Ubuntu and Windows is natively supported
-    ```bash
-    pip install apertium-python
+    ```
+    pip install apertium
     ```
 
 - For developers, pipenv can be used to install the dependencies

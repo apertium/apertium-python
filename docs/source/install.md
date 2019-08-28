@@ -4,7 +4,7 @@ Installation
 From PyPI
 -----------
 
-- Clone the project and perform `python setup.py install`
+- Install from PyPI by running
 
 
     pip install apertium-python
