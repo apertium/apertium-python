@@ -17,6 +17,7 @@ flake8-quotes = "*"
 mypy = "*"
 pep8-naming = "*"
 sphinx = "*"
+twine = "*"
 
 [packages]
 apertium-streamparser = "*"
