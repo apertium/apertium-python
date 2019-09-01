@@ -53,6 +53,8 @@ One can also install modes by providing the path to the lang-data using this sim
     In [1]: import apertium
     In [2]: apertium.append_pair_path('..')
 
+Install language packages with `apertium.installer.install_module(language_name)`. For example `apertium-eng` can be installed by executing `apertium.installer.install_module('eng')`
+
 Tagger
 ------
 
