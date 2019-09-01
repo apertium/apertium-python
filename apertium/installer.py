@@ -144,7 +144,7 @@ class Ubuntu:
 
 
 def get_installer() -> Union[Windows, Ubuntu]:
-    system = platform.system()
+    system = platform.system()  # type: str
     if system == 'Windows':
         return Windows()
     elif system == 'Linux':
@@ -165,10 +165,10 @@ def install_apertium() -> None:
 
 def install_module(module: str) -> None:
     apertium_module = 'apertium-{}'.format(module)
-    installer = get_installer()
+    installer = get_installer()  # type: Union[Windows, Ubuntu]
     installer.install_apertium_module(apertium_module)
 
 
 def install_wrapper(swig_wrapper: str) -> None:
-    installer = get_installer()
+    installer = get_installer()  # type: Union[Windows, Ubuntu]
     installer.install_wrapper(swig_wrapper)

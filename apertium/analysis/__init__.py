@@ -49,7 +49,7 @@ class Analyzer:
         Returns:
             List[LexicalUnit]
         """
-        lexical_units = list(parse(result))
+        lexical_units = list(parse(result))  # type: List[LexicalUnit]
         return lexical_units
 
     def analyze(self, in_text: str, formatting: str = 'txt') -> List[LexicalUnit]:
@@ -64,10 +64,10 @@ class Analyzer:
             List[LexicalUnit]
         """
         self._get_commands()
-        deformatter = ['apertium-des{}'.format(formatting), '-n']
+        deformatter = ['apertium-des{}'.format(formatting), '-n']  # type: List[str]
         if deformatter not in self.analyzer_cmds[self.lang]:
             self.analyzer_cmds[self.lang].insert(0, deformatter)
-        result = execute_pipeline(in_text, self.analyzer_cmds[self.lang])
+        result = execute_pipeline(in_text, self.analyzer_cmds[self.lang])  # type: str
         return self._postproc_text(result)
 
 
@@ -81,5 +81,5 @@ def analyze(lang: str, in_text: str, formatting: str = 'txt') -> List[LexicalUni
     Returns:
         List[LexicalUnit]
     """
-    analyzer = Analyzer(lang)
+    analyzer = Analyzer(lang)  # type: Analyzer
     return analyzer.analyze(in_text, formatting)
