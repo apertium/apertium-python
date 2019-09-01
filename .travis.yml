@@ -14,8 +14,6 @@ install:
     - pip install pipenv
     - python3 setup.py install
     - pipenv install --dev --system
-before_script:
-    - ./build-swig-wrapper.sh
 script:
     - flake8 --verbose apertium
     - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then

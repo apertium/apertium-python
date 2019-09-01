@@ -24,6 +24,7 @@ class PostInstallCommand(install):
         apertium.installer.install_module('kaz-tat')
         apertium.installer.install_wrapper('python3-apertium')
         apertium.installer.install_wrapper('python3-apertium-lex-tools')
+        apertium.installer.install_wrapper('python3-cg3')
         apertium.installer.install_wrapper('python3-lttoolbox')
 
 def find_details(find_value, file_paths):
