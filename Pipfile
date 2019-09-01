@@ -18,6 +18,7 @@ mypy = "*"
 pep8-naming = "*"
 sphinx = "*"
 twine = "*"
+recommonmark = "*"
 
 [packages]
 apertium-streamparser = "*"
