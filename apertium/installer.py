@@ -5,7 +5,7 @@ import platform
 import shutil
 import subprocess
 import tempfile
-from typing import Optional
+from typing import Dict, Optional, Union
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
@@ -15,14 +15,14 @@ class Windows:
     base_link = 'http://apertium.projectjj.com/{}'
 
     def __init__(self) -> None:
-        self._install_path = os.getenv('LOCALAPPDATA')
-        self._apertium_path = os.path.join(self._install_path, 'apertium-all-dev')
+        self._install_path = str(os.getenv('LOCALAPPDATA'))  # type: str
+        self._apertium_path = str(os.path.join(self._install_path, 'apertium-all-dev'))  # type: str
         self._download_path = tempfile.mkdtemp()
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
         self._logger = logging.getLogger()
         self._logger.setLevel(logging.DEBUG)
 
-    def _download_zip(self, download_files: dict, extract_path: Optional[str]) -> None:
+    def _download_zip(self, download_files: Dict[str, str], extract_path: Optional[str]) -> None:
         for zip_name, zip_link in download_files.items():
             zip_download_path = os.path.join(self._download_path, zip_name)
             urlretrieve(Windows.base_link.format(zip_link), filename=zip_download_path)
@@ -47,8 +47,8 @@ class Windows:
 
         self._logger.info('Copying Language Data to Apertium')
         for directory in os.listdir(lang_data_path):
-            source = os.path.join(lang_data_path, directory)
-            destination = os.path.join(self._apertium_path, 'share', 'apertium', directory)
+            source = str(os.path.join(lang_data_path, directory))  # type: str
+            destination = str(os.path.join(self._apertium_path, 'share', 'apertium', directory))  # type: str
             copy_tree(source, destination)
             self._logger.info('%s -> %s', source, destination)
 
@@ -62,7 +62,7 @@ class Windows:
         """
 
         # List of Mode Files
-        mode_path = os.path.join(self._apertium_path, 'share', 'apertium', 'modes')
+        mode_path = str(os.path.join(self._apertium_path, 'share', 'apertium', 'modes'))  # type: str
         for f in os.listdir(mode_path):
             if os.path.isfile(os.path.join(mode_path, f)) and f.endswith('.mode'):
                 self._logger.info('Editing mode %s ', f)
@@ -143,7 +143,7 @@ class Ubuntu:
         self._rename_wrappers()
 
 
-def get_installer():
+def get_installer() -> Union[Windows, Ubuntu]:
     system = platform.system()
     if system == 'Windows':
         return Windows()
