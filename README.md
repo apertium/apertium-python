@@ -1,9 +1,10 @@
 # Apertium + Python
 
 [![Travis Build Status](https://travis-ci.com/apertium/apertium-python.svg?branch=master)](https://travis-ci.com/apertium/apertium-python)
-[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/sesdinoy4cw2p1tk/branch/master?svg=true)](https://ci.appveyor.com/project/sushain97/apertium-python/branch/master)
+[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/sesdinoy4cw2p1tk/branch/master?svg=true)](https://ci.appveyor.com/project/apertium/apertium-python/branch/master)
 [![ReadTheDocs Docs Status](https://readthedocs.org/projects/apertium-python/badge)](https://readthedocs.org/projects/apertium-python)
 [![Coverage Status](https://coveralls.io/repos/github/apertium/apertium-python/badge.svg?branch=master)](https://coveralls.io/github/apertium/apertium-python?branch=master)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/apertium.svg)]((https://pypi.org/project/apertium/))
 
 ## Introduction
 
@@ -13,7 +14,7 @@
 
 ## About the Exisiting Code Base
 
-- The existing codebase has `Subprocess` and SWIG wrapper implementations of the basic functions used by Apertium modules.
+- The existing codebase has `Subprocess` and [SWIG](http://www.swig.org/) wrapper implementations of the higher level functions of Apertium and CG modules.
 
 ## Installation
 
@@ -77,14 +78,6 @@ In [2]: apertium.generate('en', '^cat<n><pl>$')
 Out[2]: 'cats'
 ```
 
-### Installing more modes from other language data
-
-One can also install modes by providing the path to the lang-data using this simple function
-```python
-In [1]: import apertium
-In [2]: apertium.append_pair_path('..')
-```
-
 ### Tagger
 
 Method 1:  Create a `Tagger` object and call its `tag` method.
@@ -117,4 +110,13 @@ Method 2: Calling `translate()` directly.
 In [1]: import apertium
 In [2]: apertium.translate('en', 'spa', 'cats')
 Out[2]: 'Gatos'
+```
+
+### Installing more modes from other language data
+
+One can also install modes by providing the path to the `lang-data`:
+
+```python
+In [1]: import apertium
+In [2]: apertium.append_pair_path('..')
 ```
