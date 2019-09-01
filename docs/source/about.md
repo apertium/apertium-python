@@ -18,4 +18,4 @@ Contributing
 
 - Issue Tracker: <https://www.github.com/apertium/apertium-python/issues>
 - Source Code: <https://www.github.com/apertium/apertium-python>
-- Run unit tests with `python setup.py test`.
+- Run unit tests with `./setup.py test`.
