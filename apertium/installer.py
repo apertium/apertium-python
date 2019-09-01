@@ -119,6 +119,7 @@ class Ubuntu:
         wrapper_name = {
             'python3-apertium': '_apertium_core',
             'python3-apertium-lex-tools': '_lextools',
+            'python3-cg3': '_constraint_grammar',
             'python3-lttoolbox': '_lttoolbox',
         }
         dist_package = '/usr/lib/python3/dist-packages'
