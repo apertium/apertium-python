@@ -16,14 +16,12 @@ install:
     - pipenv install --dev --system
 script:
     - flake8 --verbose apertium
-    - if [[ $TRAVIS_PYTHON_VERSION != 3.4 ]]; then
-        mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports;
-        cat .mypy_coverage/any-exprs.txt;
-        coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//');
-        if (( $(echo "$coverage < 90" | bc -l) )); then
-            exit 1;
-        fi;
-      fi
+    - mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports;
+      cat .mypy_coverage/any-exprs.txt;
+      coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//');
+      if (( $(echo "$coverage < 95" | bc -l) )); then
+          exit 1;
+      fi;
     - coverage run -m unittest --verbose --buffer tests
     - coverage report --show-missing --fail-under 85 --include 'apertium/**'
 after_success:
