@@ -1,8 +1,12 @@
+#!/usr/bin/env python3
+
 from atexit import register
 from os import path
+import re
 from setuptools import find_packages, setup  # noqa: I202
 from setuptools.command.install import install
 import sys
+from typing import Dict
 
 
 class PostInstallCommand(install):
@@ -20,16 +24,31 @@ class PostInstallCommand(install):
         apertium.installer.install_module('kaz-tat')
         apertium.installer.install_wrapper('python3-apertium')
         apertium.installer.install_wrapper('python3-apertium-lex-tools')
+        apertium.installer.install_wrapper('python3-cg3')
         apertium.installer.install_wrapper('python3-lttoolbox')
 
+def find_details(find_value, file_paths):
+    pwd = path.abspath(path.dirname(__file__))
+    with open(path.join(pwd, *file_paths), 'r') as input_file:
+        match = re.search(r"^__{}__ = ['\"]([^'\"]*)['\"]".format(find_value),
+                                input_file.read(), re.M)
+    if match:
+        return match.group(1)
+    raise RuntimeError("Unable to find {} string.".format(find_value))
+
 setup(
-    name='apertium-python',
-    # TODO: Add version description, keywords, author, author_email
-    license='GNU General Public License v3.0 ',
+    name='apertium',
+    author=find_details("author", ["apertium", "__init__.py"]),
+    author_email='sushain@skc.name',
+    license=find_details("license", ["apertium", "__init__.py"]),
+    version=find_details("version", ["apertium", "__init__.py"]),
+    keywords='Apertium Machine Translation Linguistics',
+    description='This project is an attempt to make the Apertium Core modules available in python',
     long_description=open(path.join(path.abspath(path.dirname(__file__)), 'README.md')).read(),
     long_description_content_type='text/markdown; charset=UTF-8',
+    platforms=['Ubuntu', 'Windows'],
     url='https://github.com/apertium/apertium-python',
-    python_requires='>=3.4',
+    python_requires='>=3.5',
     setup_requires=[
         'apertium-streamparser==5.0.2',
     ],

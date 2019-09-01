@@ -4,8 +4,9 @@ Apertium + Python
 Contents
 --------
 
-* [Usage](usage.md)
 * [About](about.md)
+* [Installation](install.md)
+* [Usage](usage.md)
 
 Apertium
 --------
@@ -28,6 +29,14 @@ Generation
 
 ```eval_rst
 .. automodule:: apertium.generation
+    :members:
+```
+
+Tagger
+------
+
+```eval_rst
+.. automodule:: apertium.tagger
     :members:
 ```
 

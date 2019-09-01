@@ -1,3 +1,7 @@
+__author__ = 'Lokendra Singh, Arghya Bhatttacharya, Sushain K. Cherivirala, Andi Qu'
+__license__ = 'GNU General Public License v3.0'
+__version__ = '0.1.0'
+
 import logging
 import os
 import platform

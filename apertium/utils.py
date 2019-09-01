@@ -3,7 +3,7 @@ import platform
 import subprocess
 import sys
 import tempfile
-from typing import List, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 try:
     if platform.system() == 'Linux':
@@ -23,10 +23,10 @@ from apertium.iso639 import iso_639_codes
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
 escape_chars = b'[]{}?^$@\\'
 special_chars_map = {i: '\\' + chr(i) for i in escape_chars}
-initialized_wrappers = {}
+initialized_wrappers = {}  # type: Dict[Any, Union[FSTProc, LRX, Any]]
 
 if wrappers_available:
-    class FSTProc(lttoolbox.FST):
+    class FSTProc(lttoolbox.FST):  # type: ignore
         def __init__(self, dictionary_path: str, arg: str) -> None:
             super().__init__(dictionary_path)
             if arg == '-g':
@@ -38,7 +38,7 @@ if wrappers_available:
             else:
                 self.initAnalysis()
 
-    class LRX(lextools.LRXProc):
+    class LRX(lextools.LRXProc):  # type: ignore
         def __init__(self, dictionary_path: str) -> None:
             super().__init__(dictionary_path)
             self.init()
@@ -67,23 +67,24 @@ def deformatter(text: str) -> str:
     return '{}[][\n]'.format(text.translate(special_chars_map))
 
 
-def handle_command_with_wrapper(command: Tuple, end: bytes) -> Tuple[bytes, bool]:
+def handle_command_with_wrapper(command: Union[List[str], Tuple[str, ...]], end: bytes) -> Tuple[bytes, bool]:
     """
     Executes the given command via wrappers
     """
     used_wrapper = True
-    if command not in initialized_wrappers.keys():
+    if command not in initialized_wrappers.keys() and wrappers_available:
         if 'lt-proc' == command[0]:
-            lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
+            lt_proc_command, dictionary_path = command[:-1], command[-1]
+            arg = command[1]
             lttoolbox.LtLocale.tryToSetLocale()
-            fst = FSTProc(dictionary_path, arg)
+            fst = FSTProc(dictionary_path, arg)  # type: FSTProc
             if not fst.valid():
                 raise ValueError('FST Invalid')
             initialized_wrappers[command] = fst
         elif 'lrx-proc' == command[0]:
             dictionary_path = command[-1]
             lextools.LtLocale.tryToSetLocale()
-            lrx = LRX(dictionary_path)
+            lrx = LRX(dictionary_path)  # type: LRX
             initialized_wrappers[command] = lrx
         elif 'apertium-transfer' == command[0]:
             transfer = apertium_core.ApertiumTransfer(command[-2], command[-1])
@@ -128,8 +129,8 @@ def handle_command_with_wrapper(command: Tuple, end: bytes) -> Tuple[bytes, bool
     elif 'apertium-tagger' == command[0]:
         command = list(command)
         command += [input_file.name, output_file.name]
-        command = tuple(command)
-        apertium_core.ApertiumTagger(command)
+        tuple_command = tuple(command)
+        apertium_core.ApertiumTagger(tuple_command)
     elif 'cg-proc' == command[0]:
         cg = initialized_wrappers[command]
         cg.cg_proc(command, input_file.name, output_file.name)
@@ -160,14 +161,14 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
         # Since the file is opened both by Python and the C++ SWIG wrappers, we use
         # delete=False and manually delete the file.
         used_wrapper = True
-        command = tuple(command)
+        tuple_command = tuple(command)  # type: Tuple[str, ...]
         if 'apertium-destxt' == command[0]:
             output = deformatter(end.decode())
             end = output.encode()
             continue
 
         if wrappers_available:
-            end, used_wrapper = handle_command_with_wrapper(command, end)
+            end, used_wrapper = handle_command_with_wrapper(tuple_command, end)
         if not wrappers_available or not used_wrapper:
             apertium.logger.warning('Calling subprocess %s', command[0])
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
