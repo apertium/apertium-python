@@ -171,7 +171,7 @@ class Translator:
             return result.decode()  # type: ignore
 
 
-def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> Any:
+def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
     """
     Args:
         text (str)
