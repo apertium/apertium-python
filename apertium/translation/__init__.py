@@ -1,6 +1,6 @@
 import re
 from subprocess import CalledProcessError, PIPE, Popen
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 import apertium  # noqa: E402
 from apertium.utils import execute_pipeline, parse_mode_file, to_alpha3_code  # noqa: E402
