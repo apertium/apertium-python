@@ -85,6 +85,14 @@ class TestInstallation(unittest.TestCase):
             self.assertIsNotNone(shutil.which(process), 'apertium installer not working. {} not available on system path'.format(process))
             break
 
+    def test_install_apertium_linux(self):
+        apertium.installer.install_apertium_linux()
+        apertium_processes = ['apertium-anaphora',
+                             ]
+        for process in apertium_processes:
+            self.assertIsNotNone(shutil.which(process), 'apertium linux installer not working. {} not available on system path'.format(process))
+            break
+
     def test_install_module(self):
         language = 'kir'
         apertium.installer.install_module(language)

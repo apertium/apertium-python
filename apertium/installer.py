@@ -172,3 +172,11 @@ def install_module(module: str) -> None:
 def install_wrapper(swig_wrapper: str) -> None:
     installer = get_installer()  # type: Union[Windows, Ubuntu]
     installer.install_wrapper(swig_wrapper)
+
+
+def install_apertium_linux() -> None:
+    """
+    Installs apertium-* packages on Linux Platforms
+    """
+    if platform.system() == 'Linux':
+        install_module('anaphora')

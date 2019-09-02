@@ -26,6 +26,8 @@ class PostInstallCommand(install):
         apertium.installer.install_wrapper('python3-apertium-lex-tools')
         apertium.installer.install_wrapper('python3-cg3')
         apertium.installer.install_wrapper('python3-lttoolbox')
+        apertium.installer.install_apertium_linux()
+
 
 def find_details(find_value, file_paths):
     pwd = path.abspath(path.dirname(__file__))
