@@ -3,6 +3,7 @@ import os
 import platform
 import shutil
 import sys
+from typing import Dict, Tuple
 import unittest
 
 from streamparser import known, SReading
@@ -11,6 +12,20 @@ base_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
 sys.path.append(base_path)
 
 import apertium  # noqa: E402
+
+
+class TestApertiumInit(unittest.TestCase):
+    def test_append_pair_path(self):
+        apertium.pair_paths = []
+        apertium.analyzers = {}  # type: Dict[str, Tuple[str, str]]
+        apertium.generators = {}  # type: Dict[str, Tuple[str, str]]
+        apertium.taggers = {}  # type: Dict[str, Tuple[str, str]]
+        apertium.pairs = {}  # type: Dict[str, str]
+        apertium.append_pair_path('/usr/share/apertium')
+        apertium.append_pair_path('/usr/local/share/apertium')
+        apertium.append_pair_path_windows()
+        if not apertium.pair_paths or not apertium.analyzers or not apertium.generators or not apertium.taggers or not apertium.pairs:
+            self.fail('Pair Paths not added to the list/dictionary')
 
 
 class TestAnalyze(unittest.TestCase):
@@ -85,6 +100,7 @@ class TestInstallation(unittest.TestCase):
             self.assertIsNotNone(shutil.which(process), 'apertium installer not working. {} not available on system path'.format(process))
             break
 
+    @unittest.skipIf(platform.system() == 'Windows', 'apertium binaries not available for windows')
     def test_install_apertium_linux(self):
         apertium.installer.install_apertium_linux()
         apertium_processes = ['apertium-anaphora',
@@ -153,8 +169,17 @@ class TestTranslate(unittest.TestCase):
         translated = apertium.translate('eng', 'spa', 'cats')
         self.assertEqual(translated, 'Gatos')
 
+    @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
+    def test_en_spa_formatting(self):
+        translated = apertium.translate('eng', 'spa', 'cats', formatting='txt')
+        self.assertEqual(translated, 'Gatos')
+
     def test_kaz_tat(self):
         translated = apertium.translate('kaz', 'tat', 'мысық')
+        self.assertEqual(translated, 'мәче')
+
+    def test_kaz_tat_formatting(self):
+        translated = apertium.translate('kaz', 'tat', 'мысық', formatting='txt')
         self.assertEqual(translated, 'мәче')
 
     def test_translator_kaz_tat(self):
