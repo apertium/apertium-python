@@ -67,6 +67,9 @@ setup(
     setup_requires=[
         'apertium-streamparser==5.0.2',
     ],
+    install_requires=[
+        'apertium-streamparser==5.0.2',
+    ],
     test_suite='tests',
     package_data={'apertium': ['py.typed']},
     packages=find_packages(exclude=['tests']),
