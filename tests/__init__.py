@@ -23,9 +23,33 @@ class TestApertiumInit(unittest.TestCase):
         apertium.pairs = {}  # type: Dict[str, str]
         apertium.append_pair_path('/usr/share/apertium')
         apertium.append_pair_path('/usr/local/share/apertium')
-        apertium.append_pair_path_windows()
+        if platform.system() == 'Windows':
+            apertium.append_pair_path_windows()
         if not apertium.pair_paths or not apertium.analyzers or not apertium.generators or not apertium.taggers or not apertium.pairs:
             self.fail('Pair Paths not added to the list/dictionary')
+
+    def test_append_pair_path_windows(self):
+        if platform.system() is not 'Windows':
+            with self.assertRaises(apertium.InstallationNotSupported):
+                apertium.append_pair_path_windows()
+        else:
+            apertium.pair_paths = []
+            apertium.analyzers = {}  # type: Dict[str, Tuple[str, str]]
+            apertium.generators = {}  # type: Dict[str, Tuple[str, str]]
+            apertium.taggers = {}  # type: Dict[str, Tuple[str, str]]
+            apertium.pairs = {}  # type: Dict[str, str]
+            apertium.append_pair_path_windows()
+            if not apertium.pair_paths or not apertium.analyzers or not apertium.generators or not apertium.taggers or not apertium.pairs:
+                self.fail('Pair Paths not added to the list/dictionary')
+
+    def test_update_path_windows(self):
+        if platform.system() is not 'Windows':
+            with self.assertRaises(apertium.InstallationNotSupported):
+                apertium.update_path_windows()
+        else:
+            apertium.update_path_windows()
+            test_binaries = TestInstallation()
+            test_binaries.test_apertium_installer()
 
 
 class TestAnalyze(unittest.TestCase):
