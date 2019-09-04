@@ -26,7 +26,7 @@ class Windows:
         for zip_name, zip_link in download_files.items():
             zip_download_path = os.path.join(self._download_path, zip_name)
             urlretrieve(Windows.base_link.format(zip_link), filename=zip_download_path)
-            self._logger.info('%s download completed', zip_name)
+            self._logger.info('%s -> %s download completed', Windows.base_link.format(zip_link), zip_name)
 
             # Extract the zip
             with ZipFile(zip_download_path) as zip_file:
