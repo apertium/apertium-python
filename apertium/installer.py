@@ -11,6 +11,7 @@ from zipfile import ZipFile
 
 import apertium
 
+
 class Windows:
     """Download ApertiumWin64 and Move to %localappdata%"""
     base_link = 'http://apertium.projectjj.com/{}'

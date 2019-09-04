@@ -19,8 +19,10 @@ from apertium.utils import wrappers_available  # noqa: F401
 class ModeNotInstalled(ValueError):
     pass
 
+
 class InstallationNotSupported(ValueError):
     pass
+
 
 def _update_modes(pair_path: str) -> None:
     """
