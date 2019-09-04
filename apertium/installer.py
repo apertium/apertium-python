@@ -9,6 +9,7 @@ from typing import Dict, Optional, Union
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
+import apertium
 
 class Windows:
     """Download ApertiumWin64 and Move to %localappdata%"""
@@ -153,9 +154,9 @@ def get_installer() -> Union[Windows, Ubuntu]:
         if distro_name == 'Ubuntu':
             return Ubuntu()
         else:
-            raise ValueError('Installation on {} not supported'.format(distro_name))
+            raise apertium.InstallationNotSupported(distro_name)
     else:
-        raise ValueError('Installation on {} not supported'.format(system))
+        raise apertium.InstallationNotSupported(system)
 
 
 def install_apertium() -> None:
