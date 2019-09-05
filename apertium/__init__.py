@@ -71,12 +71,12 @@ def update_path_windows() -> None:
 
     try:
         install_path = os.environ['LOCALAPPDATA']
-        current = os.environ['path']
+        current = os.environ['PATH']
 
         apertium_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
         if os.path.isdir(apertium_path):
             update_path = '{}{}{}{}'.format(current, os.pathsep, apertium_path, os.pathsep)
-            os.environ['path'] = update_path
+            os.environ['PATH'] = update_path
 
     except KeyError:
         print('This function is available only for Windows')
