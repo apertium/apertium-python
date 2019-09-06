@@ -6,7 +6,7 @@ From PyPI
 
 - Install from PyPI by running
 ```
-pip install apertium-python
+pip install apertium
 ```
 
 - For developers, `pipenv` can be used to install the development dependencies and enter a shell with them:
