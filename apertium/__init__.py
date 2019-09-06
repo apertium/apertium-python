@@ -1,6 +1,6 @@
 __author__ = 'Lokendra Singh, Arghya Bhatttacharya, Sushain K. Cherivirala, Andi Qu'
 __license__ = 'GNU General Public License v3.0'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 import logging
 import os
@@ -17,6 +17,10 @@ from apertium.utils import wrappers_available  # noqa: F401
 
 
 class ModeNotInstalled(ValueError):
+    pass
+
+
+class InstallationNotSupported(ValueError):
     pass
 
 
@@ -49,27 +53,27 @@ def append_pair_path(pair_path: str) -> None:
     _update_modes(pair_path)
 
 
-def append_pair_path_windows() -> None:
-    if platform.system() == 'Windows':
-        install_path = os.getenv('LOCALAPPDATA')
-        if install_path:
-            apertium_lang_path = \
-                os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
-            if os.path.isdir(apertium_lang_path):
-                append_pair_path(apertium_lang_path)
+def windows_update_path() -> None:
+    """
+    1. Add the Apertium Binaries to shell PATH
+    2. Call apertium.append_pair_path for windows
+    """
 
-
-def update_path_windows() -> None:
-    """Adding the Apertium Binaries to Process' PATH"""
-
-    if platform.system() == 'Windows':
+    try:
         install_path = os.environ['LOCALAPPDATA']
-        current = os.environ['path']
+        current = os.environ['PATH']
 
-        apertium_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
-        if os.path.isdir(apertium_path):
-            update_path = '{}{}{}{}'.format(current, os.pathsep, apertium_path, os.pathsep)
-            os.environ['path'] = update_path
+        apertium_bin_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
+        if os.path.isdir(apertium_bin_path):
+            update_path = '{}{}{}{}'.format(current, os.pathsep, apertium_bin_path, os.pathsep)
+            os.environ['PATH'] = update_path
+        apertium_lang_path = \
+            os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
+        if os.path.isdir(apertium_lang_path):
+            append_pair_path(apertium_lang_path)
+    except KeyError:
+        print('This function is available only for Windows')
+        raise InstallationNotSupported(platform.system())
 
 
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
@@ -79,7 +83,7 @@ taggers = {}  # type: Dict[str, Tuple[str, str]]
 pairs = {}  # type: Dict[str, str]
 for pair_path in pair_paths:
     _update_modes(pair_path)
-append_pair_path_windows()
-update_path_windows()
+if platform.system() == 'Windows':
+    windows_update_path()
 logging.basicConfig(format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.WARNING)
 logger = logging.getLogger()

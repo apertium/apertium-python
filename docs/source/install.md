@@ -5,29 +5,27 @@ From PyPI
 -----------
 
 - Install from PyPI by running
+```
+pip install apertium
+```
 
-
-    pip install apertium-python
-
-- For developers
-
-
-    git clone https://github.com/apertium/apertium-python.git
-    cd apertium-python
-    python setup.py install
-    pip install pipenv
-    pipenv install --dev --system
+- For developers, `pipenv` can be used to install the development dependencies and enter a shell with them:
+```
+pip install pipenv
+pipenv install --dev
+pipenv shell
+```
 
 Apertium packages can be installed from python interpreter as well
   - Install `apertium-all-dev`
-
-
-    import apertium
-    apertium.installer.install_apertium()
+```python
+import apertium
+apertium.installer.install_apertium()
+```
 
   - Install language packages
-
-
-    import apertium
-    apertium.installer.install_module('eng')
-    apertium.installer.install_module('en-es')
+```python
+import apertium
+apertium.installer.install_module('eng')
+apertium.installer.install_module('en-es')
+```

@@ -9,6 +9,8 @@ from typing import Dict, Optional, Union
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
+import apertium
+
 
 class Windows:
     """Download ApertiumWin64 and Move to %localappdata%"""
@@ -26,7 +28,7 @@ class Windows:
         for zip_name, zip_link in download_files.items():
             zip_download_path = os.path.join(self._download_path, zip_name)
             urlretrieve(Windows.base_link.format(zip_link), filename=zip_download_path)
-            self._logger.info('%s download completed', zip_name)
+            self._logger.info('%s -> %s download completed', Windows.base_link.format(zip_link), zip_name)
 
             # Extract the zip
             with ZipFile(zip_download_path) as zip_file:
@@ -153,9 +155,9 @@ def get_installer() -> Union[Windows, Ubuntu]:
         if distro_name == 'Ubuntu':
             return Ubuntu()
         else:
-            raise ValueError('Installation on {} not supported'.format(distro_name))
+            raise apertium.InstallationNotSupported(distro_name)
     else:
-        raise ValueError('Installation on {} not supported'.format(system))
+        raise apertium.InstallationNotSupported(system)
 
 
 def install_apertium() -> None:
@@ -172,3 +174,11 @@ def install_module(module: str) -> None:
 def install_wrapper(swig_wrapper: str) -> None:
     installer = get_installer()  # type: Union[Windows, Ubuntu]
     installer.install_wrapper(swig_wrapper)
+
+
+def install_apertium_linux() -> None:
+    """
+    Installs apertium-* packages on Linux Platforms
+    """
+    if platform.system() == 'Linux':
+        install_module('anaphora')
