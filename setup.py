@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
 
-from atexit import register
 from os import path
 import re
-from setuptools import find_packages, setup  # noqa: I202
+from setuptools import find_packages, setup
 from setuptools.command.install import install
-import sys
-from typing import Dict
+from setuptools.command.develop import develop
+from setuptools.command.egg_info import egg_info
 
 
-class PostInstallCommand(install):
-    def __init__(self, *args, **kwargs):
-        super(PostInstallCommand, self).__init__(*args, **kwargs)
-        register(self._post_install)
-
-    @staticmethod
-    def _post_install():
+def install_binaries():
         import apertium
 
         apertium.installer.install_apertium()
@@ -29,14 +22,32 @@ class PostInstallCommand(install):
         apertium.installer.install_apertium_linux()
 
 
+class CustomInstallCommand(install):
+    def run(self):
+        install.run(self)
+        install_binaries()
+
+
+class CustomDevelopCommand(develop):
+    def run(self):
+        develop.run(self)
+        install_binaries()
+
+
+class CustomEggInfoCommand(egg_info):
+    def run(self):
+        egg_info.run(self)
+        install_binaries()
+
+
 def find_details(find_value, file_paths):
     pwd = path.abspath(path.dirname(__file__))
     with open(path.join(pwd, *file_paths), 'r') as input_file:
-        match = re.search(r"^__{}__ = ['\"]([^'\"]*)['\"]".format(find_value),
-                                input_file.read(), re.M)
+        match = re.search(r"^__{}__ = ['\"]([^'\"]*)['\"]".format(find_value), input_file.read(), re.M)
     if match:
         return match.group(1)
     raise RuntimeError("Unable to find {} string.".format(find_value))
+
 
 setup(
     name='apertium',
@@ -74,6 +85,8 @@ setup(
     package_data={'apertium': ['py.typed']},
     packages=find_packages(exclude=['tests']),
     cmdclass={
-        'install': PostInstallCommand,
+        'install': CustomInstallCommand,
+        'develop': CustomDevelopCommand,
+        'egg_info': CustomEggInfoCommand,
     },
 )
