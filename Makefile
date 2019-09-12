@@ -1,12 +1,11 @@
 SHELL := /bin/bash
 
 dist:
+	git clean -xfd
 	./setup.py sdist
 
-release:
-	./setup.py sdist bdist_wheel
+release: dist
 	twine upload --sign dist/*
 
-test-release:
-	./setup.py sdist bdist_wheel
+test-release: dist
 	twine upload --sign --repository-url https://test.pypi.org/legacy/ dist/*
