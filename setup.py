@@ -1,49 +1,62 @@
 #!/usr/bin/env python3
 
-from atexit import register
 from os import path
 import re
-from setuptools import find_packages, setup  # noqa: I202
+from typing import List
+
+from setuptools import find_packages, setup
+from setuptools.command.develop import develop
+from setuptools.command.egg_info import egg_info
 from setuptools.command.install import install
-import sys
-from typing import Dict
 
 
-class PostInstallCommand(install):
-    def __init__(self, *args, **kwargs):
-        super(PostInstallCommand, self).__init__(*args, **kwargs)
-        register(self._post_install)
+def install_binaries() -> None:
+    import apertium
 
-    @staticmethod
-    def _post_install():
-        import apertium
-
-        apertium.installer.install_apertium()
-        apertium.installer.install_module('eng')
-        apertium.installer.install_module('en-es')
-        apertium.installer.install_module('kaz-tat')
-        apertium.installer.install_wrapper('python3-apertium')
-        apertium.installer.install_wrapper('python3-apertium-lex-tools')
-        apertium.installer.install_wrapper('python3-cg3')
-        apertium.installer.install_wrapper('python3-lttoolbox')
-        apertium.installer.install_apertium_linux()
+    apertium.installer.install_apertium()
+    apertium.installer.install_module('eng')
+    apertium.installer.install_module('en-es')
+    apertium.installer.install_module('kaz-tat')
+    apertium.installer.install_wrapper('python3-apertium')
+    apertium.installer.install_wrapper('python3-apertium-lex-tools')
+    apertium.installer.install_wrapper('python3-cg3')
+    apertium.installer.install_wrapper('python3-lttoolbox')
+    apertium.installer.install_apertium_linux()
 
 
-def find_details(find_value, file_paths):
+class CustomInstallCommand(install):
+    def run(self) -> None:
+        install.run(self)
+        install_binaries()
+
+
+class CustomDevelopCommand(develop):
+    def run(self) -> None:
+        develop.run(self)
+        install_binaries()
+
+
+class CustomEggInfoCommand(egg_info):
+    def run(self) -> None:
+        egg_info.run(self)
+        install_binaries()
+
+
+def find_details(find_value: str, file_paths: List[str]) -> str:
     pwd = path.abspath(path.dirname(__file__))
     with open(path.join(pwd, *file_paths), 'r') as input_file:
-        match = re.search(r"^__{}__ = ['\"]([^'\"]*)['\"]".format(find_value),
-                                input_file.read(), re.M)
+        match = re.search(r"^__{}__ = ['\"]([^'\"]*)['\"]".format(find_value), input_file.read(), re.M)
     if match:
         return match.group(1)
-    raise RuntimeError("Unable to find {} string.".format(find_value))
+    raise RuntimeError('Unable to find {} string.'.format(find_value))
+
 
 setup(
     name='apertium',
-    author=find_details("author", ["apertium", "__init__.py"]),
+    author=find_details('author', ['apertium', '__init__.py']),
     author_email='sushain@skc.name',
-    license=find_details("license", ["apertium", "__init__.py"]),
-    version=find_details("version", ["apertium", "__init__.py"]),
+    license=find_details('license', ['apertium', '__init__.py']),
+    version=find_details('version', ['apertium', '__init__.py']),
     keywords='apertium machine translation linguistics',
     description='Apertium core modules available in Python',
     classifiers=[
@@ -74,6 +87,8 @@ setup(
     package_data={'apertium': ['py.typed']},
     packages=find_packages(exclude=['tests']),
     cmdclass={
-        'install': PostInstallCommand,
+        'install': CustomInstallCommand,
+        'develop': CustomDevelopCommand,
+        'egg_info': CustomEggInfoCommand,
     },
 )
