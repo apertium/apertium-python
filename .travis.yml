@@ -12,7 +12,7 @@ python:
     - 'nightly'
 install:
     - pip install pipenv
-    - python3 setup.py install
+    - pip install apertium
     - pipenv install --dev --system
 script:
     - flake8 --verbose apertium
