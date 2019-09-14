@@ -6,7 +6,6 @@ from typing import List
 
 from setuptools import find_packages, setup
 from setuptools.command.develop import develop
-from setuptools.command.egg_info import egg_info
 from setuptools.command.install import install
 
 
@@ -33,12 +32,6 @@ class CustomInstallCommand(install):
 class CustomDevelopCommand(develop):
     def run(self) -> None:
         develop.run(self)
-        install_binaries()
-
-
-class CustomEggInfoCommand(egg_info):
-    def run(self) -> None:
-        egg_info.run(self)
         install_binaries()
 
 
@@ -87,8 +80,7 @@ setup(
     package_data={'apertium': ['py.typed']},
     packages=find_packages(exclude=['tests']),
     cmdclass={
-        'install': CustomInstallCommand,
         'develop': CustomDevelopCommand,
-        'egg_info': CustomEggInfoCommand,
+        'install': CustomInstallCommand,
     },
 )
