@@ -85,5 +85,5 @@ for pair_path in pair_paths:
     _update_modes(pair_path)
 if platform.system() == 'Windows':
     windows_update_path()
-logging.basicConfig(format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.WARNING)
+logging.basicConfig(format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.ERROR)
 logger = logging.getLogger()
