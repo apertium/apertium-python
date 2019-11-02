@@ -119,8 +119,8 @@ class Ubuntu:
     @staticmethod
     def _rename_wrappers() -> None:
         wrapper_name = {
-            'python3-apertium': '_apertium_core',
-            'python3-apertium-lex-tools': '_lextools',
+            'python3-apertium-core': '_apertium_core',
+            'python3-apertium-lex-tools': '_apertium_lex_tools',
             'python3-cg3': '_constraint_grammar',
             'python3-lttoolbox': '_lttoolbox',
         }

@@ -10,7 +10,7 @@ try:
         sys.path.append('/usr/lib/python3/dist-packages')
 
     import apertium_core
-    import lextools
+    import apertium_lex_tools
     import lttoolbox
     import constraint_grammar
     wrappers_available = True
@@ -38,7 +38,7 @@ if wrappers_available:
             else:
                 self.initAnalysis()
 
-    class LRX(lextools.LRXProc):  # type: ignore
+    class LRX(apertium_lex_tools.LRXProc):  # type: ignore
         def __init__(self, dictionary_path: str) -> None:
             super().__init__(dictionary_path)
             self.init()
@@ -83,7 +83,7 @@ def handle_command_with_wrapper(command: Union[List[str], Tuple[str, ...]], end:
             initialized_wrappers[command] = fst
         elif 'lrx-proc' == command[0]:
             dictionary_path = command[-1]
-            lextools.LtLocale.tryToSetLocale()
+            apertium_lex_tools.LtLocale.tryToSetLocale()
             lrx = LRX(dictionary_path)  # type: LRX
             initialized_wrappers[command] = lrx
         elif 'apertium-transfer' == command[0]:
@@ -112,7 +112,7 @@ def handle_command_with_wrapper(command: Union[List[str], Tuple[str, ...]], end:
         lt_proc_command, dictionary_path, arg = command[:-1], command[-1], command[1]
         fst.lt_proc(lt_proc_command, input_file.name, output_file.name)
     elif 'lrx-proc' == command[0]:
-        lextools.LtLocale.tryToSetLocale()
+        apertium_lex_tools.LtLocale.tryToSetLocale()
         lrx = initialized_wrappers[command]
         lrx.lrx_proc(command, input_file.name, output_file.name)
     elif 'apertium-transfer' == command[0]:

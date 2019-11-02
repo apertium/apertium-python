@@ -1,6 +1,6 @@
 __author__ = 'Lokendra Singh, Arghya Bhatttacharya, Sushain K. Cherivirala, Andi Qu'
 __license__ = 'GNU General Public License v3.0'
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 import logging
 import os
@@ -85,5 +85,5 @@ for pair_path in pair_paths:
     _update_modes(pair_path)
 if platform.system() == 'Windows':
     windows_update_path()
-logging.basicConfig(format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.WARNING)
+logging.basicConfig(format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.ERROR)
 logger = logging.getLogger()
