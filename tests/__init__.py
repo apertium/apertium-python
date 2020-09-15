@@ -124,7 +124,7 @@ class TestInstallation(unittest.TestCase):
             self.assertIsNotNone(shutil.which(process), 'apertium installer not working. {} not available on system path'.format(process))
             break
 
-    @unittest.skip('apertium-anaphora not installed properly on xenial')
+    @unittest.skipIf(platform.system() == 'Windows', 'apertium binaries not available for windows')
     def test_install_apertium_linux(self):
         apertium.installer.install_apertium_linux()
         apertium_processes = ['apertium-anaphora',
