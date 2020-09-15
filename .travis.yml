@@ -25,6 +25,9 @@ script:
       fi;
     - coverage run -m unittest --verbose --buffer tests
     - coverage report --show-missing --fail-under 90 --include 'apertium/**'
+    - which apertium-anaphora
+    - ls /usr/bin/apertium*
+    - ls /usr/share/doc/apertium-anaphora*
 after_success:
     - coveralls
 notifications:
