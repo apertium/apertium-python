@@ -29,7 +29,7 @@ class TestApertiumInit(unittest.TestCase):
             self.fail('Pair Paths not added to the list/dictionary')
 
     def test_windows_update_path(self):
-        if platform.system() is not 'Windows':
+        if platform.system() != 'Windows':
             with self.assertRaises(apertium.InstallationNotSupported):
                 apertium.windows_update_path()
         else:
@@ -43,7 +43,7 @@ class TestApertiumInit(unittest.TestCase):
                 self.fail('Pair Paths not added to the list/dictionary')
 
     def test_windows_update_path(self):
-        if platform.system() is not 'Windows':
+        if platform.system() != 'Windows':
             with self.assertRaises(apertium.InstallationNotSupported):
                 apertium.windows_update_path()
         else:
