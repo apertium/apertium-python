@@ -42,7 +42,7 @@ class TestApertiumInit(unittest.TestCase):
             if not apertium.pair_paths or not apertium.analyzers or not apertium.generators or not apertium.taggers or not apertium.pairs:
                 self.fail('Pair Paths not added to the list/dictionary')
 
-    def test_windows_update_path(self):
+    def test_windows_update_path_via_installer(self):
         if platform.system() != 'Windows':
             with self.assertRaises(apertium.InstallationNotSupported):
                 apertium.windows_update_path()
