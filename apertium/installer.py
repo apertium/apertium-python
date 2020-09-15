@@ -12,6 +12,9 @@ from zipfile import ZipFile
 import apertium
 
 
+nightly = True  # type: bool
+
+
 class Windows:
     """Download ApertiumWin64 and Move to %localappdata%"""
     base_link = 'http://apertium.projectjj.com/{}'
@@ -40,7 +43,8 @@ class Windows:
     def _download_package(self, package: str) -> None:
         """Installs Packages to %localappdata%/Apertium"""
 
-        zip_path = 'win32/nightly/data.php?zip='
+        install_sh = 'nightly' if nightly else 'release'
+        zip_path = f'win32/{install_sh}/data.php?zip='
         package_zip = {package: zip_path + package}
         self._download_zip(package_zip, self._download_path)
 
@@ -104,7 +108,8 @@ class Windows:
 class Ubuntu:
     @staticmethod
     def _install_package_source() -> None:
-        install_script_url = 'http://apertium.projectjj.com/apt/install-nightly.sh'
+        install_sh = 'install-nightly.sh' if nightly else 'install-release.sh'
+        install_script_url = f'http://apertium.projectjj.com/apt/{install_sh}'
         with tempfile.NamedTemporaryFile('w') as install_script:
             urlretrieve(install_script_url, install_script.name)
             execute = subprocess.run(['sudo', 'bash', install_script.name])
