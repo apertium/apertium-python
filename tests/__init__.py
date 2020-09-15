@@ -181,18 +181,15 @@ class TestSubProcess(unittest.TestCase):
 
 
 class TestTranslate(unittest.TestCase):
-    @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
     def test_translator_en_spa(self):
         translator = apertium.Translator('eng', 'spa')
         translated = translator.translate('cats')
         self.assertEqual(translated, 'Gatos')
 
-    @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
     def test_en_spa(self):
         translated = apertium.translate('eng', 'spa', 'cats')
         self.assertEqual(translated, 'Gatos')
 
-    @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
     def test_en_spa_formatting(self):
         translated = apertium.translate('eng', 'spa', 'cats', formatting='txt')
         self.assertEqual(translated, 'Gatos')
