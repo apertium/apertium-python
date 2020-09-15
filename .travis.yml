@@ -24,8 +24,6 @@ script:
       fi;
     - coverage run -m unittest --verbose --buffer tests
     - coverage report --show-missing --fail-under 90 --include 'apertium/**'
-    - cat ./tests/kaz.txt | tee /dev/fd/2 | apertium kaz-tat
-    - lt-proc -w /usr/share/apertium/apertium-kaz-tat/kaz-tat.automorf.bin ./tests/kaz.txt
 after_success:
     - coveralls
 notifications:
