@@ -59,13 +59,14 @@ class Translator:
 
         return deformat, reformat
 
-    def _check_ret_code(self, proc: Popen) -> None:
+    def _check_ret_code(self, proc: Popen, cmd: str) -> None:
         """
         Args:
             proc (Popen)
+            cmd (str)
         """
         if proc.returncode != 0:
-            raise CalledProcessError()  # type: ignore
+            raise CalledProcessError(proc.returncode, cmd)
 
     def _validate_formatters(self, deformat: Optional[str], reformat: Optional[str]) -> Tuple[Union[str, bool], Union[str, bool]]:
         """
@@ -120,7 +121,7 @@ class Translator:
             proc_deformat.stdin.write(bytes(text, 'utf-8'))
             deformatted = proc_deformat.communicate()[0]
             deformatted = deformatted.decode()
-            self._check_ret_code(proc_deformat)
+            self._check_ret_code(proc_deformat, deformat)
         else:
             deformatted = bytes(text, 'utf-8')
         res = str(deformatted)
@@ -140,7 +141,7 @@ class Translator:
             proc_reformat = Popen(reformat, stdin=PIPE, stdout=PIPE)
             proc_reformat.stdin.write(bytes(text, 'utf-8'))
             result = proc_reformat.communicate()[0]
-            self._check_ret_code(proc_reformat)
+            self._check_ret_code(proc_reformat, reformat)
         else:
             result = re.sub(rb'\0$', b'', text)  # type: ignore
         return result
