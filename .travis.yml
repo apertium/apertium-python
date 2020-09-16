@@ -14,7 +14,6 @@ install:
     - pip install pipenv
     - python3 setup.py install
     - pipenv install --dev --system
-    - ./tests/install_apertium_kaz_tat_stable.sh
 script:
     - flake8 --verbose apertium
     - mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports;
