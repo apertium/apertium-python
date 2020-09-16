@@ -20,7 +20,7 @@ class Translator:
             l1 (str)
             l2 (str)
         """
-        self.translation_cmds = {}  # type: Dict[Tuple[str, str], List[List[str]]]
+        self.translation_cmds: Dict[Tuple[str, str], List[List[str]]] = {}
         self.l1 = l1
         self.l2 = l2
 
@@ -67,36 +67,37 @@ class Translator:
         if proc.returncode != 0:
             raise CalledProcessError()  # type: ignore
 
-    def _validate_formatters(self, deformat: Optional[str], reformat: Optional[str]) -> Tuple[Union[str, object], Union[str, object]]:
+    def _validate_formatters(self, deformat: Optional[str], reformat: Optional[str]) -> Tuple[Union[str, bool], Union[str, bool]]:
         """
         Args:
             deformat (Optional[str])
             reformat (Optional[str])
 
         Returns:
-            Tuple[Union[str, object], Union[str, object]]
+            Tuple[Union[str, bool], Union[str, bool]]
         """
-        def valid1(elt: Optional[str], lst: List[object]) -> Union[str, object]:
+        def valid1(elt: Optional[str], lst: List[Union[str, bool]]) -> Union[str, bool]:
             """
             Args:
                 elt (Optional[str])
-                lst (List[object])
+                lst (List[Union[str, bool]])
 
             Returns:
-                Union[str, object]
+                Union[str, bool]
             """
             if elt in lst:
                 return elt
             else:
                 return lst[0]
+
         # First is fallback:
-        deformatters = [
+        deformatters: List[Union[str, bool]] = [
             'apertium-deshtml',
             'apertium-destxt',
             'apertium-desrtf',
             False,
         ]
-        reformatters = [
+        reformatters: List[Union[str, bool]] = [
             'apertium-rehtml-noent',
             'apertium-rehtml',
             'apertium-retxt',
@@ -125,7 +126,7 @@ class Translator:
         res = str(deformatted)
         return res
 
-    def _get_reformat(self, reformat: str, text: str) -> str:
+    def _get_reformat(self, reformat: str, text: str) -> bytes:
         """
         Args:
             reformat (str)
@@ -134,6 +135,7 @@ class Translator:
         Returns:
             str
         """
+        result: bytes
         if reformat:
             proc_reformat = Popen(reformat, stdin=PIPE, stdout=PIPE)
             proc_reformat.stdin.write(bytes(text, 'utf-8'))
@@ -141,7 +143,7 @@ class Translator:
             self._check_ret_code(proc_reformat)
         else:
             result = re.sub(rb'\0$', b'', text)  # type: ignore
-        return result  # type: ignore
+        return result
 
     def translate(self, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
         """
@@ -167,13 +169,15 @@ class Translator:
             deformater, reformater = self._validate_formatters(unsafe_deformat, unsafe_reformat)
             deformatted = self._get_deformat(str(deformater), text)
             output = execute_pipeline(deformatted, cmds)
-            result = self._get_reformat(str(reformater), output).strip()
-            return result.decode()  # type: ignore
+            result: bytes = self._get_reformat(str(reformater), output).strip()
+            return result.decode()
 
 
 def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
     """
     Args:
+        l2: str
+        l1: str
         text (str)
         mark_unknown (bool)
         formatting (Optional[str])

@@ -1,11 +1,11 @@
 import os
 import re
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Pattern, Tuple, Union
 
 from apertium.utils import to_alpha3_code
 
 
-def is_loop(dirpath: str, rootpath: str, real_root: (Union[None, str]) = None) -> bool:
+def is_loop(dirpath: str, rootpath: str, real_root: Union[None, str] = None) -> bool:
     """
     Args:
         dirpath (str)
@@ -46,19 +46,19 @@ def search_path(rootpath: str, include_pairs: bool = True) -> Dict[str, List[Tup
     Returns:
         Dict[str, List[Tuple[str, str, str]]]
     """
-    lang_code = r'[a-z]{2,3}(?:_[A-Za-z]+)?'
-    type_re = {
+    lang_code: str = r'[a-z]{2,3}(?:_[A-Za-z]+)?'
+    type_re: Dict[str, Pattern[str]] = {
         'analyzer': re.compile(r'(({0}(-{0})?)-(an)?mor(ph)?)\.mode'.format(lang_code)),
         'generator': re.compile(r'(({0}(-{0})?)-gener[A-z]*)\.mode'.format(lang_code)),
         'pair': re.compile(r'({0})-({0})\.mode'.format(lang_code)),
         'tagger': re.compile(r'(({0}(-{0})?)-tagger[A-z]*)\.mode'.format(lang_code)),
     }
-    modes = {
+    modes: Dict[str, List[Tuple[str, str, str]]] = {
         'analyzer': [],
         'generator': [],
         'pair': [],
         'tagger': [],
-    }  # type: Dict[str, List[Tuple[str, str, str]]]
+    }
 
     real_root = os.path.abspath(os.path.realpath(rootpath))
 

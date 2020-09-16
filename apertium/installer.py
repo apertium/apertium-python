@@ -12,7 +12,7 @@ from zipfile import ZipFile
 import apertium
 
 
-nightly = True  # type: bool
+nightly: bool = True
 
 
 class Windows:
@@ -20,8 +20,8 @@ class Windows:
     base_link = 'http://apertium.projectjj.com/{}'
 
     def __init__(self) -> None:
-        self._install_path = str(os.getenv('LOCALAPPDATA'))  # type: str
-        self._apertium_path = str(os.path.join(self._install_path, 'apertium-all-dev'))  # type: str
+        self._install_path: str = str(os.getenv('LOCALAPPDATA'))
+        self._apertium_path: str = str(os.path.join(self._install_path, 'apertium-all-dev'))
         self._download_path = tempfile.mkdtemp()
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
         self._logger = logging.getLogger()
@@ -53,8 +53,8 @@ class Windows:
 
         self._logger.info('Copying Language Data to Apertium')
         for directory in os.listdir(lang_data_path):
-            source = str(os.path.join(lang_data_path, directory))  # type: str
-            destination = str(os.path.join(self._apertium_path, 'share', 'apertium', directory))  # type: str
+            source: str = str(os.path.join(lang_data_path, directory))
+            destination: str = str(os.path.join(self._apertium_path, 'share', 'apertium', directory))
             copy_tree(source, destination)
             self._logger.info('%s -> %s', source, destination)
 
@@ -68,7 +68,7 @@ class Windows:
         """
 
         # List of Mode Files
-        mode_path = str(os.path.join(self._apertium_path, 'share', 'apertium', 'modes'))  # type: str
+        mode_path: str = str(os.path.join(self._apertium_path, 'share', 'apertium', 'modes'))
         for f in os.listdir(mode_path):
             if os.path.isfile(os.path.join(mode_path, f)) and f.endswith('.mode'):
                 self._logger.info('Editing mode %s ', f)
@@ -151,7 +151,7 @@ class Ubuntu:
 
 
 def get_installer() -> Union[Windows, Ubuntu]:
-    system = platform.system()  # type: str
+    system: str = platform.system()
     if system == 'Windows':
         return Windows()
     elif system == 'Linux':
@@ -172,12 +172,12 @@ def install_apertium() -> None:
 
 def install_module(module: str) -> None:
     apertium_module = 'apertium-{}'.format(module)
-    installer = get_installer()  # type: Union[Windows, Ubuntu]
+    installer: Union[Windows, Ubuntu] = get_installer()
     installer.install_apertium_module(apertium_module)
 
 
 def install_wrapper(swig_wrapper: str) -> None:
-    installer = get_installer()  # type: Union[Windows, Ubuntu]
+    installer: Union[Windows, Ubuntu] = get_installer()
     installer.install_wrapper(swig_wrapper)
 
 
