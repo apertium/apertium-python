@@ -177,8 +177,8 @@ class Translator:
 def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
     """
     Args:
-        l2: str
         l1: str
+        l2: str
         text (str)
         mark_unknown (bool)
         formatting (Optional[str])
