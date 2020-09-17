@@ -10,33 +10,33 @@ class Translator:
     """
     Attributes:
         translation_cmds (Dict[Tuple[str, str], List[List[str]]])
-        l1 (str)
-        l2 (str)
+        lang1 (str)
+        lang2 (str)
     """
 
-    def __init__(self, l1: str, l2: str) -> None:
+    def __init__(self, lang1: str, lang2: str) -> None:
         """
         Args:
-            l1 (str)
-            l2 (str)
+            lang1 (str)
+            lang2 (str)
         """
         self.translation_cmds: Dict[Tuple[str, str], List[List[str]]] = {}
-        self.l1 = l1
-        self.l2 = l2
+        self.lang1 = lang1
+        self.lang2 = lang2
 
-    def _get_commands(self, l1: str, l2: str) -> List[List[str]]:
+    def _get_commands(self, lang1: str, lang2: str) -> List[List[str]]:
         """
         Args:
-            l1 (str)
-            l2 (str)
+            lang1 (str)
+            lang2 (str)
 
         Returns:
             List[List[str]]
         """
-        if (l1, l2) not in self.translation_cmds:
-            mode_path = apertium.pairs['%s-%s' % (l1, l2)]
-            self.translation_cmds[(l1, l2)] = parse_mode_file(mode_path)
-        return self.translation_cmds[(l1, l2)]
+        if (lang1, lang2) not in self.translation_cmds:
+            mode_path = apertium.pairs['%s-%s' % (lang1, lang2)]
+            self.translation_cmds[(lang1, lang2)] = parse_mode_file(mode_path)
+        return self.translation_cmds[(lang1, lang2)]
 
     def _get_format(self, formatting: Optional[str], deformat: Optional[str], reformat: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
         """
@@ -158,14 +158,14 @@ class Translator:
         Returns:
             str
         """
-        if '{}-{}'.format(*map(to_alpha3_code, [self.l1, self.l2])) in apertium.pairs:
-            pair = map(to_alpha3_code, [self.l1, self.l2])
+        if '{}-{}'.format(*map(to_alpha3_code, [self.lang1, self.lang2])) in apertium.pairs:
+            pair = map(to_alpha3_code, [self.lang1, self.lang2])
         else:
             raise apertium.ModeNotInstalled()
 
         if pair is not None:
-            l1, l2 = pair
-            cmds = list(self._get_commands(l1, l2))
+            lang1, lang2 = pair
+            cmds = list(self._get_commands(lang1, lang2))
             unsafe_deformat, unsafe_reformat = self._get_format(formatting, deformat, reformat)
             deformater, reformater = self._validate_formatters(unsafe_deformat, unsafe_reformat)
             deformatted = self._get_deformat(str(deformater), text)
@@ -174,11 +174,11 @@ class Translator:
             return result.decode()
 
 
-def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
+def translate(lang1: str, lang2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
     """
     Args:
-        l1: str
-        l2: str
+        lang1: str
+        lang2: str
         text (str)
         mark_unknown (bool)
         formatting (Optional[str])
@@ -188,5 +188,5 @@ def translate(l1: str, l2: str, text: str, mark_unknown: bool = False, formattin
     Returns:
         str
     """
-    translator = Translator(l1, l2)
+    translator = Translator(lang1, lang2)
     return translator.translate(text, mark_unknown, formatting, deformat, reformat)
