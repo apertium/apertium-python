@@ -174,7 +174,8 @@ class Translator:
             return result.decode()
 
 
-def translate(lang1: str, lang2: str, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
+def translate(lang1: str, lang2: str, text: str, mark_unknown: bool = False,
+              formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
     """
     Args:
         lang1: str
