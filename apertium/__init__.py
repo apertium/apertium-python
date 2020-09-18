@@ -77,10 +77,10 @@ def windows_update_path() -> None:
 
 
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
-analyzers = {}  # type: Dict[str, Tuple[str, str]]
-generators = {}  # type: Dict[str, Tuple[str, str]]
-taggers = {}  # type: Dict[str, Tuple[str, str]]
-pairs = {}  # type: Dict[str, str]
+analyzers: Dict[str, Tuple[str, str]] = {}
+generators: Dict[str, Tuple[str, str]] = {}
+taggers: Dict[str, Tuple[str, str]] = {}
+pairs: Dict[str, str] = {}
 for pair_path in pair_paths:
     _update_modes(pair_path)
 if platform.system() == 'Windows':

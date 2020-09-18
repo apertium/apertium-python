@@ -12,13 +12,16 @@ from zipfile import ZipFile
 import apertium
 
 
+nightly: bool = True
+
+
 class Windows:
     """Download ApertiumWin64 and Move to %localappdata%"""
     base_link = 'http://apertium.projectjj.com/{}'
 
     def __init__(self) -> None:
-        self._install_path = str(os.getenv('LOCALAPPDATA'))  # type: str
-        self._apertium_path = str(os.path.join(self._install_path, 'apertium-all-dev'))  # type: str
+        self._install_path: str = str(os.getenv('LOCALAPPDATA'))
+        self._apertium_path: str = str(os.path.join(self._install_path, 'apertium-all-dev'))
         self._download_path = tempfile.mkdtemp()
         logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
         self._logger = logging.getLogger()
@@ -40,7 +43,8 @@ class Windows:
     def _download_package(self, package: str) -> None:
         """Installs Packages to %localappdata%/Apertium"""
 
-        zip_path = 'win32/nightly/data.php?zip='
+        install_sh = 'nightly' if nightly else 'release'
+        zip_path = f'win32/{install_sh}/data.php?zip='
         package_zip = {package: zip_path + package}
         self._download_zip(package_zip, self._download_path)
 
@@ -49,8 +53,8 @@ class Windows:
 
         self._logger.info('Copying Language Data to Apertium')
         for directory in os.listdir(lang_data_path):
-            source = str(os.path.join(lang_data_path, directory))  # type: str
-            destination = str(os.path.join(self._apertium_path, 'share', 'apertium', directory))  # type: str
+            source: str = str(os.path.join(lang_data_path, directory))
+            destination: str = str(os.path.join(self._apertium_path, 'share', 'apertium', directory))
             copy_tree(source, destination)
             self._logger.info('%s -> %s', source, destination)
 
@@ -64,7 +68,7 @@ class Windows:
         """
 
         # List of Mode Files
-        mode_path = str(os.path.join(self._apertium_path, 'share', 'apertium', 'modes'))  # type: str
+        mode_path: str = str(os.path.join(self._apertium_path, 'share', 'apertium', 'modes'))
         for f in os.listdir(mode_path):
             if os.path.isfile(os.path.join(mode_path, f)) and f.endswith('.mode'):
                 self._logger.info('Editing mode %s ', f)
@@ -104,7 +108,8 @@ class Windows:
 class Ubuntu:
     @staticmethod
     def _install_package_source() -> None:
-        install_script_url = 'http://apertium.projectjj.com/apt/install-nightly.sh'
+        install_sh = 'install-nightly.sh' if nightly else 'install-release.sh'
+        install_script_url = f'http://apertium.projectjj.com/apt/{install_sh}'
         with tempfile.NamedTemporaryFile('w') as install_script:
             urlretrieve(install_script_url, install_script.name)
             execute = subprocess.run(['sudo', 'bash', install_script.name])
@@ -146,7 +151,7 @@ class Ubuntu:
 
 
 def get_installer() -> Union[Windows, Ubuntu]:
-    system = platform.system()  # type: str
+    system: str = platform.system()
     if system == 'Windows':
         return Windows()
     elif system == 'Linux':
@@ -167,12 +172,12 @@ def install_apertium() -> None:
 
 def install_module(module: str) -> None:
     apertium_module = 'apertium-{}'.format(module)
-    installer = get_installer()  # type: Union[Windows, Ubuntu]
+    installer: Union[Windows, Ubuntu] = get_installer()
     installer.install_apertium_module(apertium_module)
 
 
 def install_wrapper(swig_wrapper: str) -> None:
-    installer = get_installer()  # type: Union[Windows, Ubuntu]
+    installer: Union[Windows, Ubuntu] = get_installer()
     installer.install_wrapper(swig_wrapper)
 
 

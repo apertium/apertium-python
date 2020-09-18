@@ -19,8 +19,8 @@ class Tagger:
         Args:
             lang (str)
         """
-        self.tagger_cmds = {}  # type: Dict[str, List[List[str]]]
-        self.lang = to_alpha3_code(lang)  # type: str
+        self.tagger_cmds: Dict[str, List[List[str]]] = {}
+        self.lang: str = to_alpha3_code(lang)
         if self.lang not in apertium.taggers:
             raise apertium.ModeNotInstalled(self.lang)
         else:

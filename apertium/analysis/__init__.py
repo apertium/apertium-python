@@ -19,8 +19,8 @@ class Analyzer:
         Args:
             lang (str)
         """
-        self.analyzer_cmds = {}  # type: Dict[str, List[List[str]]]
-        self.lang = to_alpha3_code(lang)  # type: str
+        self.analyzer_cmds: Dict[str, List[List[str]]] = {}
+        self.lang: str = to_alpha3_code(lang)
         if self.lang not in apertium.analyzers:
             raise apertium.ModeNotInstalled(self.lang)
         else:
@@ -49,7 +49,7 @@ class Analyzer:
         Returns:
             List[LexicalUnit]
         """
-        lexical_units = list(parse(result))  # type: List[LexicalUnit]
+        lexical_units: List[LexicalUnit] = list(parse(result))
         return lexical_units
 
     def analyze(self, in_text: str, formatting: str = 'txt') -> List[LexicalUnit]:
@@ -64,10 +64,10 @@ class Analyzer:
             List[LexicalUnit]
         """
         self._get_commands()
-        deformatter = ['apertium-des{}'.format(formatting), '-n']  # type: List[str]
+        deformatter: List[str] = ['apertium-des{}'.format(formatting), '-n']
         if deformatter not in self.analyzer_cmds[self.lang]:
             self.analyzer_cmds[self.lang].insert(0, deformatter)
-        result = execute_pipeline(in_text, self.analyzer_cmds[self.lang])  # type: str
+        result: str = execute_pipeline(in_text, self.analyzer_cmds[self.lang])
         return self._postproc_text(result)
 
 
@@ -81,5 +81,5 @@ def analyze(lang: str, in_text: str, formatting: str = 'txt') -> List[LexicalUni
     Returns:
         List[LexicalUnit]
     """
-    analyzer = Analyzer(lang)  # type: Analyzer
+    analyzer: Analyzer = Analyzer(lang)
     return analyzer.analyze(in_text, formatting)

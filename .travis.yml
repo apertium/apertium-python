@@ -1,14 +1,14 @@
 language: python
-dist: xenial
+dist: bionic
 cache:
     pip: true
     directories:
         - /usr/local/bin
         - /usr/local/lib/python$TRAVIS_PYTHON_VERSION/site-packages
 python:
-    - '3.5'
     - '3.6'
     - '3.7'
+    - '3.8'
     - 'nightly'
 install:
     - pip install pipenv

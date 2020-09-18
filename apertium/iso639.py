@@ -1,4 +1,6 @@
-iso_639_codes = {
+from typing import Dict
+
+iso_639_codes: Dict[str, str] = {
     'aar': 'aa',
     'abk': 'ab',
     'afr': 'af',

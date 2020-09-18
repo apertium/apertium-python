@@ -29,7 +29,7 @@ class TestApertiumInit(unittest.TestCase):
             self.fail('Pair Paths not added to the list/dictionary')
 
     def test_windows_update_path(self):
-        if platform.system() is not 'Windows':
+        if platform.system() != 'Windows':
             with self.assertRaises(apertium.InstallationNotSupported):
                 apertium.windows_update_path()
         else:
@@ -42,8 +42,8 @@ class TestApertiumInit(unittest.TestCase):
             if not apertium.pair_paths or not apertium.analyzers or not apertium.generators or not apertium.taggers or not apertium.pairs:
                 self.fail('Pair Paths not added to the list/dictionary')
 
-    def test_windows_update_path(self):
-        if platform.system() is not 'Windows':
+    def test_windows_update_path_via_installer(self):
+        if platform.system() != 'Windows':
             with self.assertRaises(apertium.InstallationNotSupported):
                 apertium.windows_update_path()
         else:
@@ -148,15 +148,19 @@ class TestInstallation(unittest.TestCase):
 
 
 class TestSubProcess(unittest.TestCase):
-    def test_analyze_en_subprocess(self):
+    def setUpModule():
+        self._wrappers_available = apertium.utils.wrappers_available
         apertium.utils.wrappers_available = False
+
+    def tearDownModule():
+        apertium.utils.wrappers_available = self._wrappers_available
+
+    def test_analyze_en_subprocess(self):
         test_analyze = TestAnalyze()
         test_analyze.test_analyzer_en()
         test_analyze.test_analyze_en()
-        apertium.utils.wrappers_available = True
 
     def test_generate_en_subprocess(self):
-        apertium.utils.wrappers_available = False
         test_generate = TestGenerate()
         test_generate.test_generator_single()
         test_generate.test_generator_multiple()
@@ -164,36 +168,28 @@ class TestSubProcess(unittest.TestCase):
         test_generate.test_single()
         test_generate.test_multiple()
         test_generate.test_bare()
-        apertium.utils.wrappers_available = True
 
     def test_translate_en_es_subprocess(self):
-        apertium.utils.wrappers_available = False
         test_translate = TestTranslate()
         test_translate.test_translator_en_spa()
         test_translate.test_en_spa()
-        apertium.utils.wrappers_available = True
 
     def test_tagger_en_subprocess(self):
-        apertium.utils.wrappers_available = False
         test_tagger = TestTagger()
         test_tagger.test_tagger_en()
         test_tagger.test_tag_en()
-        apertium.utils.wrappers_available = True
 
 
 class TestTranslate(unittest.TestCase):
-    @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
     def test_translator_en_spa(self):
         translator = apertium.Translator('eng', 'spa')
         translated = translator.translate('cats')
         self.assertEqual(translated, 'Gatos')
 
-    @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
     def test_en_spa(self):
         translated = apertium.translate('eng', 'spa', 'cats')
         self.assertEqual(translated, 'Gatos')
 
-    @unittest.skipIf(platform.system() == 'Windows', 'lrx-proc -m bug #25')
     def test_en_spa_formatting(self):
         translated = apertium.translate('eng', 'spa', 'cats', formatting='txt')
         self.assertEqual(translated, 'Gatos')
