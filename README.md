@@ -18,7 +18,7 @@
 
 ## Installation
 
-- Installation on Ubuntu and Windows is natively supported:
+- Installation on Debian/Ubuntu and Windows is natively supported:
 
     ```
     pip install apertium

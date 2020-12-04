@@ -5,6 +5,7 @@ import platform
 import shutil
 import subprocess
 import tempfile
+import re
 from typing import Dict, Optional, Union
 from urllib.request import urlretrieve
 from zipfile import ZipFile
@@ -105,7 +106,7 @@ class Windows:
         pass
 
 
-class Ubuntu:
+class Debian:
     @staticmethod
     def _install_package_source() -> None:
         install_sh = 'install-nightly.sh' if nightly else 'install-release.sh'
@@ -150,15 +151,15 @@ class Ubuntu:
         self._rename_wrappers()
 
 
-def get_installer() -> Union[Windows, Ubuntu]:
+def get_installer() -> Union[Windows, Debian]:
     system: str = platform.system()
     if system == 'Windows':
         return Windows()
     elif system == 'Linux':
         with open('/etc/os-release') as os_release:
-            distro_name = os_release.readline().split('=')[-1].strip().replace('"', '')
-        if distro_name == 'Ubuntu':
-            return Ubuntu()
+            distro_name = os_release.read()
+        if re.search('[Dd]ebian|[Uu]buntu', distro_name) is not None:
+            return Debian()
         else:
             raise apertium.InstallationNotSupported(distro_name)
     else:
@@ -172,12 +173,12 @@ def install_apertium() -> None:
 
 def install_module(module: str) -> None:
     apertium_module = 'apertium-{}'.format(module)
-    installer: Union[Windows, Ubuntu] = get_installer()
+    installer: Union[Windows, Debian] = get_installer()
     installer.install_apertium_module(apertium_module)
 
 
 def install_wrapper(swig_wrapper: str) -> None:
-    installer: Union[Windows, Ubuntu] = get_installer()
+    installer: Union[Windows, Debian] = get_installer()
     installer.install_wrapper(swig_wrapper)
 
 
