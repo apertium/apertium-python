@@ -24,24 +24,24 @@ class InstallationNotSupported(ValueError):
     pass
 
 
-def _update_modes(pair_path: str) -> None:
+def _update_modes() -> None:
     """
-    Args:
-        pair_path (str)
+
     """
-    modes = search_path(pair_path)
-    if modes['pair']:
-        for path, lang_src, lang_trg in modes['pair']:
-            pairs[f'{lang_src}-{lang_trg}'] = path
-    if modes['analyzer']:
-        for dirpath, modename, lang_pair in modes['analyzer']:
-            analyzers[lang_pair] = (dirpath, modename)
-    if modes['generator']:
-        for dirpath, modename, lang_pair in modes['generator']:
-            generators[lang_pair] = (dirpath, modename)
-    if modes['tagger']:
-        for dirpath, modename, lang_pair in modes['tagger']:
-            taggers[lang_pair] = (dirpath, modename)
+    for pair_path in pair_paths:
+        modes = search_path(pair_path)
+        if modes['pair']:
+            for path, lang_src, lang_trg in modes['pair']:
+                pairs[f'{lang_src}-{lang_trg}'] = path
+        if modes['analyzer']:
+            for dirpath, modename, lang_pair in modes['analyzer']:
+                analyzers[lang_pair] = (dirpath, modename)
+        if modes['generator']:
+            for dirpath, modename, lang_pair in modes['generator']:
+                generators[lang_pair] = (dirpath, modename)
+        if modes['tagger']:
+            for dirpath, modename, lang_pair in modes['tagger']:
+                taggers[lang_pair] = (dirpath, modename)
 
 
 def append_pair_path(pair_path: str) -> None:
@@ -50,7 +50,7 @@ def append_pair_path(pair_path: str) -> None:
         pair_path (str)
     """
     pair_paths.append(pair_path)
-    _update_modes(pair_path)
+    _update_modes()
 
 
 def windows_update_path() -> None:
@@ -81,8 +81,7 @@ analyzers: Dict[str, Tuple[str, str]] = {}
 generators: Dict[str, Tuple[str, str]] = {}
 taggers: Dict[str, Tuple[str, str]] = {}
 pairs: Dict[str, str] = {}
-for pair_path in pair_paths:
-    _update_modes(pair_path)
+_update_modes()
 if platform.system() == 'Windows':
     windows_update_path()
 logging.basicConfig(format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.ERROR)

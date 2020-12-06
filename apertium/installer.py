@@ -174,6 +174,7 @@ def install_module(module: str) -> None:
     apertium_module = 'apertium-{}'.format(module)
     installer: Union[Windows, Debian] = get_installer()
     installer.install_apertium_module(apertium_module)
+    apertium._update_modes()
 
 
 def install_wrapper(swig_wrapper: str) -> None:

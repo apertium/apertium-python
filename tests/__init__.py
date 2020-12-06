@@ -136,7 +136,6 @@ class TestInstallation(unittest.TestCase):
     def test_install_module(self):
         language = 'kir'
         apertium.installer.install_module(language)
-        importlib.reload(apertium)
         self.assertIn(language, apertium.analyzers, 'apetium.install_module not working')
 
     @unittest.skipIf(platform.system() == 'Windows', 'wrappers not available for windows')
