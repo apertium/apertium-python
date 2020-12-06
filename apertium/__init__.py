@@ -32,7 +32,7 @@ def _update_modes(pair_path: str) -> None:
     modes = search_path(pair_path)
     if modes['pair']:
         for path, lang_src, lang_trg in modes['pair']:
-            pairs['%s-%s' % (lang_src, lang_trg)] = path
+            pairs[f'{lang_src}-{lang_trg}'] = path
     if modes['analyzer']:
         for dirpath, modename, lang_pair in modes['analyzer']:
             analyzers[lang_pair] = (dirpath, modename)
@@ -65,7 +65,7 @@ def windows_update_path() -> None:
 
         apertium_bin_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
         if os.path.isdir(apertium_bin_path):
-            update_path = '{}{}{}{}'.format(current, os.pathsep, apertium_bin_path, os.pathsep)
+            update_path = f'{current}{os.pathsep}{apertium_bin_path}{os.pathsep}'
             os.environ['PATH'] = update_path
         apertium_lang_path = \
             os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
