@@ -2,16 +2,15 @@ from distutils.dir_util import copy_tree
 import logging
 import os
 import platform
+import re
 import shutil
 import subprocess
 import tempfile
-import re
 from typing import Dict, Optional, Union
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
 import apertium
-
 
 nightly: bool = True
 
