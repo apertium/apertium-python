@@ -20,7 +20,7 @@ def install_binaries() -> None:
 
     def kaz_tat_install():
         apertium.installer.nightly = False
-        ubuntu = apertium.installer.Ubuntu()
+        ubuntu = apertium.installer.Debian()
         if platform.system() == 'Linux':
             ubuntu._install_package_source()
         apertium.installer.install_module('kaz-tat')
@@ -71,16 +71,16 @@ setup(
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Intended Audience :: Science/Research',
         'Intended Audience :: Developers',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3 :: Only',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
     ],
     long_description=open(path.join(path.abspath(path.dirname(__file__)), 'README.md')).read(),
     long_description_content_type='text/markdown; charset=UTF-8',
-    platforms=['Ubuntu', 'Windows'],
+    platforms=['Debian', 'Windows'],
     url='https://github.com/apertium/apertium-python',
     python_requires='>=3.5',
     setup_requires=[

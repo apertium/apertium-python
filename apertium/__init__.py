@@ -1,6 +1,6 @@
 __author__ = 'Lokendra Singh, Arghya Bhatttacharya, Sushain K. Cherivirala, Andi Qu'
 __license__ = 'GNU General Public License v3.0'
-__version__ = '0.2.3'
+__version__ = '0.2.4'
 
 import logging
 import os
@@ -24,24 +24,24 @@ class InstallationNotSupported(ValueError):
     pass
 
 
-def _update_modes(pair_path: str) -> None:
+def _update_modes() -> None:
     """
-    Args:
-        pair_path (str)
+
     """
-    modes = search_path(pair_path)
-    if modes['pair']:
-        for path, lang_src, lang_trg in modes['pair']:
-            pairs['%s-%s' % (lang_src, lang_trg)] = path
-    if modes['analyzer']:
-        for dirpath, modename, lang_pair in modes['analyzer']:
-            analyzers[lang_pair] = (dirpath, modename)
-    if modes['generator']:
-        for dirpath, modename, lang_pair in modes['generator']:
-            generators[lang_pair] = (dirpath, modename)
-    if modes['tagger']:
-        for dirpath, modename, lang_pair in modes['tagger']:
-            taggers[lang_pair] = (dirpath, modename)
+    for pair_path in pair_paths:
+        modes = search_path(pair_path)
+        if modes['pair']:
+            for path, lang_src, lang_trg in modes['pair']:
+                pairs[f'{lang_src}-{lang_trg}'] = path
+        if modes['analyzer']:
+            for dirpath, modename, lang_pair in modes['analyzer']:
+                analyzers[lang_pair] = (dirpath, modename)
+        if modes['generator']:
+            for dirpath, modename, lang_pair in modes['generator']:
+                generators[lang_pair] = (dirpath, modename)
+        if modes['tagger']:
+            for dirpath, modename, lang_pair in modes['tagger']:
+                taggers[lang_pair] = (dirpath, modename)
 
 
 def append_pair_path(pair_path: str) -> None:
@@ -50,7 +50,7 @@ def append_pair_path(pair_path: str) -> None:
         pair_path (str)
     """
     pair_paths.append(pair_path)
-    _update_modes(pair_path)
+    _update_modes()
 
 
 def windows_update_path() -> None:
@@ -65,7 +65,7 @@ def windows_update_path() -> None:
 
         apertium_bin_path = os.path.join(install_path, 'apertium-all-dev', 'bin')
         if os.path.isdir(apertium_bin_path):
-            update_path = '{}{}{}{}'.format(current, os.pathsep, apertium_bin_path, os.pathsep)
+            update_path = f'{current}{os.pathsep}{apertium_bin_path}{os.pathsep}'
             os.environ['PATH'] = update_path
         apertium_lang_path = \
             os.path.join(install_path, 'apertium-all-dev', 'share', 'apertium')
@@ -81,8 +81,7 @@ analyzers: Dict[str, Tuple[str, str]] = {}
 generators: Dict[str, Tuple[str, str]] = {}
 taggers: Dict[str, Tuple[str, str]] = {}
 pairs: Dict[str, str] = {}
-for pair_path in pair_paths:
-    _update_modes(pair_path)
+_update_modes()
 if platform.system() == 'Windows':
     windows_update_path()
 logging.basicConfig(format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s', level=logging.ERROR)
