@@ -34,10 +34,10 @@ jobs:
         python3 setup.py install
     - name: Flake8 checks
       run: |
-        flake8 --verbose apertium
+        pipenv run flake8 --verbose apertium
     - name: mypy checks
       run: |
-        mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports
+        pipenv run mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports
         cat .mypy_coverage/any-exprs.txt
         coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//')
         if (( $(echo "$coverage < 95" | bc -l) )); then
@@ -45,5 +45,5 @@ jobs:
         fi
     - name: code coverage and unittest
       run: |
-        coverage run -m unittest --verbose --buffer tests
-        coverage report --show-missing --fail-under 90 --include 'apertium/*'
+        pipenv run coverage run -m unittest --verbose --buffer tests
+        pipenv run coverage report --show-missing --fail-under 90 --include 'apertium/*'
