@@ -22,3 +22,4 @@ recommonmark = "*"
 
 [packages]
 apertium-streamparser = "*"
+jinja2 = "~=2.11.3"
