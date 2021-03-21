@@ -1,0 +1,50 @@
+name: apertium-python CI Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install pipenv
+      run: |
+        python -m pip install --upgrade pip
+        pip install --upgrade pipenv
+    - uses: actions/cache@v2
+      with:
+        path: ~/.local/share/virtualenvs
+        key: ${{ runner.os }}-pipenv-${{ hashFiles('Pipfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pipenv-
+    - name: Install dependencies
+      if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      run: |
+        pipenv install --dev
+    - name: Install apertium-python
+      run: |
+        python3 setup.py install
+    - name: Flake8 checks
+      run: |
+        pipenv run flake8 --verbose apertium
+    - name: mypy checks
+      run: |
+        pipenv run mypy apertium --strict --any-exprs-report .mypy_coverage --ignore-missing-imports
+        cat .mypy_coverage/any-exprs.txt
+        coverage=$(tail -1 .mypy_coverage/any-exprs.txt | grep -Eo '[0-9\.]+%' | sed 's/%$//')
+        if (( $(echo "$coverage < 95" | bc -l) )); then
+            exit 1
+        fi
+    - name: code coverage and unittest
+      run: |
+        pipenv run coverage run -m unittest --verbose --buffer tests
+        pipenv run coverage report --show-missing --fail-under 90 --include 'apertium/*'
