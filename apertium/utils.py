@@ -21,7 +21,7 @@ import apertium  # noqa: F401
 from apertium.iso639 import iso_639_codes
 
 iso639_codes_inverse = {v: k for k, v in iso_639_codes.items()}
-escape_chars = b'[]{}?^$@\\'
+escape_chars = b'[]{}?^$@\\/<>'
 special_chars_map = {i: '\\' + chr(i) for i in escape_chars}
 initialized_wrappers = {}  # type: Dict[Union[List[str], Tuple[str, ...]], Union[FSTProc, LRX, Any]]
 
