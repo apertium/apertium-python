@@ -69,6 +69,7 @@ class Analyzer:
             self.analyzer_cmds[self.lang].insert(0, deformatter)
         result: str = execute_pipeline(in_text, self.analyzer_cmds[self.lang])
         return self._postproc_text(result)
+    analyse = analyze
 
 
 def analyze(lang: str, in_text: str, formatting: str = 'txt') -> List[LexicalUnit]:
@@ -83,3 +84,5 @@ def analyze(lang: str, in_text: str, formatting: str = 'txt') -> List[LexicalUni
     """
     analyzer: Analyzer = Analyzer(lang)
     return analyzer.analyze(in_text, formatting)
+analyse = analyze
+Analyser = Analyzer
