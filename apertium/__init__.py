@@ -7,7 +7,7 @@ import os
 import platform
 from typing import Dict, Tuple
 
-from apertium.analysis import analyze, Analyzer  # noqa: F401
+from apertium.analysis import analyze, analyse, Analyser, Analyzer  # noqa: F401
 from apertium.generation import generate, Generator  # noqa: F401
 from apertium.installer import install_module  # noqa: F401
 from apertium.mode_search import search_path
@@ -78,6 +78,7 @@ def windows_update_path() -> None:
 
 pair_paths = ['/usr/share/apertium', '/usr/local/share/apertium']
 analyzers: Dict[str, Tuple[str, str]] = {}
+analysers = analyzers
 generators: Dict[str, Tuple[str, str]] = {}
 taggers: Dict[str, Tuple[str, str]] = {}
 pairs: Dict[str, str] = {}
