@@ -1,62 +1,35 @@
-from typing import Dict, List, Union
+from streamparser import parse, LexicalUnit  # noqa: F401
 
 import apertium
-from apertium.utils import execute_pipeline, parse_mode_file, to_alpha3_code
+from apertium.utils import to_alpha3_code, execute
+
+if False:
+    from typing import List, Union, Tuple  # noqa: F401
 
 
-class Generator:
-    """
-    Attributes:
-        generation_cmds (Dict[str, List[List[str]]])
-        lang (str)
-    """
-
-    def __init__(self, lang: str) -> None:
-        """
-        Args:
-            lang (str)
-        """
-        self.generator_cmds: Dict[str, List[List[str]]] = {}
-        self.lang: str = lang
-
-    def _get_commands(self) -> List[List[str]]:
-        """
-        Returns:
-            List[List[str]]
-        """
-        if self.lang not in self.generator_cmds:
-            mode_path, mode = apertium.generators[self.lang]
-            self.generator_cmds[self.lang] = parse_mode_file(mode_path + '/modes/' + mode + '.mode')
-        return self.generator_cmds[self.lang]
-
-    def generate(self, in_text: str, formatting: str = 'none') -> Union[str, List[str]]:
-        """
-        Args:
-            in_text (str)
-            formatting (str)
-
-        Returns:
-            Union[str, List[str]]
-        """
-        self.lang = to_alpha3_code(self.lang)
-
-        if self.lang in apertium.generators:
-            commands = list(self._get_commands())
-            result = execute_pipeline(in_text, commands)
-            return result.rstrip('\x00')
-        else:
-            raise apertium.ModeNotInstalled(self.lang)
+def preproc_text(in_text):  # type: (str) -> List[LexicalUnit]
+    if len(list(parse(in_text))) == 0:
+        in_text = '^%s$' % (in_text,)
+        lexical_units = list(parse(in_text))
+    else:
+        lexical_units = list(parse(in_text))
+    return lexical_units
 
 
-def generate(lang: str, in_text: str, formatting: str = 'none') -> Union[str, List[str]]:
-    """
-    Args:
-        lang (str)
-        in_text (str)
-        formatting (str)
+def postproc_text(lexical_units, result):  # type: (List[LexicalUnit], str) -> str
+    return [(generation, lexical_units[i])
+            for (i, generation)
+            in enumerate(result.split(SEPARATOR))][0][0]
 
-    Returns:
-        Union[str, List[str]]
-    """
-    generator = Generator(lang)
-    return generator.generate(in_text, formatting)
+
+def generate(lang, in_text, formatting='none'):  # type: (str, str, str) -> Union[str, List[str]]
+    lang = to_alpha3_code(lang)
+
+    if lang in apertium.generators:
+        path, mode = apertium.generators[lang]
+        commands = [['apertium', '-d', path, '-f', formatting, mode]]
+        lexical_units = preproc_text(in_text)
+        result = execute(in_text, commands)
+        return postproc_text(lexical_units, result)
+    else:
+        raise apertium.ModeNotInstalled(lang)
