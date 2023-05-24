@@ -146,7 +146,7 @@ class Translator:
             result = re.sub(rb'\0$', b'', text)  # type: ignore
         return result
 
-    def translate(self, text: str, mark_unknown: bool = False, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
+    def translate(self, text: str, mark_unknown: bool = True, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
         """
         Args:
             text (str)
@@ -174,7 +174,7 @@ class Translator:
             return result.decode()
 
 
-def translate(lang1: str, lang2: str, text: str, mark_unknown: bool = False,
+def translate(lang1: str, lang2: str, text: str, mark_unknown: bool = True,
               formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
     """
     Args:
