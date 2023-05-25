@@ -20,23 +20,35 @@ class Translator:
             lang1 (str)
             lang2 (str)
         """
-        self.translation_cmds: Dict[Tuple[str, str], List[List[str]]] = {}
+        self.translation_cmds: Dict[Tuple[str, str, str, str], List[List[str]]] = {}
         self.lang1 = lang1
         self.lang2 = lang2
 
-    def _get_commands(self, lang1: str, lang2: str) -> List[List[str]]:
+    def _get_commands(self, lang1: str, lang2: str, mark_unknown: bool = True,
+                      display_ambiguity: bool = False,) -> List[List[str]]:
         """
         Args:
             lang1 (str)
             lang2 (str)
+            option (Optional[str])
+            option_tagger (Optional[str])
 
         Returns:
             List[List[str]]
         """
-        if (lang1, lang2) not in self.translation_cmds:
+        key = (lang1, lang2, mark_unknown, display_ambiguity)
+
+        if key not in self.translation_cmds:
             mode_path = apertium.pairs['%s-%s' % (lang1, lang2)]
-            self.translation_cmds[(lang1, lang2)] = parse_mode_file(mode_path)
-        return self.translation_cmds[(lang1, lang2)]
+            # Deal with parameters
+            option = None
+            option_tagger = None
+            if mark_unknown == False:
+                option = ['-n']
+            if display_ambiguity:
+                option_tagger = ['-m']
+            self.translation_cmds[key] = parse_mode_file(mode_path, option, option_tagger)
+        return self.translation_cmds[key]
 
     def _get_format(self, formatting: Optional[str], deformat: Optional[str], reformat: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
         """
@@ -146,7 +158,8 @@ class Translator:
             result = re.sub(rb'\0$', b'', text)  # type: ignore
         return result
 
-    def translate(self, text: str, mark_unknown: bool = True, formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
+    def translate(self, text: str, mark_unknown: bool = True, display_ambiguity: bool = False,
+                  formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
         """
         Args:
             text (str)
@@ -165,7 +178,7 @@ class Translator:
 
         if pair is not None:
             lang1, lang2 = pair
-            cmds = list(self._get_commands(lang1, lang2))
+            cmds = list(self._get_commands(lang1, lang2, mark_unknown, display_ambiguity))
             unsafe_deformat, unsafe_reformat = self._get_format(formatting, deformat, reformat)
             deformater, reformater = self._validate_formatters(unsafe_deformat, unsafe_reformat)
             deformatted = self._get_deformat(str(deformater), text)
@@ -174,7 +187,7 @@ class Translator:
             return result.decode()
 
 
-def translate(lang1: str, lang2: str, text: str, mark_unknown: bool = True,
+def translate(lang1: str, lang2: str, text: str, mark_unknown: bool = True, display_ambiguity: bool = False,
               formatting: Optional[str] = None, deformat: str = 'txt', reformat: str = 'txt') -> str:
     """
     Args:

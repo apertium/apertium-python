@@ -3,7 +3,7 @@ import platform
 import subprocess
 import sys
 import tempfile
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, Optional
 
 try:
     if platform.system() == 'Linux':
@@ -176,7 +176,7 @@ def execute_pipeline(inp: str, commands: List[List[str]]) -> str:
     return end.decode()
 
 
-def parse_mode_file(mode_path: str) -> List[List[str]]:
+def parse_mode_file(mode_path: str, option: Optional[List[str]], option_tagger: Optional[List[str]]) -> List[List[str]]:
     """
     Args:
         mode_path (str)
@@ -184,6 +184,12 @@ def parse_mode_file(mode_path: str) -> List[List[str]]:
     Returns:
         List[List[str]]
     """
+
+    if option is None:
+        option = ['-g']
+    if option_tagger is None:
+        option_tagger = []
+
     with open(mode_path) as mode_file:
         mode_str = mode_file.read().strip()
     if mode_str:
@@ -192,7 +198,8 @@ def parse_mode_file(mode_path: str) -> List[List[str]]:
             # TODO: we should make language pairs install
             # modes.xml instead; this is brittle (what if a path
             # has | or ' in it?)
-            cmd = cmd.replace('$2', '').replace('$1', '-g')
+            cmd = cmd.replace('$1', ' '.join(option))
+            cmd = cmd.replace('$2', ' '.join(option_tagger))
             commands.append([c.strip("'") for c in cmd.split()])
         return commands
     else:
