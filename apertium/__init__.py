@@ -7,7 +7,7 @@ import os
 import platform
 from typing import Dict, Tuple
 
-from apertium.analysis import analyze, Analyzer  # noqa: F401
+from apertium.analysis import analyze, analyse, Analyzer, Analyser  # noqa: F401
 from apertium.generation import generate, Generator  # noqa: F401
 from apertium.installer import install_module  # noqa: F401
 from apertium.mode_search import search_path
